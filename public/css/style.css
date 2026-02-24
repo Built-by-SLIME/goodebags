@@ -1009,8 +1009,9 @@ img {
 }
 
 .footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 60px;
   padding-bottom: 60px;
 }
@@ -1020,6 +1021,12 @@ img {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 280px;
+}
+
+.footer-brand .logo-img {
+  height: 50px;
+  max-width: 200px;
 }
 
 .footer-tagline {
