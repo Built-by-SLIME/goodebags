@@ -145,7 +145,7 @@ img {
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 16px 0;
+  padding: 0;
   background: rgba(8, 8, 8, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -154,7 +154,6 @@ img {
 }
 
 .navbar.scrolled {
-  padding: 12px 0;
   background: rgba(8, 8, 8, 0.98);
 }
 
@@ -173,18 +172,17 @@ img {
 }
 
 .logo-img {
-  height: 36px;
+  height: 120px;
   width: auto;
   display: block;
-  max-width: 280px;
+  max-width: 320px;
   object-fit: contain;
-  /* If the logo PNG has built-in transparent padding, increase this value */
 }
 
 @media (max-width: 768px) {
   .logo-img {
-    height: 30px;
-    max-width: 200px;
+    height: 70px;
+    max-width: 220px;
   }
 }
 
@@ -285,7 +283,7 @@ img {
 ═══════════════════════════════════════════ */
 .hero {
   position: relative;
-  padding: 160px 0 100px;
+  padding: 180px 0 100px;
   overflow: hidden;
 }
 
