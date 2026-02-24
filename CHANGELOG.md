@@ -53,6 +53,16 @@ Format: `[Date] — Description`
 
 ---
 
+## [2024-02-24] — Navbar Restructure: Socials, Right-aligned Nav, Connect Wallet
+
+- Moved all nav items (socials, links, button) into a right-aligned `.nav-right` group
+- Added Discord, X, TikTok, Instagram icon links to navbar with a divider separator
+- Changed "Get Started" button to "Connect Wallet" (placeholder for WalletConnect modal)
+- Updated nav link label "Games" → "Mints" to match section rename
+- Mobile: socials and divider hidden; hamburger menu unchanged
+
+---
+
 ## [2024-02-24] — Logo Size + Navbar Thickness Adjustments
 
 - Increased logo height from `40px` → `120px` per client request (attempt 1)
