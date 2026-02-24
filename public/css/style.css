@@ -11,9 +11,9 @@
   --bg:          #080808;
   --bg-2:        #0f0f0f;
   --bg-3:        #141414;
-  --green:       #39FF14;
-  --green-dark:  #2bcc0f;
-  --green-glow:  rgba(57, 255, 20, 0.18);
+  --green:       #FFD700;
+  --green-dark:  #E5C200;
+  --green-glow:  rgba(255, 215, 0, 0.18);
   --white:       #ffffff;
   --gray-1:      #a0a0a0;
   --gray-2:      #4a4a4a;
@@ -22,7 +22,7 @@
   --radius-lg:   20px;
   --transition:  0.25s ease;
   --font:        'Inter', sans-serif;
-  --shadow-green: 0 0 30px rgba(57,255,20,0.25);
+  --shadow-green: 0 0 30px rgba(255,215,0,0.25);
 }
 
 html {
@@ -294,7 +294,7 @@ img {
   right: -10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(57,255,20,0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 70%);
   pointer-events: none;
   border-radius: 50%;
 }
@@ -317,8 +317,8 @@ img {
   width: fit-content;
   align-items: center;
   gap: 8px;
-  background: rgba(57,255,20,0.12);
-  border: 1px solid rgba(57,255,20,0.3);
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.3);
   color: var(--green);
   font-size: 0.82rem;
   font-weight: 600;
@@ -498,8 +498,8 @@ img {
 .section-tag {
   display: inline-flex;
   width: fit-content;
-  background: rgba(57,255,20,0.12);
-  border: 1px solid rgba(57,255,20,0.3);
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.3);
   color: var(--green);
   font-size: 0.78rem;
   font-weight: 700;
@@ -874,7 +874,7 @@ img {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(57,255,20,0.1) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(255,215,0,0.1) 0%, transparent 60%);
   pointer-events: none;
 }
 
