@@ -183,7 +183,17 @@ img {
   object-fit: contain;
 }
 
+.navbar .logo-img {
+  height: 150px;
+  max-width: 420px;
+}
+
 @media (max-width: 768px) {
+  .navbar .logo-img {
+    height: 90px;
+    max-width: 280px;
+  }
+
   .logo-img {
     height: 70px;
     max-width: 220px;
@@ -905,6 +915,15 @@ img {
   color: var(--gray-1);
   font-size: 0.9rem;
   line-height: 1.75;
+}
+
+.faq-answer a {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.faq-answer a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
