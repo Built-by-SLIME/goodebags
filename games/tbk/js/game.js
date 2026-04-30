@@ -95,25 +95,44 @@ class Game {
 
   init() {
     /* ═══════════════════════════════════════════
-       TBK CARD DEFINITIONS — Drop real card art into:
-       /games/tbk/assets/cards/
-       Then update image paths below.
+       TBK CARD DEFINITIONS — 30 real card arts wired in.
+       Stats are placeholders — update when gameplay rules arrive.
     ═══════════════════════════════════════════ */
-    const starterDeck = () => [
-      new Card(1,  'Worker Bee',    1, 1, 2, 'assets/cards/worker-bee.png'),
-      new Card(2,  'Drone Soldier', 1, 2, 1, 'assets/cards/drone-soldier.png'),
-      new Card(3,  'Honey Defender',2, 2, 4, 'assets/cards/honey-defender.png'),
-      new Card(4,  'Royal Guard',   2, 3, 3, 'assets/cards/royal-guard.png'),
-      new Card(5,  'Nectar Thief',  1, 2, 1, 'assets/cards/nectar-thief.png'),
-      new Card(6,  'Hive Queen',    4, 5, 5, 'assets/cards/hive-queen.png'),
-      new Card(7,  'Sting Swarm',   3, 4, 2, 'assets/cards/sting-swarm.png'),
-      new Card(8,  'Pollen Mage',   2, 2, 3, 'assets/cards/pollen-mage.png'),
-      new Card(9,  'Wax Builder',   2, 1, 4, 'assets/cards/wax-builder.png'),
-      new Card(10, 'Bee's Knees',  3, 3, 3, 'assets/cards/bees-knees.png'),
+    const cards = [
+      new Card(1,  'TBK #1',   1, 1, 2, 'assets/cards/TBK-1.png'),
+      new Card(2,  'TBK #2',   1, 2, 1, 'assets/cards/TBK-2.png'),
+      new Card(3,  'TBK #3',   1, 2, 2, 'assets/cards/TBK-3.png'),
+      new Card(4,  'TBK #4',   2, 2, 3, 'assets/cards/TBK-4.png'),
+      new Card(5,  'TBK #5',   1, 1, 2, 'assets/cards/TBK-5.png'),
+      new Card(6,  'TBK #6',   2, 3, 2, 'assets/cards/TBK-6.png'),
+      new Card(7,  'TBK #7',   1, 2, 1, 'assets/cards/TBK-7.png'),
+      new Card(8,  'TBK #8',   2, 2, 4, 'assets/cards/TBK-8.png'),
+      new Card(9,  'TBK #9',   2, 3, 3, 'assets/cards/TBK-9.png'),
+      new Card(10, 'TBK #10',  1, 2, 1, 'assets/cards/TBK-10.png'),
+      new Card(11, 'TBK #11',  3, 4, 3, 'assets/cards/TBK-11.png'),
+      new Card(12, 'TBK #12',  2, 2, 3, 'assets/cards/TBK-12.png'),
+      new Card(13, 'TBK #13',  1, 1, 3, 'assets/cards/TBK-13.png'),
+      new Card(14, 'TBK #14',  2, 3, 2, 'assets/cards/TBK-14.png'),
+      new Card(15, 'TBK #15',  3, 3, 4, 'assets/cards/TBK-15.png'),
+      new Card(16, 'TBK #16',  1, 2, 1, 'assets/cards/TBK-16.png'),
+      new Card(17, 'TBK #17',  2, 2, 3, 'assets/cards/TBK-17.png'),
+      new Card(18, 'TBK #18',  2, 3, 2, 'assets/cards/TBK-18.png'),
+      new Card(19, 'TBK #19',  3, 4, 3, 'assets/cards/TBK-19.png'),
+      new Card(20, 'TBK #20',  4, 5, 5, 'assets/cards/TBK-20.png'),
+      new Card(21, 'TBK #21',  1, 1, 2, 'assets/cards/TBK-21.png'),
+      new Card(22, 'TBK #22',  2, 3, 2, 'assets/cards/TBK-22.png'),
+      new Card(23, 'TBK #23',  2, 2, 4, 'assets/cards/TBK-23.png'),
+      new Card(24, 'TBK #24',  3, 4, 3, 'assets/cards/TBK-24.png'),
+      new Card(25, 'TBK #25',  1, 2, 1, 'assets/cards/TBK-25.png'),
+      new Card(26, 'TBK #26',  2, 3, 3, 'assets/cards/TBK-26.png'),
+      new Card(27, 'TBK #27',  2, 2, 3, 'assets/cards/TBK-27.png'),
+      new Card(28, 'TBK #28',  3, 4, 4, 'assets/cards/TBK-28.png'),
+      new Card(29, 'TBK #29',  1, 1, 2, 'assets/cards/TBK-29.png'),
+      new Card(30, 'TBK #30',  2, 3, 2, 'assets/cards/TBK-30.png'),
     ];
 
-    this.player.deck = new Deck([...starterDeck(), ...starterDeck(), ...starterDeck()]);
-    this.ai.deck = new Deck([...starterDeck(), ...starterDeck(), ...starterDeck()]);
+    this.player.deck = new Deck([...cards]);
+    this.ai.deck = new Deck([...cards]);
 
     this.player.draw(3);
     this.ai.draw(3);

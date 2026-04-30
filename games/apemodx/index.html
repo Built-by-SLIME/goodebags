@@ -24,14 +24,20 @@
     .deck-pile span, .discard-pile span { color: var(--amx-blue); }
     .btn-primary { background: var(--amx-blue); color: #fff; }
     .btn-primary:hover { background: #1a3bc7; }
-    .game-logo img { content: url('/assets/apemodx-logo.png'); } /* Replace with real Ape Mod X logo */
+    .game-logo img { max-height: 40px; }
+    .game-board {
+      background: url('assets/board-bg.png') center/cover no-repeat;
+      min-height: 60vh;
+      border-radius: 12px;
+      position: relative;
+    }
   </style>
 </head>
 <body>
   <div class="game-container">
     <header class="game-header">
       <a href="/games/" class="game-logo">
-        <img src="/assets/apemodx-logo.png" alt="Ape Mod X" onerror="this.src='/assets/goodebags-logo.png'" />
+        <img src="assets/logo.png" alt="Ape Mod X" onerror="this.src='/assets/goodebags-logo.png'" />
       </a>
       <div class="game-meta">
         <span id="turnIndicator" class="turn-badge">Your Turn</span>

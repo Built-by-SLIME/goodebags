@@ -95,25 +95,21 @@ class Game {
 
   init() {
     /* ═══════════════════════════════════════════
-       APE MOD X CARD DEFINITIONS — Drop real card art into:
-       /games/apemodx/assets/cards/
-       Then update image paths below.
+       APE MOD X CARD DEFINITIONS — 7 real card arts wired in.
+       Stats are placeholders — update when gameplay rules arrive.
     ═══════════════════════════════════════════ */
-    const starterDeck = () => [
-      new Card(1,  'Base Ape',     1, 2, 2, 'assets/cards/base-ape.png'),
-      new Card(2,  'Modded Ape',   2, 3, 2, 'assets/cards/modded-ape.png'),
-      new Card(3,  'Cyber Ape',    3, 4, 3, 'assets/cards/cyber-ape.png'),
-      new Card(4,  'XRPL Guard',   2, 2, 4, 'assets/cards/xrpl-guard.png'),
-      new Card(5,  'Ape Scout',    1, 1, 2, 'assets/cards/ape-scout.png'),
-      new Card(6,  'Alpha Ape',    4, 5, 5, 'assets/cards/alpha-ape.png'),
-      new Card(7,  'Ape Brawler',  3, 4, 3, 'assets/cards/ape-brawler.png'),
-      new Card(8,  'Tech Ape',     2, 2, 3, 'assets/cards/tech-ape.png'),
-      new Card(9,  'Ape Tank',     2, 1, 5, 'assets/cards/ape-tank.png'),
-      new Card(10, 'Ape Mod X',    3, 3, 3, 'assets/cards/ape-mod-x.png'),
+    const cards = [
+      new Card(1,  'AM #34',  1, 2, 2, 'assets/cards/AM-34.png'),
+      new Card(2,  'AM #38',  2, 3, 2, 'assets/cards/AM-38.png'),
+      new Card(3,  'AM #44',  2, 2, 4, 'assets/cards/AM-44.png'),
+      new Card(4,  'AM #45',  1, 1, 2, 'assets/cards/AM-45.png'),
+      new Card(5,  'AM #48',  3, 4, 3, 'assets/cards/AM-48.png'),
+      new Card(6,  'AM #49',  2, 3, 3, 'assets/cards/AM-49.png'),
+      new Card(7,  'AM #50',  4, 5, 5, 'assets/cards/AM-50.png'),
     ];
 
-    this.player.deck = new Deck([...starterDeck(), ...starterDeck(), ...starterDeck()]);
-    this.ai.deck = new Deck([...starterDeck(), ...starterDeck(), ...starterDeck()]);
+    this.player.deck = new Deck([...cards, ...cards, ...cards]);
+    this.ai.deck = new Deck([...cards, ...cards, ...cards]);
 
     this.player.draw(3);
     this.ai.draw(3);

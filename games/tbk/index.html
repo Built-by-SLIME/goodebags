@@ -24,14 +24,20 @@
     .deck-pile span, .discard-pile span { color: var(--tbk-green); }
     .btn-primary { background: var(--tbk-green); color: #000; }
     .btn-primary:hover { background: #2aaa6a; }
-    .game-logo img { content: url('/assets/tbk-logo.png'); } /* Replace with real TBK logo */
+    .game-logo img { max-height: 40px; }
+    .game-board {
+      background: url('assets/board-bg.png') center/cover no-repeat;
+      min-height: 60vh;
+      border-radius: 12px;
+      position: relative;
+    }
   </style>
 </head>
 <body>
   <div class="game-container">
     <header class="game-header">
       <a href="/games/" class="game-logo">
-        <img src="/assets/tbk-logo.png" alt="The Bee's Knees" onerror="this.src='/assets/goodebags-logo.png'" />
+        <img src="assets/logo.png" alt="The Bee's Knees" onerror="this.src='/assets/goodebags-logo.png'" />
       </a>
       <div class="game-meta">
         <span id="turnIndicator" class="turn-badge">Your Turn</span>
