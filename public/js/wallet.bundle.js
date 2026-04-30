@@ -26651,16 +26651,18 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
     }
     try {
       console.log("[Wallet] Creating WalletConnectModal...");
+      const walletList = [
+        { id: "hashpack", name: "HashPack", links: { native: "hashpack://", universal: "https://hashpack.app" } },
+        { id: "kabila", name: "Kabila", links: { native: "kabila://", universal: "https://kabila.app" } },
+        { id: "xaman", name: "Xaman", links: { native: "xaman://", universal: "https://xaman.app" } },
+        { id: "joey", name: "Joey", links: { native: "joey://", universal: "https://joeywallet.com" } }
+      ];
       modal = new WalletConnectModal({
         projectId,
         chains: CHAINS,
         enableExplorer: true,
-        mobileWallets: [
-          { id: "hashpack", name: "HashPack", links: { native: "hashpack://", universal: "https://hashpack.app" } },
-          { id: "kabila", name: "Kabila", links: { native: "kabila://", universal: "https://kabila.app" } },
-          { id: "xaman", name: "Xaman", links: { native: "xaman://", universal: "https://xaman.app" } },
-          { id: "joey", name: "Joey", links: { native: "joey://", universal: "https://joeywallet.com" } }
-        ]
+        mobileWallets: walletList,
+        desktopWallets: walletList
       });
       console.log("[Wallet] WalletConnectModal created");
     } catch (e9) {
