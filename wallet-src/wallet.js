@@ -8,62 +8,98 @@ let currentProjectId = null;
 const CHAINS = ['hedera:mainnet', 'hedera:testnet', 'xrpl:0', 'xrpl:1'];
 
 async function init(projectId) {
-  if (provider && currentProjectId === projectId) return { provider, modal };
+  console.log('[Wallet] init() called with projectId:', projectId ? 'set' : 'missing');
+  if (provider && currentProjectId === projectId) {
+    console.log('[Wallet] Reusing existing provider');
+    return { provider, modal };
+  }
   currentProjectId = projectId;
 
-  provider = await UniversalProvider.init({
-    projectId,
-    relayUrl: 'wss://relay.walletconnect.com',
-    metadata: {
-      name: 'Goodebags Games',
-      description: 'Collect. Play. Compete.',
-      url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
-      icons: ['https://goodebags.games/assets/goodebags-logo.png']
-    }
-  });
+  try {
+    console.log('[Wallet] Initializing UniversalProvider...');
+    provider = await UniversalProvider.init({
+      projectId,
+      relayUrl: 'wss://relay.walletconnect.com',
+      metadata: {
+        name: 'Goodebags Games',
+        description: 'Collect. Play. Compete.',
+        url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
+        icons: ['https://goodebags.games/assets/goodebags-logo.png']
+      }
+    });
+    console.log('[Wallet] UniversalProvider initialized');
+  } catch (e) {
+    console.error('[Wallet] UniversalProvider.init failed:', e);
+    alert('Wallet provider init failed: ' + e.message);
+    throw e;
+  }
 
-  modal = new WalletConnectModal({
-    projectId,
-    chains: CHAINS,
-    enableExplorer: true,
-    mobileWallets: [
-      { id: 'hashpack', name: 'HashPack', links: { native: 'hashpack://', universal: 'https://hashpack.app' } },
-      { id: 'kabila', name: 'Kabila', links: { native: 'kabila://', universal: 'https://kabila.app' } },
-      { id: 'xaman', name: 'Xaman', links: { native: 'xaman://', universal: 'https://xaman.app' } },
-      { id: 'joey', name: 'Joey', links: { native: 'joey://', universal: 'https://joeywallet.com' } }
-    ]
-  });
+  try {
+    console.log('[Wallet] Creating WalletConnectModal...');
+    modal = new WalletConnectModal({
+      projectId,
+      chains: CHAINS,
+      enableExplorer: true,
+      mobileWallets: [
+        { id: 'hashpack', name: 'HashPack', links: { native: 'hashpack://', universal: 'https://hashpack.app' } },
+        { id: 'kabila', name: 'Kabila', links: { native: 'kabila://', universal: 'https://kabila.app' } },
+        { id: 'xaman', name: 'Xaman', links: { native: 'xaman://', universal: 'https://xaman.app' } },
+        { id: 'joey', name: 'Joey', links: { native: 'joey://', universal: 'https://joeywallet.com' } }
+      ]
+    });
+    console.log('[Wallet] WalletConnectModal created');
+  } catch (e) {
+    console.error('[Wallet] WalletConnectModal creation failed:', e);
+    alert('Wallet modal init failed: ' + e.message);
+    throw e;
+  }
 
   return { provider, modal };
 }
 
 export async function openConnect(projectId) {
-  const { provider, modal } = await init(projectId);
+  console.log('[Wallet] openConnect() called');
+  try {
+    const { provider, modal } = await init(projectId);
+    console.log('[Wallet] Provider+Modal ready, calling connect...');
 
-  const { uri, approval } = await provider.connect({
-    namespaces: {
-      hedera: {
-        chains: ['hedera:mainnet', 'hedera:testnet'],
-        methods: [],
-        events: []
-      },
-      xrpl: {
-        chains: ['xrpl:0', 'xrpl:1'],
-        methods: [],
-        events: []
+    const { uri, approval } = await provider.connect({
+      namespaces: {
+        hedera: {
+          chains: ['hedera:mainnet', 'hedera:testnet'],
+          methods: [],
+          events: []
+        },
+        xrpl: {
+          chains: ['xrpl:0', 'xrpl:1'],
+          methods: [],
+          events: []
+        }
       }
+    });
+    console.log('[Wallet] connect() returned. URI present?', !!uri);
+
+    if (uri) {
+      console.log('[Wallet] Opening modal with URI...');
+      modal.openModal({ uri });
+      console.log('[Wallet] modal.openModal() called');
+    } else {
+      console.warn('[Wallet] No URI returned from provider.connect()');
+      alert('Wallet connection URI could not be generated.');
     }
-  });
 
-  if (uri) {
-    modal.openModal({ uri });
+    const session = await approval();
+    console.log('[Wallet] Session approved:', !!session);
+    return session;
+  } catch (e) {
+    console.error('[Wallet] openConnect error:', e);
+    alert('Wallet connect error: ' + e.message);
+    throw e;
   }
-
-  const session = await approval();
-  return session;
 }
 
 export async function disconnectWallet() {
+  console.log('[Wallet] disconnectWallet() called');
   if (provider) {
     await provider.disconnect();
   }

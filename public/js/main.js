@@ -7,11 +7,13 @@ let walletProjectId = null;
 
 async function loadWalletConfig() {
   try {
+    console.log('[Main] Fetching /api/config...');
     const res = await fetch('/api/config');
     const cfg = await res.json();
     walletProjectId = cfg.walletConnectProjectId || '';
+    console.log('[Main] Project ID loaded:', walletProjectId ? 'yes' : 'no');
   } catch (e) {
-    console.warn('Could not load wallet config:', e);
+    console.warn('[Main] Could not load wallet config:', e);
     walletProjectId = '';
   }
 }
@@ -22,6 +24,7 @@ function updateWalletBtn(connected) {
 }
 
 walletBtn.addEventListener('click', () => {
+  console.log('[Main] Wallet button clicked');
   if (!walletProjectId) {
     alert('WalletConnect Project ID not configured. Please set WALLETCONNECT_PROJECT_ID environment variable.');
     return;
@@ -30,17 +33,20 @@ walletBtn.addEventListener('click', () => {
     alert('Wallet module not loaded. Please refresh the page.');
     return;
   }
+  console.log('[Main] WalletModule present. isConnected?', WalletModule.isConnected ? WalletModule.isConnected() : 'no isConnected fn');
   if (WalletModule.isConnected && WalletModule.isConnected()) {
     WalletModule.disconnectWallet().then(() => {
       updateWalletBtn(false);
     }).catch(() => {});
   } else {
+    console.log('[Main] Calling WalletModule.openConnect()...');
     WalletModule.openConnect(walletProjectId)
       .then(() => {
+        console.log('[Main] openConnect resolved');
         updateWalletBtn(true);
       })
       .catch((err) => {
-        console.error('Wallet connection failed:', err);
+        console.error('[Main] Wallet connection failed:', err);
       });
   }
 });
