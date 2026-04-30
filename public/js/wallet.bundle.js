@@ -26670,44 +26670,12 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
     }
     return { provider, modal };
   }
-  function testWebSocket(url) {
-    return new Promise((resolve) => {
-      console.log("[Wallet] Testing WebSocket to", url);
-      try {
-        const ws2 = new WebSocket(url);
-        const timeout = setTimeout(() => {
-          console.log("[Wallet] WebSocket test timed out");
-          resolve(false);
-          try {
-            ws2.close();
-          } catch (e9) {
-          }
-        }, 5e3);
-        ws2.onopen = () => {
-          clearTimeout(timeout);
-          console.log("[Wallet] WebSocket test: connected!");
-          resolve(true);
-          ws2.close();
-        };
-        ws2.onerror = (e9) => {
-          clearTimeout(timeout);
-          console.log("[Wallet] WebSocket test: error", e9);
-          resolve(false);
-        };
-      } catch (e9) {
-        console.log("[Wallet] WebSocket test: exception", e9);
-        resolve(false);
-      }
-    });
-  }
   async function openConnect(projectId) {
     console.log("[Wallet] openConnect() called");
     try {
       const { provider: provider2, modal: modal2 } = await init(projectId);
       console.log("[Wallet] Provider+Modal ready");
-      const wsOk = await testWebSocket("wss://relay.walletconnect.com");
-      console.log("[Wallet] WebSocket connectivity:", wsOk);
-      console.log("[Wallet] About to call provider.connect()...");
+      console.log("[Wallet] Starting provider.connect() \u2014 this will wait for user approval...");
       const connectPromise = provider2.connect({
         namespaces: {
           hedera: {
@@ -26722,36 +26690,27 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
           }
         }
       });
-      const timeoutPromise = new Promise((_4, reject) => {
-        setTimeout(() => reject(new Error("provider.connect() timed out after 8s")), 8e3);
-      });
-      let result;
-      try {
-        result = await Promise.race([connectPromise, timeoutPromise]);
-      } catch (timeoutErr) {
-        console.error("[Wallet] Timeout or error:", timeoutErr.message);
-        if (provider2.uri) {
-          console.log("[Wallet] Found provider.uri after timeout:", provider2.uri.substring(0, 30) + "...");
-          modal2.openModal({ uri: provider2.uri });
-          return null;
-        }
-        throw timeoutErr;
-      }
-      console.log("[Wallet] connect() resolved. Result:", result);
-      console.log("[Wallet] Result type:", typeof result);
-      if (result && typeof result === "object") {
-        console.log("[Wallet] Result keys:", Object.keys(result));
-      }
-      const uri = provider2.uri;
-      console.log("[Wallet] provider.uri present?", !!uri);
-      if (uri) {
-        console.log("[Wallet] Opening modal with URI...");
+      let modalShown = false;
+      const showModal = (uri) => {
+        if (modalShown || !uri) return;
+        modalShown = true;
+        console.log("[Wallet] Opening WalletConnect modal with URI");
         modal2.openModal({ uri });
-        console.log("[Wallet] modal.openModal() called");
-      } else {
-        console.warn("[Wallet] No URI available");
-      }
-      return result;
+      };
+      provider2.events.on("display_uri", (uri) => {
+        console.log("[Wallet] display_uri event received");
+        showModal(uri);
+      });
+      const pollInterval = setInterval(() => {
+        if (provider2.uri) {
+          clearInterval(pollInterval);
+          showModal(provider2.uri);
+        }
+      }, 100);
+      setTimeout(() => clearInterval(pollInterval), 5e3);
+      const session = await connectPromise;
+      console.log("[Wallet] User approved session");
+      return session;
     } catch (e9) {
       console.error("[Wallet] openConnect error:", e9);
       alert("Wallet connect error: " + (e9?.message || String(e9)));
