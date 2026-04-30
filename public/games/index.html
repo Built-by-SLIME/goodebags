@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goodebags Games — Select Your Battle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .game-select-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: #080808; }
+    .game-select-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; text-align: center; }
+    .game-select-sub { color: #a0a0a0; margin-bottom: 48px; text-align: center; }
+    .game-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 900px; width: 100%; }
+    .game-card {
+      background: #0f0f0f; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;
+      overflow: hidden; cursor: pointer; transition: all 0.25s ease; text-decoration: none; color: inherit;
+      display: block;
+    }
+    .game-card:hover { border-color: #FFD700; transform: translateY(-4px); box-shadow: 0 0 30px rgba(255,215,0,0.15); }
+    .game-card-img { width: 100%; height: 220px; object-fit: cover; background: #141414; }
+    .game-card-body { padding: 24px; }
+    .game-card-badge {
+      display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; padding: 4px 12px; border-radius: 100px; margin-bottom: 12px;
+    }
+    .badge-hedera { background: rgba(59,220,150,0.15); color: #3BDC96; border: 1px solid rgba(59,220,150,0.3); }
+    .badge-xrpl { background: rgba(48,81,252,0.15); color: #3051FC; border: 1px solid rgba(48,81,252,0.3); }
+    .game-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .game-card p { font-size: 0.88rem; color: #a0a0a0; line-height: 1.5; }
+    .back-link { margin-top: 40px; color: #a0a0a0; text-decoration: none; font-size: 0.85rem; }
+    .back-link:hover { color: #FFD700; }
+    @media (max-width: 700px) { .game-cards { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="game-select-container">
+    <h1 class="game-select-title">Choose Your <span style="color:#FFD700">Battle</span></h1>
+    <p class="game-select-sub">Select your network. Each game uses cards from its own NFT collection.</p>
+
+    <div class="game-cards">
+      <!-- TBK — Hedera -->
+      <a href="/games/tbk/" class="game-card">
+        <img src="/assets/tbk-preview.jpg" alt="The Bee's Knees" class="game-card-img" />
+        <div class="game-card-body">
+          <span class="game-card-badge badge-hedera">Hedera Network</span>
+          <h3>The Bee's Knees</h3>
+          <p>Battle with your TBK NFT cards on the Hedera network. Build your hive, swarm your opponents, and claim the honey pot.</p>
+        </div>
+      </a>
+
+      <!-- Ape Mod X — XRPL -->
+      <a href="/games/apemodx/" class="game-card">
+        <img src="/assets/apemodx-preview.jpg" alt="Ape Mod X" class="game-card-img" />
+        <div class="game-card-body">
+          <span class="game-card-badge badge-xrpl">XRPL Network</span>
+          <h3>Ape Mod X</h3>
+          <p>Enter the arena with your Ape Mod X NFTs on the XRPL. Modify your apes, outsmart rivals, and dominate the jungle.</p>
+        </div>
+      </a>
+    </div>
+
+    <a href="/" class="back-link">← Back to Goodebags Games</a>
+  </div>
+</body>
+</html>

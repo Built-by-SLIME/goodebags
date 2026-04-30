@@ -3,20 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goodebags Game 1</title>
+  <title>The Bee's Knees — Hedera Card Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/game.css" />
+  <style>
+    :root {
+      /* TBK Hedera Theme — drop real assets in /games/tbk/assets/ */
+      --tbk-green: #3BDC96;
+      --tbk-gold: #FFD700;
+      --tbk-bg: #080808;
+      --tbk-bg-2: #0f0f0f;
+      --tbk-accent: var(--tbk-green);
+    }
+    .game-header { border-color: rgba(59,220,150,0.2); }
+    .turn-badge { background: rgba(59,220,150,0.12); border-color: rgba(59,220,150,0.3); color: var(--tbk-green); }
+    .card:hover { border-color: var(--tbk-green); box-shadow: 0 0 30px rgba(59,220,150,0.25); }
+    .card.can-attack { box-shadow: 0 0 12px rgba(59,220,150,0.35); }
+    .health-fill { background: linear-gradient(90deg, #2aaa6a, var(--tbk-green)); }
+    .deck-pile span, .discard-pile span { color: var(--tbk-green); }
+    .btn-primary { background: var(--tbk-green); color: #000; }
+    .btn-primary:hover { background: #2aaa6a; }
+    .game-logo img { content: url('/assets/tbk-logo.png'); } /* Replace with real TBK logo */
+  </style>
 </head>
 <body>
   <div class="game-container">
     <header class="game-header">
-      <a href="/" class="game-logo">
-        <img src="/assets/goodebags-logo.png" alt="Goodebags Games" />
+      <a href="/games/" class="game-logo">
+        <img src="/assets/tbk-logo.png" alt="The Bee's Knees" onerror="this.src='/assets/goodebags-logo.png'" />
       </a>
       <div class="game-meta">
         <span id="turnIndicator" class="turn-badge">Your Turn</span>
         <button id="endTurnBtn" class="btn btn-primary btn-sm">End Turn</button>
+        <a href="/games/" class="btn btn-outline btn-sm">Back</a>
       </div>
     </header>
 

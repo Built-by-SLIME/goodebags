@@ -1,0 +1,260 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080808; --bg-2: #0f0f0f; --bg-3: #141414;
+  --green: #FFD700; --green-dark: #E5C200;
+  --white: #ffffff; --gray-1: #a0a0a0; --gray-2: #4a4a4a;
+  --border: rgba(255,255,255,0.08); --radius: 12px; --radius-lg: 20px;
+  --transition: 0.25s ease; --font: 'Inter', sans-serif;
+  --shadow-green: 0 0 30px rgba(255,215,0,0.25);
+}
+
+body {
+  background: var(--bg); color: var(--white); font-family: var(--font);
+  line-height: 1.6; overflow-x: hidden; min-height: 100vh;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+.game-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.game-logo img { height: 48px; width: auto; }
+
+.game-meta { display: flex; align-items: center; gap: 12px; }
+
+.turn-badge {
+  background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3);
+  color: var(--green); font-size: 0.82rem; font-weight: 700;
+  padding: 6px 14px; border-radius: 100px;
+}
+
+.game-board {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.opponent-area, .player-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.player-name { font-weight: 700; font-size: 0.95rem; }
+
+.health-bar {
+  position: relative;
+  width: 160px;
+  height: 20px;
+  background: var(--bg-3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.health-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-dark), var(--green));
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+
+.health-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.mana-pool { font-size: 0.85rem; color: var(--gray-1); }
+
+.hand, .board {
+  display: flex;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.board { min-height: 140px; flex-wrap: wrap; }
+
+.card {
+  width: 100px;
+  height: 140px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.card:hover {
+  border-color: var(--green);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-green);
+}
+
+.card.played { border-color: var(--green); }
+.card.can-attack { box-shadow: 0 0 12px rgba(255,215,0,0.35); }
+
+.card img {
+  width: 100%; height: 60px; object-fit: cover;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-name { font-size: 0.7rem; font-weight: 700; padding: 4px; text-align: center; }
+
+.card-stats {
+  position: absolute;
+  bottom: 6px;
+  display: flex;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.stat-atk { color: #ff6b6b; }
+.stat-hp { color: var(--green); }
+
+.card-cost {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 20px; height: 20px;
+  background: var(--green);
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.opponent-hand .card { background: var(--bg-2); }
+.opponent-hand .card::after {
+  content: '?';
+  font-size: 1.2rem;
+  color: var(--gray-2);
+}
+
+.battle-zone {
+  padding: 12px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 60px;
+}
+
+.battle-log {
+  font-size: 0.82rem;
+  color: var(--gray-1);
+  max-height: 80px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.battle-log .log-entry {
+  padding: 2px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.battle-log .log-entry:last-child { border-bottom: none; }
+
+.game-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.deck-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.deck-pile, .discard-pile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+  background: var(--bg-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.deck-pile span, .discard-pile span {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.deck-pile label, .discard-pile label {
+  font-size: 0.7rem;
+  color: var(--gray-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 10px 20px; border-radius: var(--radius);
+  font-family: var(--font); font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition); border: none;
+}
+
+.btn-primary { background: var(--green); color: #000; }
+.btn-primary:hover { background: var(--green-dark); box-shadow: var(--shadow-green); }
+
+.btn-outline { background: transparent; color: var(--white); border: 2px solid var(--border); }
+.btn-outline:hover { border-color: var(--green); color: var(--green); }
+
+.btn-sm { padding: 8px 16px; font-size: 0.78rem; }
+
+@media (max-width: 900px) {
+  .game-container { grid-template-columns: 1fr; }
+  .game-sidebar { flex-direction: row; justify-content: space-between; }
+  .hand, .board { overflow-x: auto; }
+}

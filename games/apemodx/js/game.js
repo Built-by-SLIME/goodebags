@@ -94,17 +94,22 @@ class Game {
   }
 
   init() {
+    /* ═══════════════════════════════════════════
+       APE MOD X CARD DEFINITIONS — Drop real card art into:
+       /games/apemodx/assets/cards/
+       Then update image paths below.
+    ═══════════════════════════════════════════ */
     const starterDeck = () => [
-      new Card(1, 'Base Ape', 1, 2, 2),
-      new Card(2, 'Bee Swarm', 2, 3, 2),
-      new Card(3, 'Ape Mod', 3, 4, 3),
-      new Card(4, 'Hedera Guard', 2, 2, 4),
-      new Card(5, 'XRPL Scout', 1, 1, 1),
-      new Card(6, 'Goodebag', 4, 5, 4),
-      new Card(7, 'TBK Fighter', 3, 3, 3),
-      new Card(8, 'Slime Token', 1, 1, 2),
-      new Card(9, 'Dual Chain', 2, 2, 2),
-      new Card(10, 'SentX Shard', 3, 4, 2),
+      new Card(1,  'Base Ape',     1, 2, 2, 'assets/cards/base-ape.png'),
+      new Card(2,  'Modded Ape',   2, 3, 2, 'assets/cards/modded-ape.png'),
+      new Card(3,  'Cyber Ape',    3, 4, 3, 'assets/cards/cyber-ape.png'),
+      new Card(4,  'XRPL Guard',   2, 2, 4, 'assets/cards/xrpl-guard.png'),
+      new Card(5,  'Ape Scout',    1, 1, 2, 'assets/cards/ape-scout.png'),
+      new Card(6,  'Alpha Ape',    4, 5, 5, 'assets/cards/alpha-ape.png'),
+      new Card(7,  'Ape Brawler',  3, 4, 3, 'assets/cards/ape-brawler.png'),
+      new Card(8,  'Tech Ape',     2, 2, 3, 'assets/cards/tech-ape.png'),
+      new Card(9,  'Ape Tank',     2, 1, 5, 'assets/cards/ape-tank.png'),
+      new Card(10, 'Ape Mod X',    3, 3, 3, 'assets/cards/ape-mod-x.png'),
     ];
 
     this.player.deck = new Deck([...starterDeck(), ...starterDeck(), ...starterDeck()]);
@@ -250,8 +255,10 @@ class Game {
     hand.forEach((card, idx) => {
       const node = document.createElement('div');
       node.className = 'card';
+      const imgHtml = card.image ? `<img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` : '';
       if (isPlayer) {
         node.innerHTML = `
+          ${imgHtml}
           <div class="card-cost">${card.cost}</div>
           <div class="card-name">${card.name}</div>
           <div class="card-stats"><span class="stat-atk">${card.attack}</span><span class="stat-hp">${card.health}</span></div>
@@ -279,7 +286,9 @@ class Game {
     board.forEach((card, idx) => {
       const node = document.createElement('div');
       node.className = 'card' + (card.canAttack ? ' can-attack' : '');
+      const imgHtml = card.image ? `<img src="${card.image}" alt="${card.name}" loading="lazy" onerror="this.style.display='none'">` : '';
       node.innerHTML = `
+        ${imgHtml}
         <div class="card-cost">${card.cost}</div>
         <div class="card-name">${card.name}</div>
         <div class="card-stats"><span class="stat-atk">${card.attack}</span><span class="stat-hp">${card.health}</span></div>

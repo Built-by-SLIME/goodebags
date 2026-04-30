@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ape Mod X — XRPL Card Battle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/game.css" />
+  <style>
+    :root {
+      /* Ape Mod X XRPL Theme — drop real assets in /games/apemodx/assets/ */
+      --amx-blue: #3051FC;
+      --amx-gold: #FFD700;
+      --amx-bg: #080808;
+      --amx-bg-2: #0f0f0f;
+      --amx-accent: var(--amx-blue);
+    }
+    .game-header { border-color: rgba(48,81,252,0.2); }
+    .turn-badge { background: rgba(48,81,252,0.12); border-color: rgba(48,81,252,0.3); color: var(--amx-blue); }
+    .card:hover { border-color: var(--amx-blue); box-shadow: 0 0 30px rgba(48,81,252,0.25); }
+    .card.can-attack { box-shadow: 0 0 12px rgba(48,81,252,0.35); }
+    .health-fill { background: linear-gradient(90deg, #1a3bc7, var(--amx-blue)); }
+    .deck-pile span, .discard-pile span { color: var(--amx-blue); }
+    .btn-primary { background: var(--amx-blue); color: #fff; }
+    .btn-primary:hover { background: #1a3bc7; }
+    .game-logo img { content: url('/assets/apemodx-logo.png'); } /* Replace with real Ape Mod X logo */
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <a href="/games/" class="game-logo">
+        <img src="/assets/apemodx-logo.png" alt="Ape Mod X" onerror="this.src='/assets/goodebags-logo.png'" />
+      </a>
+      <div class="game-meta">
+        <span id="turnIndicator" class="turn-badge">Your Turn</span>
+        <button id="endTurnBtn" class="btn btn-primary btn-sm">End Turn</button>
+        <a href="/games/" class="btn btn-outline btn-sm">Back</a>
+      </div>
+    </header>
+
+    <main class="game-board">
+      <!-- Opponent Area -->
+      <section class="opponent-area">
+        <div class="player-info">
+          <span class="player-name">AI Opponent</span>
+          <div class="health-bar">
+            <div id="aiHealth" class="health-fill" style="width:100%"></div>
+            <span id="aiHealthText" class="health-text">20 / 20</span>
+          </div>
+        </div>
+        <div id="aiHand" class="hand opponent-hand"></div>
+        <div id="aiBoard" class="board opponent-board"></div>
+      </section>
+
+      <!-- Battle Zone -->
+      <section class="battle-zone">
+        <div id="battleLog" class="battle-log"></div>
+      </section>
+
+      <!-- Player Area -->
+      <section class="player-area">
+        <div id="playerBoard" class="board player-board"></div>
+        <div id="playerHand" class="hand player-hand"></div>
+        <div class="player-info">
+          <span class="player-name">You</span>
+          <div class="health-bar">
+            <div id="playerHealth" class="health-fill" style="width:100%"></div>
+            <span id="playerHealthText" class="health-text">20 / 20</span>
+          </div>
+          <div class="mana-pool">
+            <span id="manaText">Mana: 1 / 1</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="game-sidebar">
+      <div class="deck-info">
+        <div class="deck-pile">
+          <span id="deckCount">30</span>
+          <label>Deck</label>
+        </div>
+        <div class="discard-pile">
+          <span id="discardCount">0</span>
+          <label>Discard</label>
+        </div>
+      </div>
+      <button id="restartBtn" class="btn btn-outline btn-sm">Restart</button>
+    </aside>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
