@@ -7,9 +7,9 @@ const PORT = process.env.PORT || 3000;
 // Serve the main website
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Game routes — games will live in /games/game1 and /games/game2
-app.use('/games/game1', express.static(path.join(__dirname, 'games', 'game1')));
-app.use('/games/game2', express.static(path.join(__dirname, 'games', 'game2')));
+// Game routes — TBK (Hedera) and Ape Mod X (XRPL)
+app.use('/games/tbk', express.static(path.join(__dirname, 'games', 'tbk')));
+app.use('/games/apemodx', express.static(path.join(__dirname, 'games', 'apemodx')));
 
 // Config endpoint for frontend env vars
 app.get('/api/config', (req, res) => {
