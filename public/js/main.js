@@ -35,16 +35,15 @@ walletBtn.addEventListener('click', () => {
       updateWalletBtn(false);
     }).catch(() => {});
   } else {
-    WalletModule.openWalletModal(walletProjectId);
+    WalletModule.openConnect(walletProjectId)
+      .then(() => {
+        updateWalletBtn(true);
+      })
+      .catch((err) => {
+        console.error('Wallet connection failed:', err);
+      });
   }
 });
-
-// Listen for connection state changes from AppKit
-if (typeof WalletModule !== 'undefined' && WalletModule.subscribeConnection) {
-  WalletModule.subscribeConnection((state) => {
-    updateWalletBtn(state.isConnected);
-  });
-}
 
 /* ═══════════════════════════════════════════
    NAVBAR — scroll effect + mobile toggle

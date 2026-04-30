@@ -1,84 +1,79 @@
-import { createAppKit } from '@reown/appkit';
-import { EthersAdapter } from '@reown/appkit-adapter-ethers';
+import { WalletConnectModal } from '@walletconnect/modal';
+import { UniversalProvider } from '@walletconnect/universal-provider';
 
+let provider = null;
 let modal = null;
 let currentProjectId = null;
 
-const metadata = {
-  name: 'Goodebags Games',
-  description: 'Collect. Play. Compete.',
-  url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
-  icons: ['https://goodebags.games/assets/goodebags-logo.png']
-};
+const CHAINS = ['hedera:mainnet', 'hedera:testnet', 'xrpl:0', 'xrpl:1'];
 
-const networks = [
-  { id: 'hedera:mainnet', chainId: 'hedera:mainnet', chainNamespace: 'hedera', name: 'Hedera Mainnet', nativeCurrency: { name: 'HBAR', symbol: 'HBAR', decimals: 8 } },
-  { id: 'hedera:testnet', chainId: 'hedera:testnet', chainNamespace: 'hedera', name: 'Hedera Testnet', nativeCurrency: { name: 'HBAR', symbol: 'HBAR', decimals: 8 } },
-  { id: 'xrpl:0', chainId: 'xrpl:0', chainNamespace: 'xrpl', name: 'XRPL Mainnet', nativeCurrency: { name: 'XRP', symbol: 'XRP', decimals: 6 } },
-  { id: 'xrpl:1', chainId: 'xrpl:1', chainNamespace: 'xrpl', name: 'XRPL Testnet', nativeCurrency: { name: 'XRP', symbol: 'XRP', decimals: 6 } }
-];
-
-function initModal(projectId) {
-  if (modal && currentProjectId === projectId) return modal;
+async function init(projectId) {
+  if (provider && currentProjectId === projectId) return { provider, modal };
   currentProjectId = projectId;
 
-  const ethersAdapter = new EthersAdapter();
-
-  modal = createAppKit({
-    adapters: [ethersAdapter],
-    networks: networks,
-    metadata: metadata,
-    projectId: projectId,
-    features: {
-      analytics: false,
-      email: false,
-      socials: false
+  provider = await UniversalProvider.init({
+    projectId,
+    relayUrl: 'wss://relay.walletconnect.com',
+    metadata: {
+      name: 'Goodebags Games',
+      description: 'Collect. Play. Compete.',
+      url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
+      icons: ['https://goodebags.games/assets/goodebags-logo.png']
     }
   });
 
-  return modal;
-}
-
-export function openWalletModal(projectId) {
-  const m = initModal(projectId);
-  m.open();
-}
-
-export function closeWalletModal() {
-  if (modal) {
-    modal.close();
-  }
-}
-
-export function subscribeConnection(callback) {
-  if (!modal) return () => {};
-  return modal.subscribeState((state) => {
-    callback({
-      open: state.open,
-      selectedNetworkId: state.selectedNetworkId,
-      isConnected: state.isConnected
-    });
+  modal = new WalletConnectModal({
+    projectId,
+    chains: CHAINS,
+    enableExplorer: true,
+    mobileWallets: [
+      { id: 'hashpack', name: 'HashPack', links: { native: 'hashpack://', universal: 'https://hashpack.app' } },
+      { id: 'kabila', name: 'Kabila', links: { native: 'kabila://', universal: 'https://kabila.app' } },
+      { id: 'xaman', name: 'Xaman', links: { native: 'xaman://', universal: 'https://xaman.app' } },
+      { id: 'joey', name: 'Joey', links: { native: 'joey://', universal: 'https://joeywallet.com' } }
+    ]
   });
+
+  return { provider, modal };
 }
 
-export function getConnection() {
-  if (!modal) return null;
-  const state = modal.getState ? modal.getState() : {};
-  return {
-    isConnected: state.isConnected || false,
-    address: state.address || null,
-    chainId: state.selectedNetworkId || null
-  };
-}
+export async function openConnect(projectId) {
+  const { provider, modal } = await init(projectId);
 
-export function isConnected() {
-  if (!modal) return false;
-  const state = modal.getState ? modal.getState() : {};
-  return !!state.isConnected;
+  const { uri, approval } = await provider.connect({
+    namespaces: {
+      hedera: {
+        chains: ['hedera:mainnet', 'hedera:testnet'],
+        methods: [],
+        events: []
+      },
+      xrpl: {
+        chains: ['xrpl:0', 'xrpl:1'],
+        methods: [],
+        events: []
+      }
+    }
+  });
+
+  if (uri) {
+    modal.openModal({ uri });
+  }
+
+  const session = await approval();
+  return session;
 }
 
 export async function disconnectWallet() {
-  if (modal && modal.disconnect) {
-    await modal.disconnect();
+  if (provider) {
+    await provider.disconnect();
   }
+}
+
+export function isConnected() {
+  return !!(provider && provider.session);
+}
+
+export function getSession() {
+  if (!provider) return null;
+  return provider.session || null;
 }
