@@ -25,17 +25,16 @@
     .btn-primary { background: var(--tbk-green); color: #000; }
     .btn-primary:hover { background: #2aaa6a; }
     .game-logo img { max-height: 40px; }
-    .game-board {
-      background: url('assets/board-bg.png') center/cover no-repeat;
-      min-height: 60vh;
-      border-radius: 12px;
-      position: relative;
+    .game-container {
+      background: url('assets/board-bg.png') center/cover no-repeat fixed;
     }
-    .opponent-area, .player-area, .battle-zone {
-      background: rgba(15,15,15,0.78);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+    .opponent-area, .player-area, .battle-zone, .game-sidebar {
+      background: rgba(8,8,8,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.06);
     }
+    .game-board { gap: 0; }
   </style>
 </head>
 <body>
