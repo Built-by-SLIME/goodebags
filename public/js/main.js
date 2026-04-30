@@ -1,10 +1,7 @@
 /* ═══════════════════════════════════════════
-   WALLET CONNECT
+   WALLET CONNECT — AppKit / WalletConnect v2
 ═══════════════════════════════════════════ */
 const walletBtn = document.getElementById('walletBtn');
-const walletModal = document.getElementById('walletModal');
-const walletModalClose = document.getElementById('walletModalClose');
-const walletStatus = document.getElementById('walletStatus');
 
 let walletProjectId = null;
 
@@ -20,51 +17,34 @@ async function loadWalletConfig() {
 }
 loadWalletConfig();
 
-function openWalletModal() {
-  walletModal.classList.add('open');
-  walletStatus.textContent = '';
-  walletStatus.className = 'wallet-status';
-}
-
-function closeWalletModal() {
-  walletModal.classList.remove('open');
+function updateWalletBtn(connected) {
+  walletBtn.textContent = connected ? 'Disconnect' : 'Connect Wallet';
 }
 
 walletBtn.addEventListener('click', () => {
-  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
+  if (!walletProjectId) {
+    alert('WalletConnect Project ID not configured. Please set WALLETCONNECT_PROJECT_ID environment variable.');
+    return;
+  }
+  if (typeof WalletModule === 'undefined') {
+    alert('Wallet module not loaded. Please refresh the page.');
+    return;
+  }
+  if (WalletModule.isConnected && WalletModule.isConnected()) {
     WalletModule.disconnectWallet().then(() => {
-      walletBtn.textContent = 'Connect Wallet';
+      updateWalletBtn(false);
     }).catch(() => {});
   } else {
-    openWalletModal();
+    WalletModule.openWalletModal(walletProjectId);
   }
 });
 
-walletModalClose.addEventListener('click', closeWalletModal);
-walletModal.querySelector('.wallet-modal-overlay').addEventListener('click', closeWalletModal);
-
-document.querySelectorAll('.wallet-option').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const key = btn.dataset.wallet;
-    walletStatus.textContent = 'Connecting…';
-    walletStatus.className = 'wallet-status';
-    try {
-      if (typeof WalletModule === 'undefined' || !WalletModule.connectWallet) {
-        throw new Error('Wallet module not loaded');
-      }
-      if (!walletProjectId) {
-        throw new Error('WalletConnect Project ID not configured');
-      }
-      const result = await WalletModule.connectWallet(key, walletProjectId);
-      walletBtn.textContent = 'Disconnect';
-      closeWalletModal();
-      console.log('Wallet connected:', result);
-    } catch (err) {
-      walletStatus.textContent = err.message || 'Connection failed';
-      walletStatus.classList.add('error');
-    }
+// Listen for connection state changes from AppKit
+if (typeof WalletModule !== 'undefined' && WalletModule.subscribeConnection) {
+  WalletModule.subscribeConnection((state) => {
+    updateWalletBtn(state.isConnected);
   });
-});
+}
 
 /* ═══════════════════════════════════════════
    NAVBAR — scroll effect + mobile toggle

@@ -1,100 +1,84 @@
-import { UniversalProvider } from '@walletconnect/universal-provider';
+import { createAppKit } from '@reown/appkit';
+import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 
-let provider = null;
-let session = null;
+let modal = null;
 let currentProjectId = null;
 
-const WALLET_META = {
-  hashpack: {
-    name: 'HashPack',
-    icon: 'https://hashpack.app/img/logo.svg',
-    chains: ['hedera:mainnet', 'hedera:testnet'],
-    deepLink: 'hashpack://wc?uri='
-  },
-  kabila: {
-    name: 'Kabila',
-    icon: '',
-    chains: ['hedera:mainnet', 'hedera:testnet'],
-    deepLink: 'kabila://wc?uri='
-  },
-  xaman: {
-    name: 'Xaman',
-    icon: '',
-    chains: ['xrpl:0', 'xrpl:1'],
-    deepLink: 'xaman://wc?uri='
-  },
-  joey: {
-    name: 'Joey',
-    icon: '',
-    chains: ['xrpl:0', 'xrpl:1'],
-    deepLink: 'joey://wc?uri='
-  }
+const metadata = {
+  name: 'Goodebags Games',
+  description: 'Collect. Play. Compete.',
+  url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
+  icons: ['https://goodebags.games/assets/goodebags-logo.png']
 };
 
-async function initProvider(projectId) {
-  if (provider && currentProjectId === projectId) return provider;
+const networks = [
+  { id: 'hedera:mainnet', chainId: 'hedera:mainnet', chainNamespace: 'hedera', name: 'Hedera Mainnet', nativeCurrency: { name: 'HBAR', symbol: 'HBAR', decimals: 8 } },
+  { id: 'hedera:testnet', chainId: 'hedera:testnet', chainNamespace: 'hedera', name: 'Hedera Testnet', nativeCurrency: { name: 'HBAR', symbol: 'HBAR', decimals: 8 } },
+  { id: 'xrpl:0', chainId: 'xrpl:0', chainNamespace: 'xrpl', name: 'XRPL Mainnet', nativeCurrency: { name: 'XRP', symbol: 'XRP', decimals: 6 } },
+  { id: 'xrpl:1', chainId: 'xrpl:1', chainNamespace: 'xrpl', name: 'XRPL Testnet', nativeCurrency: { name: 'XRP', symbol: 'XRP', decimals: 6 } }
+];
+
+function initModal(projectId) {
+  if (modal && currentProjectId === projectId) return modal;
   currentProjectId = projectId;
-  provider = await UniversalProvider.init({
+
+  const ethersAdapter = new EthersAdapter();
+
+  modal = createAppKit({
+    adapters: [ethersAdapter],
+    networks: networks,
+    metadata: metadata,
     projectId: projectId,
-    relayUrl: 'wss://relay.walletconnect.com',
-    metadata: {
-      name: 'Goodebags Games',
-      description: 'Collect. Play. Compete.',
-      url: typeof window !== 'undefined' ? window.location.origin : 'https://goodebags.games',
-      icons: ['https://goodebags.games/assets/goodebags-logo.png']
+    features: {
+      analytics: false,
+      email: false,
+      socials: false
     }
   });
-  return provider;
+
+  return modal;
 }
 
-export async function connectWallet(walletKey, projectId) {
-  const prov = await initProvider(projectId);
-  const wallet = WALLET_META[walletKey];
-  if (!wallet) throw new Error('Unknown wallet');
-
-  const namespaces = {
-    [wallet.chains[0].split(':')[0]]: {
-      chains: wallet.chains,
-      methods: [],
-      events: []
-    }
-  };
-
-  session = await prov.connect({
-    namespaces,
-    skipPairing: false
-  });
-
-  return {
-    wallet: wallet.name,
-    accounts: session.namespaces[wallet.chains[0].split(':')[0]]?.accounts || []
-  };
+export function openWalletModal(projectId) {
+  const m = initModal(projectId);
+  m.open();
 }
 
-export async function disconnectWallet() {
-  if (provider && session) {
-    await provider.disconnect();
-    session = null;
+export function closeWalletModal() {
+  if (modal) {
+    modal.close();
   }
+}
+
+export function subscribeConnection(callback) {
+  if (!modal) return () => {};
+  return modal.subscribeState((state) => {
+    callback({
+      open: state.open,
+      selectedNetworkId: state.selectedNetworkId,
+      isConnected: state.isConnected
+    });
+  });
 }
 
 export function getConnection() {
-  if (!session) return null;
-  const nsKeys = Object.keys(session.namespaces);
-  if (!nsKeys.length) return null;
-  const accounts = session.namespaces[nsKeys[0]].accounts || [];
+  if (!modal) return null;
+  const state = modal.getState ? modal.getState() : {};
   return {
-    accounts,
-    wallet: 'WalletConnect'
+    isConnected: state.isConnected || false,
+    address: state.address || null,
+    chainId: state.selectedNetworkId || null
   };
 }
 
 export function isConnected() {
-  return !!session;
+  if (!modal) return false;
+  const state = modal.getState ? modal.getState() : {};
+  return !!state.isConnected;
 }
 
-export const walletList = Object.entries(WALLET_META).map(([key, meta]) => ({
-  key,
-  name: meta.name,
-  icon: meta.icon
-}));
+export async function disconnectWallet() {
+  if (modal && modal.disconnect) {
+    await modal.disconnect();
+  }
+}
