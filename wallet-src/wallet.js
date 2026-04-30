@@ -43,12 +43,21 @@ async function init(projectId) {
       { id: 'joey', name: 'Joey', links: { native: 'joey://', universal: 'https://joeywallet.com' } }
     ];
 
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const walletImages = {
+      hashpack: `${origin}/images/wallets/hashpack.png`,
+      kabila: `${origin}/images/wallets/kabila.png`,
+      xaman: `${origin}/images/wallets/xaman.png`,
+      joey: `${origin}/images/wallets/joey.png`
+    };
+
     modal = new WalletConnectModal({
       projectId,
       chains: CHAINS,
       enableExplorer: true,
       mobileWallets: walletList,
-      desktopWallets: walletList
+      desktopWallets: walletList,
+      walletImages
     });
     console.log('[Wallet] WalletConnectModal created');
   } catch (e) {
