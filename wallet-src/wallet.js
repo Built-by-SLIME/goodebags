@@ -7,7 +7,13 @@ let currentProjectId = null;
 
 const CHAINS = ['hedera:mainnet', 'hedera:testnet', 'xrpl:0', 'xrpl:1'];
 
-async function init(projectId) {
+function dispatch(eventName) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(eventName));
+  }
+}
+
+export async function init(projectId) {
   console.log('[Wallet] init() called with projectId:', projectId ? 'set' : 'missing');
   if (provider && currentProjectId === projectId) {
     console.log('[Wallet] Reusing existing provider');
@@ -28,6 +34,19 @@ async function init(projectId) {
       }
     });
     console.log('[Wallet] UniversalProvider initialized');
+
+    provider.events.on('session_connect', () => {
+      console.log('[Wallet] session_connect event');
+      dispatch('walletConnected');
+    });
+    provider.events.on('session_delete', () => {
+      console.log('[Wallet] session_delete event');
+      dispatch('walletDisconnected');
+    });
+    provider.events.on('session_expire', () => {
+      console.log('[Wallet] session_expire event');
+      dispatch('walletDisconnected');
+    });
   } catch (e) {
     console.error('[Wallet] UniversalProvider.init failed:', e);
     alert('Wallet provider init failed: ' + e.message);
@@ -36,28 +55,10 @@ async function init(projectId) {
 
   try {
     console.log('[Wallet] Creating WalletConnectModal...');
-    const walletList = [
-      { id: 'hashpack', name: 'HashPack', links: { native: 'hashpack://', universal: 'https://hashpack.app' } },
-      { id: 'kabila', name: 'Kabila', links: { native: 'kabila://', universal: 'https://kabila.app' } },
-      { id: 'xaman', name: 'Xaman', links: { native: 'xaman://', universal: 'https://xaman.app' } },
-      { id: 'joey', name: 'Joey', links: { native: 'joey://', universal: 'https://joeywallet.com' } }
-    ];
-
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const walletImages = {
-      hashpack: `${origin}/images/wallets/hashpack.png`,
-      kabila: `${origin}/images/wallets/kabila.png`,
-      xaman: `${origin}/images/wallets/xaman.png`,
-      joey: `${origin}/images/wallets/joey.png`
-    };
-
     modal = new WalletConnectModal({
       projectId,
       chains: CHAINS,
-      enableExplorer: true,
-      mobileWallets: walletList,
-      desktopWallets: walletList,
-      walletImages
+      enableExplorer: true
     });
     console.log('[Wallet] WalletConnectModal created');
   } catch (e) {
@@ -123,6 +124,8 @@ export async function openConnect(projectId) {
     // Now await the actual user approval (this can take seconds/minutes)
     const session = await connectPromise;
     console.log('[Wallet] User approved session');
+    if (modal) modal.closeModal();
+    dispatch('walletConnected');
     return session;
   } catch (e) {
     console.error('[Wallet] openConnect error:', e);

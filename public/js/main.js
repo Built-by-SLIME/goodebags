@@ -5,6 +5,10 @@ const walletBtn = document.getElementById('walletBtn');
 
 let walletProjectId = null;
 
+function updateWalletBtn(connected) {
+  walletBtn.textContent = connected ? 'Disconnect' : 'Connect Wallet';
+}
+
 async function loadWalletConfig() {
   try {
     console.log('[Main] Fetching /api/config...');
@@ -12,6 +16,15 @@ async function loadWalletConfig() {
     const cfg = await res.json();
     walletProjectId = cfg.walletConnectProjectId || '';
     console.log('[Main] Project ID loaded:', walletProjectId ? 'yes' : 'no');
+
+    if (walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
+      try {
+        await WalletModule.init(walletProjectId);
+        updateWalletBtn(!!WalletModule.isConnected && WalletModule.isConnected());
+      } catch (e) {
+        console.warn('[Main] Silent wallet init failed:', e);
+      }
+    }
   } catch (e) {
     console.warn('[Main] Could not load wallet config:', e);
     walletProjectId = '';
@@ -19,9 +32,8 @@ async function loadWalletConfig() {
 }
 loadWalletConfig();
 
-function updateWalletBtn(connected) {
-  walletBtn.textContent = connected ? 'Disconnect' : 'Connect Wallet';
-}
+window.addEventListener('walletConnected', () => updateWalletBtn(true));
+window.addEventListener('walletDisconnected', () => updateWalletBtn(false));
 
 walletBtn.addEventListener('click', () => {
   console.log('[Main] Wallet button clicked');

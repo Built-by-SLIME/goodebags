@@ -9418,6 +9418,7 @@ var WalletModule = (() => {
   __export(wallet_exports, {
     disconnectWallet: () => disconnectWallet,
     getSession: () => getSession,
+    init: () => init,
     isConnected: () => isConnected,
     openConnect: () => openConnect
   });
@@ -26624,6 +26625,11 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
   var modal = null;
   var currentProjectId = null;
   var CHAINS = ["hedera:mainnet", "hedera:testnet", "xrpl:0", "xrpl:1"];
+  function dispatch(eventName) {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(eventName));
+    }
+  }
   async function init(projectId) {
     console.log("[Wallet] init() called with projectId:", projectId ? "set" : "missing");
     if (provider && currentProjectId === projectId) {
@@ -26644,6 +26650,18 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
         }
       });
       console.log("[Wallet] UniversalProvider initialized");
+      provider.events.on("session_connect", () => {
+        console.log("[Wallet] session_connect event");
+        dispatch("walletConnected");
+      });
+      provider.events.on("session_delete", () => {
+        console.log("[Wallet] session_delete event");
+        dispatch("walletDisconnected");
+      });
+      provider.events.on("session_expire", () => {
+        console.log("[Wallet] session_expire event");
+        dispatch("walletDisconnected");
+      });
     } catch (e9) {
       console.error("[Wallet] UniversalProvider.init failed:", e9);
       alert("Wallet provider init failed: " + e9.message);
@@ -26651,26 +26669,10 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
     }
     try {
       console.log("[Wallet] Creating WalletConnectModal...");
-      const walletList = [
-        { id: "hashpack", name: "HashPack", links: { native: "hashpack://", universal: "https://hashpack.app" } },
-        { id: "kabila", name: "Kabila", links: { native: "kabila://", universal: "https://kabila.app" } },
-        { id: "xaman", name: "Xaman", links: { native: "xaman://", universal: "https://xaman.app" } },
-        { id: "joey", name: "Joey", links: { native: "joey://", universal: "https://joeywallet.com" } }
-      ];
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      const walletImages = {
-        hashpack: `${origin}/images/wallets/hashpack.png`,
-        kabila: `${origin}/images/wallets/kabila.png`,
-        xaman: `${origin}/images/wallets/xaman.png`,
-        joey: `${origin}/images/wallets/joey.png`
-      };
       modal = new WalletConnectModal({
         projectId,
         chains: CHAINS,
-        enableExplorer: true,
-        mobileWallets: walletList,
-        desktopWallets: walletList,
-        walletImages
+        enableExplorer: true
       });
       console.log("[Wallet] WalletConnectModal created");
     } catch (e9) {
@@ -26720,6 +26722,8 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
       setTimeout(() => clearInterval(pollInterval), 5e3);
       const session = await connectPromise;
       console.log("[Wallet] User approved session");
+      if (modal2) modal2.closeModal();
+      dispatch("walletConnected");
       return session;
     } catch (e9) {
       console.error("[Wallet] openConnect error:", e9);
