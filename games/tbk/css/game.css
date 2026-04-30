@@ -19,8 +19,6 @@ body {
   grid-template-columns: 1fr 160px;
   grid-template-rows: auto 1fr;
   gap: 16px;
-  max-width: 1400px;
-  margin: 0 auto;
   padding: 16px;
   min-height: 100vh;
 }
@@ -31,9 +29,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
 }
 
 .game-logo img { height: 48px; width: auto; }
@@ -49,7 +44,6 @@ body {
 .game-board {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .opponent-area, .player-area {
@@ -57,9 +51,6 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
 }
 
 .player-info {
@@ -68,7 +59,7 @@ body {
   gap: 16px;
 }
 
-.player-name { font-weight: 700; font-size: 0.95rem; }
+.player-name { font-weight: 700; font-size: 0.95rem; text-shadow: 0 1px 4px rgba(0,0,0,0.85); }
 
 .health-bar {
   position: relative;
@@ -97,7 +88,7 @@ body {
   color: #000;
 }
 
-.mana-pool { font-size: 0.85rem; color: var(--gray-1); }
+.mana-pool { font-size: 0.85rem; color: var(--gray-1); text-shadow: 0 1px 4px rgba(0,0,0,0.85); }
 
 .hand, .board {
   display: flex;
@@ -122,6 +113,7 @@ body {
   position: relative;
   overflow: hidden;
   user-select: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.55);
 }
 
 .card:hover {
@@ -138,7 +130,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.card-name { font-size: 0.7rem; font-weight: 700; padding: 4px; text-align: center; }
+.card-name { font-size: 0.7rem; font-weight: 700; padding: 4px; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
 
 .card-stats {
   position: absolute;
@@ -147,6 +139,7 @@ body {
   gap: 8px;
   font-size: 0.75rem;
   font-weight: 800;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
 .stat-atk { color: #ff6b6b; }
@@ -176,9 +169,6 @@ body {
 
 .battle-zone {
   padding: 12px 16px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
   min-height: 60px;
 }
 
@@ -190,6 +180,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
 }
 
 .battle-log .log-entry {
@@ -204,9 +195,6 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
 }
 
 .deck-info {
@@ -221,15 +209,15 @@ body {
   align-items: center;
   gap: 4px;
   padding: 12px;
-  background: var(--bg-3);
+  background: rgba(0,0,0,0.25);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
 }
 
 .deck-pile span, .discard-pile span {
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--green);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.85);
 }
 
 .deck-pile label, .discard-pile label {
@@ -237,6 +225,7 @@ body {
   color: var(--gray-1);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
 }
 
 .btn {
