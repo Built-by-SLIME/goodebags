@@ -1236,3 +1236,9 @@ img {
   text-align: center;
 }
 
+/* WalletConnect modal — must float above fixed navbar (z-index:100) */
+wcm-modal {
+  z-index: 1000 !important;
+  position: relative;
+}
+
