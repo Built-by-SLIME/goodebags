@@ -11,6 +11,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/games/game1', express.static(path.join(__dirname, 'games', 'game1')));
 app.use('/games/game2', express.static(path.join(__dirname, 'games', 'game2')));
 
+// Config endpoint for frontend env vars
+app.get('/api/config', (req, res) => {
+  res.json({
+    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID || ''
+  });
+});
+
 // Fallback to index.html for the root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

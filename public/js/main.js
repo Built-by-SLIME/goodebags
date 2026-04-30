@@ -1,4 +1,72 @@
 /* ═══════════════════════════════════════════
+   WALLET CONNECT
+═══════════════════════════════════════════ */
+const walletBtn = document.getElementById('walletBtn');
+const walletModal = document.getElementById('walletModal');
+const walletModalClose = document.getElementById('walletModalClose');
+const walletStatus = document.getElementById('walletStatus');
+
+let walletProjectId = null;
+
+async function loadWalletConfig() {
+  try {
+    const res = await fetch('/api/config');
+    const cfg = await res.json();
+    walletProjectId = cfg.walletConnectProjectId || '';
+  } catch (e) {
+    console.warn('Could not load wallet config:', e);
+    walletProjectId = '';
+  }
+}
+loadWalletConfig();
+
+function openWalletModal() {
+  walletModal.classList.add('open');
+  walletStatus.textContent = '';
+  walletStatus.className = 'wallet-status';
+}
+
+function closeWalletModal() {
+  walletModal.classList.remove('open');
+}
+
+walletBtn.addEventListener('click', () => {
+  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
+    WalletModule.disconnectWallet().then(() => {
+      walletBtn.textContent = 'Connect Wallet';
+    }).catch(() => {});
+  } else {
+    openWalletModal();
+  }
+});
+
+walletModalClose.addEventListener('click', closeWalletModal);
+walletModal.querySelector('.wallet-modal-overlay').addEventListener('click', closeWalletModal);
+
+document.querySelectorAll('.wallet-option').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const key = btn.dataset.wallet;
+    walletStatus.textContent = 'Connecting…';
+    walletStatus.className = 'wallet-status';
+    try {
+      if (typeof WalletModule === 'undefined' || !WalletModule.connectWallet) {
+        throw new Error('Wallet module not loaded');
+      }
+      if (!walletProjectId) {
+        throw new Error('WalletConnect Project ID not configured');
+      }
+      const result = await WalletModule.connectWallet(key, walletProjectId);
+      walletBtn.textContent = 'Disconnect';
+      closeWalletModal();
+      console.log('Wallet connected:', result);
+    } catch (err) {
+      walletStatus.textContent = err.message || 'Connection failed';
+      walletStatus.classList.add('error');
+    }
+  });
+});
+
+/* ═══════════════════════════════════════════
    NAVBAR — scroll effect + mobile toggle
 ═══════════════════════════════════════════ */
 const navbar    = document.getElementById('navbar');

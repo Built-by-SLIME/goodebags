@@ -49,7 +49,7 @@
           </a>
         </div>
 
-        <a href="#join" class="btn btn-primary">Connect Wallet</a>
+        <button id="walletBtn" class="btn btn-primary">Connect Wallet</button>
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </button>
@@ -389,6 +389,36 @@
     </div>
   </footer>
 
+  <!-- Wallet Connect Modal -->
+  <div id="walletModal" class="wallet-modal">
+    <div class="wallet-modal-overlay"></div>
+    <div class="wallet-modal-content">
+      <button class="wallet-modal-close" id="walletModalClose">&times;</button>
+      <h3>Connect Wallet</h3>
+      <p>Select your wallet to connect to Goodebags Games</p>
+      <div class="wallet-grid">
+        <button class="wallet-option" data-wallet="hashpack">
+          <span class="wallet-name">HashPack</span>
+          <span class="wallet-chain">Hedera</span>
+        </button>
+        <button class="wallet-option" data-wallet="kabila">
+          <span class="wallet-name">Kabila</span>
+          <span class="wallet-chain">Hedera</span>
+        </button>
+        <button class="wallet-option" data-wallet="xaman">
+          <span class="wallet-name">Xaman</span>
+          <span class="wallet-chain">XRPL</span>
+        </button>
+        <button class="wallet-option" data-wallet="joey">
+          <span class="wallet-name">Joey</span>
+          <span class="wallet-chain">XRPL</span>
+        </button>
+      </div>
+      <div id="walletStatus" class="wallet-status"></div>
+    </div>
+  </div>
+
+  <script src="js/wallet.bundle.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goodebags Game 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <a href="/" class="game-logo">
+        <img src="/assets/goodebags-logo.png" alt="Goodebags Games" />
+      </a>
+      <div class="game-meta">
+        <span id="turnIndicator" class="turn-badge">Your Turn</span>
+        <button id="endTurnBtn" class="btn btn-primary btn-sm">End Turn</button>
+      </div>
+    </header>
+
+    <main class="game-board">
+      <!-- Opponent Area -->
+      <section class="opponent-area">
+        <div class="player-info">
+          <span class="player-name">AI Opponent</span>
+          <div class="health-bar">
+            <div id="aiHealth" class="health-fill" style="width:100%"></div>
+            <span id="aiHealthText" class="health-text">20 / 20</span>
+          </div>
+        </div>
+        <div id="aiHand" class="hand opponent-hand"></div>
+        <div id="aiBoard" class="board opponent-board"></div>
+      </section>
+
+      <!-- Battle Zone -->
+      <section class="battle-zone">
+        <div id="battleLog" class="battle-log"></div>
+      </section>
+
+      <!-- Player Area -->
+      <section class="player-area">
+        <div id="playerBoard" class="board player-board"></div>
+        <div id="playerHand" class="hand player-hand"></div>
+        <div class="player-info">
+          <span class="player-name">You</span>
+          <div class="health-bar">
+            <div id="playerHealth" class="health-fill" style="width:100%"></div>
+            <span id="playerHealthText" class="health-text">20 / 20</span>
+          </div>
+          <div class="mana-pool">
+            <span id="manaText">Mana: 1 / 1</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="game-sidebar">
+      <div class="deck-info">
+        <div class="deck-pile">
+          <span id="deckCount">30</span>
+          <label>Deck</label>
+        </div>
+        <div class="discard-pile">
+          <span id="discardCount">0</span>
+          <label>Discard</label>
+        </div>
+      </div>
+      <button id="restartBtn" class="btn btn-outline btn-sm">Restart</button>
+    </aside>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
