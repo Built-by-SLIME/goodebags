@@ -48,11 +48,25 @@
         <button class="opp-btn active" data-opp="1">1<span class="opp-pts">1,000 pts</span></button>
         <button class="opp-btn" data-opp="2">2<span class="opp-pts">2,000 pts</span></button>
         <button class="opp-btn" data-opp="3">3<span class="opp-pts">3,000 pts</span></button>
+        <button class="opp-btn" data-opp="4">4<span class="opp-pts">4,000 pts</span></button>
       </div>
       <p class="opp-note">More opponents = more points, but harder to win.</p>
     </div>
     <button id="btn-start" class="btn-primary btn-lg">Deal Cards &amp; Play</button>
     <a href="/games/" class="back-link">← Back to Game Select</a>
+  </div>
+</div>
+
+<!-- ── SCREEN: BOARD SELECT ── -->
+<div id="screen-board-select" class="screen">
+  <div class="board-select-inner">
+    <h2>Choose Your <span class="accent">Table</span></h2>
+    <p class="board-select-sub">Pick a table before the game begins.</p>
+    <div id="board-grid" class="board-grid"></div>
+    <div class="board-select-actions">
+      <button id="btn-board-back" class="btn-outline btn-lg">← Back</button>
+      <button id="btn-board-play" class="btn-primary btn-lg" disabled>Deal Cards ▶</button>
+    </div>
   </div>
 </div>
 
@@ -157,6 +171,7 @@
 <!-- ── STAR PING ── -->
 <div id="star-ping" class="star-ping" style="display:none">🐝</div>
 
+<script src="/js/device-guard.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

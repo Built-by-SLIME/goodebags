@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    THE BEE'S KNEES  —  Game Engine  (per official rules)
    50 cards | 8 traits | NO XTRA bonus
-   10 cards each | 1 human vs 1-3 computer opponents
+   10 cards each | 1 human vs 1-4 computer opponents
    Highest trait wins the round; ties freeze cards
 ═══════════════════════════════════════════════════════════ */
 'use strict';
@@ -16,13 +16,15 @@ const S = {
   numOpponents: 1, playerHand: [], oppHands: [],
   frozenPile: [], callerIndex: -1, calledTraitIdx: -1,
   sessionScore: 0, roundNum: 0,
+  selectedBoard: null,
 };
 
 // ── DOM ──────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const screens = {
   auth:$('screen-auth'), register:$('screen-register'), lobby:$('screen-lobby'),
-  dealing:$('screen-dealing'), game:$('screen-game'), result:$('screen-result'), leaderboard:$('screen-leaderboard')
+  'board-select':$('screen-board-select'), dealing:$('screen-dealing'),
+  game:$('screen-game'), result:$('screen-result'), leaderboard:$('screen-leaderboard')
 };
 
 function show(name) {
@@ -142,7 +144,47 @@ document.querySelectorAll('.opp-btn').forEach(btn=>{
   });
 });
 
-$('btn-start').addEventListener('click', async()=>{
+$('btn-start').addEventListener('click', () => goToBoardSelect());
+
+// ── Board selector ────────────────────────────────────────
+const TBK_BOARDS = [
+  { file:'tbk-01.jpg',       label:'Hive Table 1' },
+  { file:'tbk-02.jpg',       label:'Hive Table 2' },
+  { file:'universal-01.jpg', label:'Classic Table 1' },
+  { file:'universal-02.png', label:'Classic Table 2' },
+];
+
+function goToBoardSelect() {
+  show('board-select');
+  buildBoardGrid(TBK_BOARDS);
+  $('btn-board-play').disabled = !S.selectedBoard;
+  if (S.selectedBoard) {
+    document.querySelectorAll('.board-thumb').forEach(t => {
+      if ('assets/boards/'+t.dataset.file === S.selectedBoard) t.classList.add('selected');
+    });
+  }
+}
+
+function buildBoardGrid(boards) {
+  const grid = $('board-grid'); grid.innerHTML = '';
+  boards.forEach(board => {
+    const thumb = document.createElement('div');
+    thumb.className = 'board-thumb';
+    thumb.dataset.file = board.file;
+    thumb.innerHTML = `<img src="assets/boards/${board.file}" alt="${board.label}" loading="lazy" /><div class="board-label">${board.label}</div>`;
+    thumb.addEventListener('click', () => {
+      document.querySelectorAll('.board-thumb').forEach(t => t.classList.remove('selected'));
+      thumb.classList.add('selected');
+      S.selectedBoard = 'assets/boards/' + board.file;
+      $('btn-board-play').disabled = false;
+    });
+    grid.appendChild(thumb);
+  });
+}
+
+$('btn-board-back').addEventListener('click', () => goToLobby());
+
+$('btn-board-play').addEventListener('click', async () => {
   show('dealing'); $('dealing-msg').textContent='Loading cards…';
   const cardsRes=await fetch('data/cards.json');
   S.allCards=await cardsRes.json();
@@ -182,6 +224,13 @@ function startGame() {
 const BEE_AVATARS = ['bee-1.png','bee-3.png','bee-8.png','bee-19.png'];
 
 function buildTableUI() {
+  // Apply selected board image dynamically
+  const gameScreen = $('screen-game');
+  if (gameScreen && S.selectedBoard) {
+    gameScreen.style.backgroundImage = `url('${S.selectedBoard}')`;
+    gameScreen.style.backgroundSize  = 'cover';
+    gameScreen.style.backgroundPosition = 'center';
+  }
   const oz=$('opponents-zone'); oz.innerHTML='';
   for(let i=0;i<S.numOpponents;i++){
     const avatar=BEE_AVATARS[i % BEE_AVATARS.length];

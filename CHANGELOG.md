@@ -1,7 +1,50 @@
-# Goodebag Games — Changelog
+# Goodebags Games — Changelog
 
 All notable changes to this project are documented here.
 Format: `[Date] — Description`
+
+---
+
+## [2026-05-28] — Chunk 1: Codebase Cleanup
+
+### Removed
+- `public/newtasks.md` — internal dev notes were publicly web-accessible; removed from `public/`
+- `games/` directory (root level) — dead Hearthstone-style prototype that was never served and contradicted the live game rules; removed to eliminate confusion
+- npm packages `@reown/appkit`, `@reown/appkit-adapter-ethers`, `ethers` — Ethereum ecosystem libraries unused in this Hedera/XRPL project; 210 packages removed from `node_modules`
+
+### Added
+- `package.json` → `build:wallet` script: `esbuild wallet-src/wallet.js --bundle --format=iife --global-name=WalletModule --outfile=public/js/wallet.bundle.js` — provides a documented, reproducible way to rebuild the WalletConnect browser bundle
+
+---
+
+## [2026-05-28] — Chunk 2: New Board Assets
+
+### Added
+- `public/games/apemodx/assets/boards/` — 13 poker table boards for AMX (ape-01 through ape-11 + universal-01, universal-02); all confirmed 1920×1080 (16:9)
+- `public/games/tbk/assets/boards/` — 4 poker table boards for TBK (tbk-01, tbk-02 + universal-01, universal-02)
+- `scripts/check_image_dims.py` — utility script to verify image dimensions
+
+---
+
+## [2026-05-28] — Chunk 3: Mobile & Tablet Device Guard
+
+### Added
+- `public/js/device-guard.js` — shared device detection overlay; hard-blocks phones (< 768px), prompts tablet users in portrait to rotate to landscape; PC/landscape tablet passes through
+- Both game pages now include `device-guard.js` before `game.js` so the guard is ready on first paint
+
+---
+
+## [2026-05-28] — Chunk 4: Lobby — 4th Opponent + Board Selector
+
+### Added
+- 4th opponent button (4,000 pts) to both AMX and TBK lobby screens — supports up to 4 computer opponents as per PDF spec
+- `#screen-board-select` screen in both game pages — players must choose a table before the game begins; board persists for the full session (no re-selection between rounds)
+- Board selector CSS in both `style.css` files — responsive grid, 16:9 thumbnails, gold selection highlight
+- AMX: 13 board options in the selector; TBK: 4 board options
+
+### Changed
+- TBK `#screen-game` background is now set dynamically by `buildTableUI()` from the board selected; removed hardcoded `url('assets/table.jpg')` from CSS
+- AMX `buildTableUI()` applies the selected board image to `.table-felt` at game start
 
 ---
 
