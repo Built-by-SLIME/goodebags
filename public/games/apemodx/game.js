@@ -48,35 +48,68 @@ function updateOppBack(i){const b=$(`opp-back-${i}`),c=$(`opp-count-${i}`);if(b)
 function updateAllCounts(){updatePlayerBack();for(let i=0;i<S.numOpponents;i++)updateOppBack(i);updateScoreBar();}
 function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);updatePlayerBack();}else{S.oppHands[wi-1].push(...cards);updateOppBack(wi-1);}}
 
+// ── Read wallet from WalletConnect's own IndexedDB (no relay needed) ─────────
+// WC v2 stores sessions in IndexedDB: db=WALLET_CONNECT_V2_INDEXED_DB, store=keyvaluestorage
+function getWalletFromWC() {
+  return new Promise(resolve => {
+    try {
+      const req = indexedDB.open('WALLET_CONNECT_V2_INDEXED_DB');
+      req.onerror = () => resolve(null);
+      req.onsuccess = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('keyvaluestorage')) { resolve(null); return; }
+        const store = db.transaction('keyvaluestorage', 'readonly').objectStore('keyvaluestorage');
+        const keysReq = store.getAllKeys();
+        keysReq.onerror = () => resolve(null);
+        keysReq.onsuccess = () => {
+          // Find the key that holds session data (contains 'session')
+          const sessionKey = keysReq.result.find(k => typeof k === 'string' && k.includes('session'));
+          if (!sessionKey) { resolve(null); return; }
+          const valReq = store.get(sessionKey);
+          valReq.onerror = () => resolve(null);
+          valReq.onsuccess = () => {
+            try {
+              const raw = valReq.result;
+              const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+              for (const session of Object.values(data || {})) {
+                if (!session?.namespaces) continue;
+                for (const ns of Object.values(session.namespaces)) {
+                  if (ns.accounts?.length) {
+                    // Account format: "chain:networkId:address"
+                    const parts = ns.accounts[0].split(':');
+                    resolve(parts[parts.length - 1] || null);
+                    return;
+                  }
+                }
+              }
+              resolve(null);
+            } catch(e) { resolve(null); }
+          };
+        };
+      };
+    } catch(e) { resolve(null); }
+  });
+}
+
 // ── Auth ─────────────────────────────────────────────────
 async function initAuth() {
-  show('auth'); $('auth-status').textContent='Checking wallet…';
+  show('auth'); $('auth-status').textContent = 'Checking wallet…';
 
-  // 1. Load config (R2 URL + WalletConnect project ID)
-  let projectId = '';
+  // Load R2 config
   try {
-    const cfg = await fetch('/api/config').then(r=>r.json());
-    R2 = (cfg.r2BaseUrl||'').replace(/\/$/,'') + '/apemodx';
-    projectId = cfg.walletConnectProjectId || '';
+    const cfg = await fetch('/api/config').then(r => r.json());
+    R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
   } catch(e) {}
 
-  // 2. Re-init WalletConnect so it restores the existing session (if any)
-  try {
-    if (projectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
-      await WalletModule.init(projectId);
-    }
-  } catch(e) { /* provider init failed — treat as not connected */ }
-
-  // 3. Read wallet address from live WC session — no localStorage
-  const connected = typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected();
-  S.wallet = connected ? WalletModule.getAddress() : null;
+  // Read wallet address directly from WC's IndexedDB — instant, no network
+  S.wallet = await getWalletFromWC();
 
   if (!S.wallet) {
     $('auth-status').innerHTML = 'Please <a href="/" style="color:var(--gold)">connect your wallet</a> on the main site first, then return here.';
     return;
   }
 
-  // 4. Look up or register user in DB
+  // Look up or register user
   try {
     const res = await fetch(`/api/user/${S.wallet}`);
     if (res.ok) { S.user = await res.json(); goToLobby(); }
