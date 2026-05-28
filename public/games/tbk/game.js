@@ -350,18 +350,6 @@ async function loadLeaderboard(){
   $('btn-lb-quit').onclick=()=>window.location.href='/games/';
 }
 
-// ── Boot ──────────────────────────────────────────────────
-initAuth();
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function pickAnim(card) {
-  const a = card.animations;
-  return a[Math.floor(Math.random() * a.length)];
-}
-
 function msg(t) { msgBox.textContent = t; }
 
 function updateScoreBar() {
@@ -662,3 +650,6 @@ function endGame() {
 }
 
 function playAgain() { S.callerIndex = 0; startGame(); }
+
+// ── Boot ──────────────────────────────────────────────────
+initAuth();
