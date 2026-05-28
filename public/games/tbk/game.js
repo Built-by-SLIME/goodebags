@@ -48,17 +48,40 @@ function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);upda
 // ── Auth ─────────────────────────────────────────────────
 async function initAuth() {
   show('auth'); $('auth-status').textContent='Checking wallet…';
-  try { const cfg=await fetch('/api/config').then(r=>r.json()); R2=(cfg.r2BaseUrl||'').replace(/\/$/,'')+'/tbk'; } catch(e){}
-  S.wallet=localStorage.getItem('gbg_wallet');
-  if(!S.wallet){
-    $('auth-status').innerHTML='Please <a href="/" style="color:var(--gold)">connect your wallet</a> on the main site first.';
+
+  // 1. Load config (R2 URL + WalletConnect project ID)
+  let projectId = '';
+  try {
+    const cfg = await fetch('/api/config').then(r=>r.json());
+    R2 = (cfg.r2BaseUrl||'').replace(/\/$/,'') + '/tbk';
+    projectId = cfg.walletConnectProjectId || '';
+  } catch(e) {}
+
+  // 2. Re-init WalletConnect so it restores the existing session (if any)
+  try {
+    if (projectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
+      await WalletModule.init(projectId);
+    }
+  } catch(e) { /* provider init failed — treat as not connected */ }
+
+  // 3. Read wallet address from live WC session — no localStorage
+  const connected = typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected();
+  S.wallet = connected ? WalletModule.getAddress() : null;
+
+  if (!S.wallet) {
+    $('auth-status').innerHTML = 'Please <a href="/" style="color:var(--gold)">connect your wallet</a> on the main site first, then return here.';
     return;
   }
+
+  // 4. Look up or register user in DB
   try {
-    const res=await fetch(`/api/user/${S.wallet}`);
-    if(res.ok){S.user=await res.json();goToLobby();}
+    const res = await fetch(`/api/user/${S.wallet}`);
+    if (res.ok) { S.user = await res.json(); goToLobby(); }
     else show('register');
-  } catch(e){ S.user={username:'Guest',wallet_address:S.wallet}; goToLobby(); }
+  } catch(e) {
+    S.user = { username: 'Guest', wallet_address: S.wallet };
+    goToLobby();
+  }
 }
 
 $('btn-register').addEventListener('click', async()=>{
