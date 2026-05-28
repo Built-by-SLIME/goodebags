@@ -1,0 +1,5103 @@
+[
+  {
+    "id": "AM#1",
+    "deck": "Couture",
+    "image": "assets/cards/AM#1.png",
+    "animations": [
+      "assets/animations/AM#1.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 9
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 9
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#2",
+    "deck": "Couture",
+    "image": "assets/cards/AM#2.png",
+    "animations": [
+      "assets/animations/AM#2.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#3",
+    "deck": "Couture",
+    "image": "assets/cards/AM#3.png",
+    "animations": [
+      "assets/animations/AM#3.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Large Gold Earring",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#4",
+    "deck": "Couture",
+    "image": "assets/cards/AM#4.png",
+    "animations": [
+      "assets/animations/AM#4.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#5",
+    "deck": "Couture",
+    "image": "assets/cards/AM#5.png",
+    "animations": [
+      "assets/animations/AM#5.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#6",
+    "deck": "Couture",
+    "image": "assets/cards/AM#6.png",
+    "animations": [
+      "assets/animations/AM#6.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#7",
+    "deck": "Couture",
+    "image": "assets/cards/AM#7.png",
+    "animations": [
+      "assets/animations/AM#7.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#8",
+    "deck": "Couture",
+    "image": "assets/cards/AM#8.png",
+    "animations": [
+      "assets/animations/AM#8.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#9",
+    "deck": "Couture",
+    "image": "assets/cards/AM#9.png",
+    "animations": [
+      "assets/animations/AM#9.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#10",
+    "deck": "Couture",
+    "image": "assets/cards/AM#10.png",
+    "animations": [
+      "assets/animations/AM#10.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#11",
+    "deck": "Couture",
+    "image": "assets/cards/AM#11.png",
+    "animations": [
+      "assets/animations/AM#11.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#12",
+    "deck": "Couture",
+    "image": "assets/cards/AM#12.png",
+    "animations": [
+      "assets/animations/AM#12.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#13",
+    "deck": "Couture",
+    "image": "assets/cards/AM#13.png",
+    "animations": [
+      "assets/animations/AM#13.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Ear Cuffs In Both Ears",
+      "value": 3
+    }
+  },
+  {
+    "id": "AM#14",
+    "deck": "Couture",
+    "image": "assets/cards/AM#14.png",
+    "animations": [
+      "assets/animations/AM#14.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#15",
+    "deck": "Couture",
+    "image": "assets/cards/AM#15.png",
+    "animations": [
+      "assets/animations/AM#15.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#16",
+    "deck": "Couture",
+    "image": "assets/cards/AM#16.png",
+    "animations": [
+      "assets/animations/AM#16.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#17",
+    "deck": "Couture",
+    "image": "assets/cards/AM#17.png",
+    "animations": [
+      "assets/animations/AM#17.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#18",
+    "deck": "Couture",
+    "image": "assets/cards/AM#18.png",
+    "animations": [
+      "assets/animations/AM#18.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#19",
+    "deck": "Couture",
+    "image": "assets/cards/AM#19.png",
+    "animations": [
+      "assets/animations/AM#19.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#20",
+    "deck": "Couture",
+    "image": "assets/cards/AM#20.png",
+    "animations": [
+      "assets/animations/AM#20.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#21",
+    "deck": "Couture",
+    "image": "assets/cards/AM#21.png",
+    "animations": [
+      "assets/animations/AM#21.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#22",
+    "deck": "Couture",
+    "image": "assets/cards/AM#22.png",
+    "animations": [
+      "assets/animations/AM#22.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 9
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#23",
+    "deck": "Couture",
+    "image": "assets/cards/AM#23.png",
+    "animations": [
+      "assets/animations/AM#23.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Gold Ball Earring",
+      "value": 3
+    }
+  },
+  {
+    "id": "AM#24",
+    "deck": "Couture",
+    "image": "assets/cards/AM#24.png",
+    "animations": [
+      "assets/animations/AM#24.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Large Gold Earring",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#25",
+    "deck": "Couture",
+    "image": "assets/cards/AM#25.png",
+    "animations": [
+      "assets/animations/AM#25.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#26",
+    "deck": "Couture",
+    "image": "assets/cards/AM#26.png",
+    "animations": [
+      "assets/animations/AM#26.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Gold Ball Earring",
+      "value": 3
+    }
+  },
+  {
+    "id": "AM#27",
+    "deck": "Couture",
+    "image": "assets/cards/AM#27.png",
+    "animations": [
+      "assets/animations/AM#27.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#28",
+    "deck": "Couture",
+    "image": "assets/cards/AM#28.png",
+    "animations": [
+      "assets/animations/AM#28.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#29",
+    "deck": "Couture",
+    "image": "assets/cards/AM#29.png",
+    "animations": [
+      "assets/animations/AM#29.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#30",
+    "deck": "Couture",
+    "image": "assets/cards/AM#30.png",
+    "animations": [
+      "assets/animations/AM#30.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Ear Cuffs In Both Ears",
+      "value": 3
+    }
+  },
+  {
+    "id": "AM#31",
+    "deck": "Couture",
+    "image": "assets/cards/AM#31.png",
+    "animations": [
+      "assets/animations/AM#31.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 9
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#32",
+    "deck": "Couture",
+    "image": "assets/cards/AM#32.png",
+    "animations": [
+      "assets/animations/AM#32.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#33",
+    "deck": "Couture",
+    "image": "assets/cards/AM#33.png",
+    "animations": [
+      "assets/animations/AM#33.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#34",
+    "deck": "Couture",
+    "image": "assets/cards/AM#34.png",
+    "animations": [
+      "assets/animations/AM#34.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#35",
+    "deck": "Couture",
+    "image": "assets/cards/AM#35.png",
+    "animations": [
+      "assets/animations/AM#35.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#36",
+    "deck": "Couture",
+    "image": "assets/cards/AM#36.png",
+    "animations": [
+      "assets/animations/AM#36.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#37",
+    "deck": "Couture",
+    "image": "assets/cards/AM#37.png",
+    "animations": [
+      "assets/animations/AM#37.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#38",
+    "deck": "Couture",
+    "image": "assets/cards/AM#38.png",
+    "animations": [
+      "assets/animations/AM#38.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#39",
+    "deck": "Couture",
+    "image": "assets/cards/AM#39.png",
+    "animations": [
+      "assets/animations/AM#39.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#40",
+    "deck": "Couture",
+    "image": "assets/cards/AM#40.png",
+    "animations": [
+      "assets/animations/AM#40.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#41",
+    "deck": "Couture",
+    "image": "assets/cards/AM#41.png",
+    "animations": [
+      "assets/animations/AM#41.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 9
+      }
+    ],
+    "xtra": {
+      "name": "One Gold Earring",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#42",
+    "deck": "Couture",
+    "image": "assets/cards/AM#42.png",
+    "animations": [
+      "assets/animations/AM#42.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AM#43",
+    "deck": "Couture",
+    "image": "assets/cards/AM#43.png",
+    "animations": [
+      "assets/animations/AM#43.mp4",
+      "assets/animations/AM#43b.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#44",
+    "deck": "Couture",
+    "image": "assets/cards/AM#44.png",
+    "animations": [
+      "assets/animations/AM#44.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Two Gold Earrings",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#45",
+    "deck": "Couture",
+    "image": "assets/cards/AM#45.png",
+    "animations": [
+      "assets/animations/AM#45.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AM#46",
+    "deck": "Couture",
+    "image": "assets/cards/AM#46.png",
+    "animations": [
+      "assets/animations/AM#46.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#47",
+    "deck": "Couture",
+    "image": "assets/cards/AM#47.png",
+    "animations": [
+      "assets/animations/AM#47.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Large Gold Earring",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#48",
+    "deck": "Couture",
+    "image": "assets/cards/AM#48.png",
+    "animations": [
+      "assets/animations/AM#48.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#49",
+    "deck": "Couture",
+    "image": "assets/cards/AM#49.png",
+    "animations": [
+      "assets/animations/AM#49.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Large Gold Earring",
+      "value": 2
+    }
+  },
+  {
+    "id": "AM#50",
+    "deck": "Couture",
+    "image": "assets/cards/AM#50.png",
+    "animations": [
+      "assets/animations/AM#50.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#1",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#1.png",
+    "animations": [
+      "assets/animations/AMM#1.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#2",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#2.png",
+    "animations": [
+      "assets/animations/AMM#2.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#3",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#3.png",
+    "animations": [
+      "assets/animations/AMM#3.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#4",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#4.png",
+    "animations": [
+      "assets/animations/AMM#4.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#5",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#5.png",
+    "animations": [
+      "assets/animations/AMM#5.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 0
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#6",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#6.png",
+    "animations": [
+      "assets/animations/AMM#6.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Toxic Rainbow Slime",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#7",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#7.png",
+    "animations": [
+      "assets/animations/AMM#7.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#8",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#8.png",
+    "animations": [
+      "assets/animations/AMM#8.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#9",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#9.png",
+    "animations": [
+      "assets/animations/AMM#9.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#10",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#10.png",
+    "animations": [
+      "assets/animations/AMM#10.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#11",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#11.png",
+    "animations": [
+      "assets/animations/AMM#11.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#12",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#12.png",
+    "animations": [
+      "assets/animations/AMM#12.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Extra Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#13",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#13.png",
+    "animations": [
+      "assets/animations/AMM#13.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Ball Earring",
+      "value": 3
+    }
+  },
+  {
+    "id": "AMM#14",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#14.png",
+    "animations": [
+      "assets/animations/AMM#14.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#15",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#15.png",
+    "animations": [
+      "assets/animations/AMM#15.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#16",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#16.png",
+    "animations": [
+      "assets/animations/AMM#16.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#17",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#17.png",
+    "animations": [
+      "assets/animations/AMM#17.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#18",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#18.png",
+    "animations": [
+      "assets/animations/AMM#18.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Extra Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#19",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#19.png",
+    "animations": [
+      "assets/animations/AMM#19.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "AMM#20",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#20.png",
+    "animations": [
+      "assets/animations/AMM#20.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#21",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#21.png",
+    "animations": [
+      "assets/animations/AMM#21.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Gold Ball Earring",
+      "value": 3
+    }
+  },
+  {
+    "id": "AMM#22",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#22.png",
+    "animations": [
+      "assets/animations/AMM#22.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#23",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#23.png",
+    "animations": [
+      "assets/animations/AMM#23.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#24",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#24.png",
+    "animations": [
+      "assets/animations/AMM#24.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#25",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#25.png",
+    "animations": [
+      "assets/animations/AMM#25.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Toxic Rainbow Slime",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#26",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#26.png",
+    "animations": [
+      "assets/animations/AMM#26.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#27",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#27.png",
+    "animations": [
+      "assets/animations/AMM#27.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Extra Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#28",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#28.png",
+    "animations": [
+      "assets/animations/AMM#28.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#29",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#29.png",
+    "animations": [
+      "assets/animations/AMM#29.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#30",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#30.png",
+    "animations": [
+      "assets/animations/AMM#30.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "AMM#31",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#31.png",
+    "animations": [
+      "assets/animations/AMM#31.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 9
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#32",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#32.png",
+    "animations": [
+      "assets/animations/AMM#32.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#33",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#33.png",
+    "animations": [
+      "assets/animations/AMM#33.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#34",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#34.png",
+    "animations": [
+      "assets/animations/AMM#34.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#35",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#35.png",
+    "animations": [
+      "assets/animations/AMM#35.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#36",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#36.png",
+    "animations": [
+      "assets/animations/AMM#36.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#37",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#37.png",
+    "animations": [
+      "assets/animations/AMM#37.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Extra Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#38",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#38.png",
+    "animations": [
+      "assets/animations/AMM#38.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#39",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#39.png",
+    "animations": [
+      "assets/animations/AMM#39.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "AMM#40",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#40.png",
+    "animations": [
+      "assets/animations/AMM#40.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#41",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#41.png",
+    "animations": [
+      "assets/animations/AMM#41.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 9
+      }
+    ],
+    "xtra": {
+      "name": "Toxic Rainbow Slime",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#42",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#42.png",
+    "animations": [
+      "assets/animations/AMM#42.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#43",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#43.png",
+    "animations": [
+      "assets/animations/AMM#43.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "Mutated Extra Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#44",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#44.png",
+    "animations": [
+      "assets/animations/AMM#44.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#45",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#45.png",
+    "animations": [
+      "assets/animations/AMM#45.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Twinkle In His Eye",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#46",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#46.png",
+    "animations": [
+      "assets/animations/AMM#46.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Toxic Rainbow Slime",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#47",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#47.png",
+    "animations": [
+      "assets/animations/AMM#47.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Green & Red Slime",
+      "value": 1
+    }
+  },
+  {
+    "id": "AMM#48",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#48.png",
+    "animations": [
+      "assets/animations/AMM#48.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Toxic Rainbow Slime",
+      "value": 2
+    }
+  },
+  {
+    "id": "AMM#49",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#49.png",
+    "animations": [
+      "assets/animations/AMM#49.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "AMM#50",
+    "deck": "Mutants",
+    "image": "assets/cards/AMM#50.png",
+    "animations": [
+      "assets/animations/AMM#50.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 9
+      },
+      {
+        "name": "Head & Hat",
+        "value": 9
+      },
+      {
+        "name": "Face",
+        "value": 9
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Gold Nose Tooth",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#1",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#1.png",
+    "animations": [
+      "assets/animations/amme#1.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 9
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#2",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#2.png",
+    "animations": [
+      "assets/animations/amme#2.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#3",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#3.png",
+    "animations": [
+      "assets/animations/amme#3.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 8
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#4",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#4.png",
+    "animations": [
+      "assets/animations/amme#4.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#5",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#5.png",
+    "animations": [
+      "assets/animations/amme#5.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "Jagged Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "amme#6",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#6.png",
+    "animations": [
+      "assets/animations/amme#6.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 7
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#7",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#7.png",
+    "animations": [
+      "assets/animations/amme#7.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#8",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#8.png",
+    "animations": [
+      "assets/animations/amme#8.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#9",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#9.png",
+    "animations": [
+      "assets/animations/amme#9.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#10",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#10.png",
+    "animations": [
+      "assets/animations/amme#10.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 6
+      },
+      {
+        "name": "Head & Hat",
+        "value": 2
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#11",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#11.png",
+    "animations": [
+      "assets/animations/amme#11.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 9
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Banana Oil",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#12",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#12.png",
+    "animations": [
+      "assets/animations/amme#12.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Gold Bar",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#13",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#13.png",
+    "animations": [
+      "assets/animations/amme#13.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 8
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      }
+    ],
+    "xtra": {
+      "name": "Banana Oil",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#14",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#14.png",
+    "animations": [
+      "assets/animations/amme#14.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#15",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#15.png",
+    "animations": [
+      "assets/animations/amme#15.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Bar",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#16",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#16.png",
+    "animations": [
+      "assets/animations/amme#16.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 5
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#17",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#17.png",
+    "animations": [
+      "assets/animations/amme#17.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#18",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#18.png",
+    "animations": [
+      "assets/animations/amme#18.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Jagged Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "amme#19",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#19.png",
+    "animations": [
+      "assets/animations/amme#19.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#20",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#20.png",
+    "animations": [
+      "assets/animations/amme#20.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 1
+      },
+      {
+        "name": "Face",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Gold Bar",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#21",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#21.png",
+    "animations": [
+      "assets/animations/amme#21.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 9
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#22",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#22.png",
+    "animations": [
+      "assets/animations/amme#22.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#23",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#23.png",
+    "animations": [
+      "assets/animations/amme#23.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 4
+      },
+      {
+        "name": "Head & Hat",
+        "value": 8
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#24",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#24.png",
+    "animations": [
+      "assets/animations/amme#24.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Banana Oil",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#25",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#25.png",
+    "animations": [
+      "assets/animations/amme#25.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#26",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#26.png",
+    "animations": [
+      "assets/animations/amme#26.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 7
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#27",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#27.png",
+    "animations": [
+      "assets/animations/amme#27.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#28",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#28.png",
+    "animations": [
+      "assets/animations/amme#28.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#29",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#29.png",
+    "animations": [
+      "assets/animations/amme#29.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "Golden Banana Trophy",
+      "value": 3
+    }
+  },
+  {
+    "id": "amme#30",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#30.png",
+    "animations": [
+      "assets/animations/amme#30.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 6
+      },
+      {
+        "name": "Face",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#31",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#31.png",
+    "animations": [
+      "assets/animations/amme#31.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 3
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 9
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#32",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#32.png",
+    "animations": [
+      "assets/animations/amme#32.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Jagged Halo",
+      "value": 3
+    }
+  },
+  {
+    "id": "amme#33",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#33.png",
+    "animations": [
+      "assets/animations/amme#33.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Golden Banana Trophy",
+      "value": 3
+    }
+  },
+  {
+    "id": "amme#34",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#34.png",
+    "animations": [
+      "assets/animations/amme#34.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#35",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#35.png",
+    "animations": [
+      "assets/animations/amme#35.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#36",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#36.png",
+    "animations": [
+      "assets/animations/amme#36.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 5
+      },
+      {
+        "name": "Face",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#37",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#37.png",
+    "animations": [
+      "assets/animations/amme#37.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#38",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#38.png",
+    "animations": [
+      "assets/animations/amme#38.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Gold Bar",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#39",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#39.png",
+    "animations": [
+      "assets/animations/amme#39.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Gold Bar",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#40",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#40.png",
+    "animations": [
+      "assets/animations/amme#40.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 2
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#41",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#41.png",
+    "animations": [
+      "assets/animations/amme#41.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 9
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#42",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#42.png",
+    "animations": [
+      "assets/animations/amme#42.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#43",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#43.png",
+    "animations": [
+      "assets/animations/amme#43.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 4
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      }
+    ],
+    "xtra": {
+      "name": "Banana Oil",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#44",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#44.png",
+    "animations": [
+      "assets/animations/amme#44.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#45",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#45.png",
+    "animations": [
+      "assets/animations/amme#45.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Banana Oil",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#46",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#46.png",
+    "animations": [
+      "assets/animations/amme#46.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      }
+    ],
+    "xtra": {
+      "name": "Banana",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#47",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#47.png",
+    "animations": [
+      "assets/animations/amme#47.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  },
+  {
+    "id": "amme#48",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#48.png",
+    "animations": [
+      "assets/animations/amme#48.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "High Voltage",
+      "value": 1
+    }
+  },
+  {
+    "id": "amme#49",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#49.png",
+    "animations": [
+      "assets/animations/amme#49.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "Banana Plant",
+      "value": 2
+    }
+  },
+  {
+    "id": "amme#50",
+    "deck": "Mecha",
+    "image": "assets/cards/amme#50.png",
+    "animations": [
+      "assets/animations/amme#50.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Wearing & Holding",
+        "value": 1
+      },
+      {
+        "name": "Head & Hat",
+        "value": 3
+      },
+      {
+        "name": "Face",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      }
+    ],
+    "xtra": {
+      "name": "None",
+      "value": 0
+    }
+  }
+]

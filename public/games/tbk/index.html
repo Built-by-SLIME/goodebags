@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Bee's Knees — Goodebags Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── SCREEN: AUTH CHECK ── -->
+<div id="screen-auth" class="screen active">
+  <div class="auth-inner">
+    <img src="/assets/goodebags-logo.png" alt="Goodebags" class="lobby-logo" />
+    <h1>The Bee's <span class="accent">Knees</span></h1>
+    <div id="auth-status" class="auth-status">Checking wallet…</div>
+    <a href="/games/" class="back-link">← Back to Game Select</a>
+  </div>
+</div>
+
+<!-- ── SCREEN: REGISTER ── -->
+<div id="screen-register" class="screen">
+  <div class="auth-inner">
+    <img src="/assets/goodebags-logo.png" alt="Goodebags" class="lobby-logo" />
+    <h1>The Bee's <span class="accent">Knees</span></h1>
+    <p class="lobby-sub">Create your username to track your score on the leaderboard.</p>
+    <div class="register-form">
+      <input id="username-input" type="text" maxlength="30" placeholder="Your username (e.g. @Goodebags)" class="username-input" />
+      <p class="register-note">Use an @X handle to be eligible for prizes.</p>
+      <button id="btn-register" class="btn-primary btn-lg">Create Account</button>
+      <p id="register-error" class="register-error"></p>
+    </div>
+    <a href="/games/" class="back-link">← Back to Game Select</a>
+  </div>
+</div>
+
+<!-- ── SCREEN: LOBBY ── -->
+<div id="screen-lobby" class="screen">
+  <div class="lobby-inner">
+    <img src="/assets/goodebags-logo.png" alt="Goodebags" class="lobby-logo" />
+    <h1>The Bee's <span class="accent">Knees</span></h1>
+    <p id="lobby-welcome" class="lobby-sub">Welcome back!</p>
+    <div class="lobby-section">
+      <label class="lobby-label">Number of computer opponents</label>
+      <div class="opponent-btns">
+        <button class="opp-btn active" data-opp="1">1<span class="opp-pts">1,000 pts</span></button>
+        <button class="opp-btn" data-opp="2">2<span class="opp-pts">2,000 pts</span></button>
+        <button class="opp-btn" data-opp="3">3<span class="opp-pts">3,000 pts</span></button>
+      </div>
+      <p class="opp-note">More opponents = more points, but harder to win.</p>
+    </div>
+    <button id="btn-start" class="btn-primary btn-lg">Deal Cards &amp; Play</button>
+    <a href="/games/" class="back-link">← Back to Game Select</a>
+  </div>
+</div>
+
+<!-- ── SCREEN: DEALING ── -->
+<div id="screen-dealing" class="screen">
+  <div class="dealing-inner">
+    <div id="dealing-msg" class="dealing-msg">Shuffling the deck…</div>
+    <div id="dealing-table" class="dealing-table">
+      <div id="dealing-deck" class="dealing-deck">
+        <img class="dealing-card-back" src="" alt="" />
+        <span class="dealing-count">50</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: GAME ── -->
+<div id="screen-game" class="screen">
+  <div class="score-bar">
+    <span id="round-info" class="round-info">Round 1</span>
+    <span id="session-score" class="session-score">Score: 0</span>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-felt">
+      <div id="opponents-zone" class="opponents-zone"></div>
+
+      <div class="play-area">
+        <div id="message-box" class="message-box"></div>
+        <div id="cards-in-play" class="cards-in-play"></div>
+      </div>
+
+      <div id="player-zone" class="player-zone">
+        <div class="stack-wrap">
+          <img id="player-back" class="card-back-img" src="" alt="Your deck" />
+          <span id="player-count" class="card-count">10</span>
+        </div>
+        <span id="player-name-label" class="player-label">You</span>
+        <div id="player-card-area" class="player-card-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button id="btn-continue" class="btn-primary" style="display:none">
+      Continue ▶ <span id="continue-timer" class="continue-timer"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ── SCREEN: RESULT ── -->
+<div id="screen-result" class="screen">
+  <div class="result-inner">
+    <div id="result-icon" class="result-icon">🏆</div>
+    <h2 id="result-title">You Win!</h2>
+    <p id="result-msg" class="result-msg"></p>
+    <div class="result-score-box">
+      <span class="result-score-label">Points This Game</span>
+      <span id="result-points" class="result-score-num">+1,000</span>
+      <span class="result-score-label">Session Total</span>
+      <span id="result-total" class="result-score-num">1,000</span>
+    </div>
+    <div class="result-btns">
+      <button id="btn-next-game" class="btn-primary btn-lg">Next Game ▶</button>
+      <button id="btn-view-lb"   class="btn-outline btn-lg">Leaderboard</button>
+      <button id="btn-quit"      class="btn-outline btn-lg">Quit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: LEADERBOARD ── -->
+<div id="screen-leaderboard" class="screen">
+  <div class="lb-inner">
+    <h2>The Bee's <span class="accent">Knees</span> Leaderboard</h2>
+    <table class="lb-table">
+      <thead><tr><th>#</th><th>Player</th><th>Score</th><th>vs</th></tr></thead>
+      <tbody id="lb-body"></tbody>
+    </table>
+    <div class="result-btns" style="margin-top:24px">
+      <button id="btn-lb-play" class="btn-primary">Play Again</button>
+      <button id="btn-lb-quit" class="btn-outline">Game Select</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── WIN ANIMATION OVERLAY ── -->
+<div id="win-overlay" class="win-anim-overlay" style="display:none">
+  <video id="win-video" playsinline class="win-video"></video>
+  <p class="win-tap-hint">Tap to skip</p>
+</div>
+
+<!-- ── STAR PING ── -->
+<div id="star-ping" class="star-ping" style="display:none">🐝</div>
+
+<script src="game.js"></script>
+</body>
+</html>

@@ -32,8 +32,21 @@ async function loadWalletConfig() {
 }
 loadWalletConfig();
 
-window.addEventListener('walletConnected', () => updateWalletBtn(true));
-window.addEventListener('walletDisconnected', () => updateWalletBtn(false));
+window.addEventListener('walletConnected', async () => {
+  updateWalletBtn(true);
+  // Persist wallet address to localStorage so game pages can read it
+  try {
+    if (WalletModule && WalletModule.getAddress) {
+      const addr = await WalletModule.getAddress();
+      if (addr) localStorage.setItem('gbg_wallet', addr.toLowerCase());
+    }
+  } catch (e) { /* silent */ }
+});
+
+window.addEventListener('walletDisconnected', () => {
+  updateWalletBtn(false);
+  localStorage.removeItem('gbg_wallet');
+});
 
 walletBtn.addEventListener('click', () => {
   console.log('[Main] Wallet button clicked');

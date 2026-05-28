@@ -9417,6 +9417,7 @@ var WalletModule = (() => {
   var wallet_exports = {};
   __export(wallet_exports, {
     disconnectWallet: () => disconnectWallet,
+    getAddress: () => getAddress,
     getSession: () => getSession,
     init: () => init,
     isConnected: () => isConnected,
@@ -26743,6 +26744,17 @@ ${t6.length}`, n10 = new TextEncoder().encode(e9 + t6);
   function getSession() {
     if (!provider) return null;
     return provider.session || null;
+  }
+  function getAddress() {
+    const session = provider && provider.session;
+    if (!session || !session.namespaces) return null;
+    for (const ns3 of Object.values(session.namespaces)) {
+      if (ns3.accounts && ns3.accounts.length > 0) {
+        const parts = ns3.accounts[0].split(":");
+        return parts[parts.length - 1] || null;
+      }
+    }
+    return null;
   }
   return __toCommonJS(wallet_exports);
 })();

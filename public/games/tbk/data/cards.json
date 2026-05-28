@@ -1,0 +1,2052 @@
+[
+  {
+    "id": "TBK#1",
+    "image": "assets/cards/TBK#1.png",
+    "animations": [
+      "assets/animations/TBK#1.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 7
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      },
+      {
+        "name": "Knees",
+        "value": 3
+      },
+      {
+        "name": "Antennae",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": "TBK#2",
+    "image": "assets/cards/TBK#2.png",
+    "animations": [
+      "assets/animations/TBK#2.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#3",
+    "image": "assets/cards/TBK#3.png",
+    "animations": [
+      "assets/animations/TBK#3.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 6
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#4",
+    "image": "assets/cards/TBK#4.png",
+    "animations": [
+      "assets/animations/TBK#4.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 3
+      },
+      {
+        "name": "Clothes",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "TBK#5",
+    "image": "assets/cards/TBK#5.png",
+    "animations": [
+      "assets/animations/TBK#5.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "id": "TBK#6",
+    "image": "assets/cards/TBK#6.png",
+    "animations": [
+      "assets/animations/TBK#6.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 6
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "TBK#7",
+    "image": "assets/cards/TBK#7.png",
+    "animations": [
+      "assets/animations/TBK#7.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Shoes",
+        "value": 6
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 7
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#8",
+    "image": "assets/cards/TBK#8.png",
+    "animations": [
+      "assets/animations/TBK#8.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 3
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": "TBK#9",
+    "image": "assets/cards/TBK#9.png",
+    "animations": [
+      "assets/animations/TBK#9.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 6
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#10",
+    "image": "assets/cards/TBK#10.png",
+    "animations": [
+      "assets/animations/TBK#10.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "id": "TBK#11",
+    "image": "assets/cards/TBK#11.png",
+    "animations": [
+      "assets/animations/TBK#11.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 5
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#12",
+    "image": "assets/cards/TBK#12.png",
+    "animations": [
+      "assets/animations/TBK#12.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Shoes",
+        "value": 5
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 3
+      },
+      {
+        "name": "Clothes",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#13",
+    "image": "assets/cards/TBK#13.png",
+    "animations": [
+      "assets/animations/TBK#13.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 9
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 9
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "id": "TBK#14",
+    "image": "assets/cards/TBK#14.png",
+    "animations": [
+      "assets/animations/TBK#14.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 9
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "TBK#15",
+    "image": "assets/cards/TBK#15.png",
+    "animations": [
+      "assets/animations/TBK#15.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 7
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 9
+      }
+    ]
+  },
+  {
+    "id": "TBK#16",
+    "image": "assets/cards/TBK#16.png",
+    "animations": [
+      "assets/animations/TBK#16.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 6
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#17",
+    "image": "assets/cards/TBK#17.png",
+    "animations": [
+      "assets/animations/TBK#17.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 3
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      },
+      {
+        "name": "Knees",
+        "value": 3
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#18",
+    "image": "assets/cards/TBK#18.png",
+    "animations": [
+      "assets/animations/TBK#18.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 3
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#19",
+    "image": "assets/cards/TBK#19.png",
+    "animations": [
+      "assets/animations/TBK#19.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 8
+      },
+      {
+        "name": "Stinger",
+        "value": 7
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 8
+      },
+      {
+        "name": "Knees",
+        "value": 7
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#20",
+    "image": "assets/cards/TBK#20.png",
+    "animations": [
+      "assets/animations/TBK#20.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Shoes",
+        "value": 8
+      },
+      {
+        "name": "Wings",
+        "value": 5
+      },
+      {
+        "name": "Stinger",
+        "value": 7
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#21",
+    "image": "assets/cards/TBK#21.png",
+    "animations": [
+      "assets/animations/TBK#21.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 3
+      },
+      {
+        "name": "Clothes",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#22",
+    "image": "assets/cards/TBK#22.png",
+    "animations": [
+      "assets/animations/TBK#22.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 8
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 7
+      },
+      {
+        "name": "Antennae",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": "TBK#23",
+    "image": "assets/cards/TBK#23.png",
+    "animations": [
+      "assets/animations/TBK#23.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 8
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": "TBK#24",
+    "image": "assets/cards/TBK#24.png",
+    "animations": [
+      "assets/animations/TBK#24.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#25",
+    "image": "assets/cards/TBK#25.png",
+    "animations": [
+      "assets/animations/TBK#25.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 7
+      },
+      {
+        "name": "Wings",
+        "value": 5
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#26",
+    "image": "assets/cards/TBK#26.png",
+    "animations": [
+      "assets/animations/TBK#26.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 6
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      },
+      {
+        "name": "Knees",
+        "value": 7
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#27",
+    "image": "assets/cards/TBK#27.png",
+    "animations": [
+      "assets/animations/TBK#27.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 9
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 2
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#28",
+    "image": "assets/cards/TBK#28.png",
+    "animations": [
+      "assets/animations/TBK#28.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 6
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 7
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#29",
+    "image": "assets/cards/TBK#29.png",
+    "animations": [
+      "assets/animations/TBK#29.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "id": "TBK#30",
+    "image": "assets/cards/TBK#30.png",
+    "animations": [
+      "assets/animations/TBK#30.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 7
+      },
+      {
+        "name": "Wings",
+        "value": 6
+      },
+      {
+        "name": "Stinger",
+        "value": 8
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#31",
+    "image": "assets/cards/TBK#31.png",
+    "animations": [
+      "assets/animations/TBK#31.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 5
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#32",
+    "image": "assets/cards/TBK#32.png",
+    "animations": [
+      "assets/animations/TBK#32.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 6
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#33",
+    "image": "assets/cards/TBK#33.png",
+    "animations": [
+      "assets/animations/TBK#33.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 7
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#34",
+    "image": "assets/cards/TBK#34.png",
+    "animations": [
+      "assets/animations/TBK#34.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#35",
+    "image": "assets/cards/TBK#35.png",
+    "animations": [
+      "assets/animations/TBK#35.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 5
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#36",
+    "image": "assets/cards/TBK#36.png",
+    "animations": [
+      "assets/animations/TBK#36.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#37",
+    "image": "assets/cards/TBK#37.png",
+    "animations": [
+      "assets/animations/TBK#37.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#38",
+    "image": "assets/cards/TBK#38.png",
+    "animations": [
+      "assets/animations/TBK#38.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 6
+      },
+      {
+        "name": "Shoes",
+        "value": 6
+      },
+      {
+        "name": "Wings",
+        "value": 8
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 2
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#39",
+    "image": "assets/cards/TBK#39.png",
+    "animations": [
+      "assets/animations/TBK#39.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 7
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 8
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "TBK#40",
+    "image": "assets/cards/TBK#40.png",
+    "animations": [
+      "assets/animations/TBK#40.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#41",
+    "image": "assets/cards/TBK#41.png",
+    "animations": [
+      "assets/animations/TBK#41.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 9
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#42",
+    "image": "assets/cards/TBK#42.png",
+    "animations": [
+      "assets/animations/TBK#42.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 5
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 4
+      },
+      {
+        "name": "Knees",
+        "value": 6
+      },
+      {
+        "name": "Antennae",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "TBK#43",
+    "image": "assets/cards/TBK#43.png",
+    "animations": [
+      "assets/animations/TBK#43.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 6
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 5
+      },
+      {
+        "name": "Eyes",
+        "value": 7
+      },
+      {
+        "name": "Knees",
+        "value": 8
+      },
+      {
+        "name": "Antennae",
+        "value": 7
+      }
+    ]
+  },
+  {
+    "id": "TBK#44",
+    "image": "assets/cards/TBK#44.png",
+    "animations": [
+      "assets/animations/TBK#44.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 3
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 6
+      },
+      {
+        "name": "Stinger",
+        "value": 4
+      },
+      {
+        "name": "Clothes",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 8
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#45",
+    "image": "assets/cards/TBK#45.png",
+    "animations": [
+      "assets/animations/TBK#45.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 1
+      },
+      {
+        "name": "Wings",
+        "value": 2
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 6
+      },
+      {
+        "name": "Eyes",
+        "value": 5
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#46",
+    "image": "assets/cards/TBK#46.png",
+    "animations": [
+      "assets/animations/TBK#46.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 1
+      },
+      {
+        "name": "Shoes",
+        "value": 4
+      },
+      {
+        "name": "Wings",
+        "value": 1
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 3
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 4
+      },
+      {
+        "name": "Antennae",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "TBK#47",
+    "image": "assets/cards/TBK#47.png",
+    "animations": [
+      "assets/animations/TBK#47.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 5
+      },
+      {
+        "name": "Shoes",
+        "value": 6
+      },
+      {
+        "name": "Wings",
+        "value": 6
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 4
+      },
+      {
+        "name": "Eyes",
+        "value": 3
+      },
+      {
+        "name": "Knees",
+        "value": 5
+      },
+      {
+        "name": "Antennae",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "TBK#48",
+    "image": "assets/cards/TBK#48.png",
+    "animations": [
+      "assets/animations/TBK#48.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 7
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 5
+      },
+      {
+        "name": "Stinger",
+        "value": 1
+      },
+      {
+        "name": "Clothes",
+        "value": 9
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 3
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#49",
+    "image": "assets/cards/TBK#49.png",
+    "animations": [
+      "assets/animations/TBK#49.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 4
+      },
+      {
+        "name": "Shoes",
+        "value": 2
+      },
+      {
+        "name": "Wings",
+        "value": 4
+      },
+      {
+        "name": "Stinger",
+        "value": 2
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 1
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "TBK#50",
+    "image": "assets/cards/TBK#50.png",
+    "animations": [
+      "assets/animations/TBK#50.mp4"
+    ],
+    "traits": [
+      {
+        "name": "Background",
+        "value": 2
+      },
+      {
+        "name": "Shoes",
+        "value": 3
+      },
+      {
+        "name": "Wings",
+        "value": 3
+      },
+      {
+        "name": "Stinger",
+        "value": 5
+      },
+      {
+        "name": "Clothes",
+        "value": 1
+      },
+      {
+        "name": "Eyes",
+        "value": 2
+      },
+      {
+        "name": "Knees",
+        "value": 1
+      },
+      {
+        "name": "Antennae",
+        "value": 6
+      }
+    ]
+  }
+]

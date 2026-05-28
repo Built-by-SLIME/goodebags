@@ -1,17 +1,26 @@
 const express = require('express');
-const path = require('path');
+const path    = require('path');
+const { Pool } = require('pg');
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve the main website
+// ── Database ─────────────────────────────────────────────
+const db = process.env.DATABASE_URL
+  ? new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } })
+  : null;
+
+async function query(sql, params) {
+  if (!db) return null;
+  try { return await db.query(sql, params); }
+  catch (e) { console.error('[DB]', e.message); return null; }
+}
+
+// ── Middleware ────────────────────────────────────────────
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Game routes — TBK (Hedera) and Ape Mod X (XRPL)
-app.use('/games/tbk', express.static(path.join(__dirname, 'games', 'tbk')));
-app.use('/games/apemodx', express.static(path.join(__dirname, 'games', 'apemodx')));
-
-// Config endpoint for frontend env vars
+// ── Config ───────────────────────────────────────────────
 app.get('/api/config', (req, res) => {
   res.json({
     walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID || '',
@@ -19,11 +28,63 @@ app.get('/api/config', (req, res) => {
   });
 });
 
-// Fallback to index.html for the root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// ── Users ─────────────────────────────────────────────────
+// GET /api/user/:wallet  — look up existing account
+app.get('/api/user/:wallet', async (req, res) => {
+  const r = await query('SELECT * FROM users WHERE wallet_address = $1', [req.params.wallet.toLowerCase()]);
+  if (!r || r.rows.length === 0) return res.status(404).json({ error: 'not_found' });
+  res.json(r.rows[0]);
 });
 
-app.listen(PORT, () => {
-  console.log(`Goodebag Games server running on port ${PORT}`);
+// POST /api/user  — register new account
+app.post('/api/user', async (req, res) => {
+  const { walletAddress, username } = req.body;
+  if (!walletAddress || !username) return res.status(400).json({ error: 'missing fields' });
+  const clean = username.trim().slice(0, 30);
+  const wallet = walletAddress.toLowerCase();
+  const r = await query(
+    'INSERT INTO users (wallet_address, username) VALUES ($1, $2) ON CONFLICT (wallet_address) DO UPDATE SET username=$2 RETURNING *',
+    [wallet, clean]
+  );
+  if (!r) return res.status(503).json({ error: 'db_unavailable' });
+  res.json(r.rows[0]);
 });
+
+// ── Scores ────────────────────────────────────────────────
+async function submitScore(table, req, res) {
+  const { walletAddress, score, opponents } = req.body;
+  if (!walletAddress || score == null) return res.status(400).json({ error: 'missing fields' });
+  const wallet = walletAddress.toLowerCase();
+  // look up user
+  const u = await query('SELECT id FROM users WHERE wallet_address=$1', [wallet]);
+  if (!u || u.rows.length === 0) return res.status(404).json({ error: 'user_not_found' });
+  const userId = u.rows[0].id;
+  const r = await query(
+    `INSERT INTO ${table} (user_id, score, opponents) VALUES ($1,$2,$3) RETURNING *`,
+    [userId, score, opponents || 1]
+  );
+  if (!r) return res.status(503).json({ error: 'db_unavailable' });
+  res.json(r.rows[0]);
+}
+
+app.post('/api/scores/amx', (req, res) => submitScore('amx_scores', req, res));
+app.post('/api/scores/tbk', (req, res) => submitScore('tbk_scores', req, res));
+
+// ── Leaderboards ──────────────────────────────────────────
+async function getLeaderboard(table, req, res) {
+  const r = await query(
+    `SELECT u.username, s.score, s.opponents, s.played_at
+     FROM ${table} s JOIN users u ON u.id = s.user_id
+     ORDER BY s.score DESC LIMIT 50`
+  );
+  res.json(r ? r.rows : []);
+}
+
+app.get('/api/leaderboard/amx', (req, res) => getLeaderboard('amx_scores', req, res));
+app.get('/api/leaderboard/tbk', (req, res) => getLeaderboard('tbk_scores', req, res));
+
+// ── Root fallback ─────────────────────────────────────────
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+
+app.listen(PORT, () => console.log(`Goodebags server running on port ${PORT}`));
+

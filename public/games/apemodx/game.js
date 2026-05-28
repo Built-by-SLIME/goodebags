@@ -1,468 +1,307 @@
-/* ═══════════════════════════════════════════
-   APE-MOD-X  —  Game Engine
-   Rules: 150 cards (Couture/Mutants/Mecha mixed)
-   10 cards each, 5 traits + XTRA (defence bonus)
-   Highest score wins round; ties = freeze & replay
-═══════════════════════════════════════════ */
-
+/* ═══════════════════════════════════════════════════════
+   APE-MOD-X  —  Game Engine  (per official PDF rules)
+   150 cards | Couture / Mutants / Mecha mixed
+   10 cards each | 5 traits + XTRA defence bonus
+   1 human vs 1-3 computer opponents
+═══════════════════════════════════════════════════════ */
 'use strict';
 
-// ── R2 Asset Base (set from /api/config on load) ───
+// ── Config ───────────────────────────────────────────────
 let R2 = '';
+function r2url(p) { return R2 + '/' + p.replace(/#/g, '%23'); }
 
-function r2url(path) {
-  // path is like "assets/cards/AM#1.png" — encode # so browsers don't treat it as fragment
-  return R2 + '/' + path.replace(/#/g, '%23');
-}
-
-// ── State ──────────────────────────────────
+// ── State ────────────────────────────────────────────────
 const S = {
-  allCards: [],
-  numOpponents: 1,
-  playerHand: [],
-  oppHands: [],       // array of arrays
-  frozenPile: [],
-  callerIndex: -1,    // 0 = human, 1-4 = computer
-  calledTraitIdx: -1,
-  sessionScore: 0,
-  roundNum: 0,
-  phase: 'lobby',     // lobby | deal | human-pick | resolve | next-round | result
+  user: null, wallet: null, allCards: [],
+  numOpponents: 1, playerHand: [], oppHands: [],
+  frozenPile: [], callerIndex: -1, calledTraitIdx: -1,
+  sessionScore: 0, roundNum: 0, continueTimer: null,
 };
 
-// ── DOM refs ───────────────────────────────
-const screens = {
-  lobby:  document.getElementById('screen-lobby'),
-  game:   document.getElementById('screen-game'),
-  result: document.getElementById('screen-result'),
-};
-const oppZone       = document.getElementById('opponents-zone');
-const playArea      = document.getElementById('cards-in-play');
-const msgBox        = document.getElementById('message-box');
-const playerCardArea = document.getElementById('player-card-area');
-const playerBack    = document.getElementById('player-back');
-const playerCountEl = document.getElementById('player-count');
-const btnContinue   = document.getElementById('btn-continue');
-const sessionScoreEl = document.getElementById('session-score');
-const roundInfoEl    = document.getElementById('round-info');
+// ── DOM ──────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const screens = { auth:$('screen-auth'), register:$('screen-register'), lobby:$('screen-lobby'),
+  dealing:$('screen-dealing'), game:$('screen-game'), result:$('screen-result'), leaderboard:$('screen-leaderboard') };
 
-// ── Helpers ────────────────────────────────
-function showScreen(name) {
-  Object.values(screens).forEach(s => s.classList.remove('active'));
-  screens[name].classList.add('active');
+function show(name) {
+  Object.values(screens).forEach(s => { s.style.display='none'; s.classList.remove('active'); });
+  screens[name].style.display='flex'; screens[name].classList.add('active');
 }
 
+// ── Helpers ──────────────────────────────────────────────
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;
+}
+function pickAnim(c){const a=c.animations;return a[Math.floor(Math.random()*a.length)];}
+function backFor(c){
+  if(!c) return R2+'/assets/backs/couture-back.png';
+  if(c.deck==='Mutants') return R2+'/assets/backs/mutants-back.png';
+  if(c.deck==='Mecha')   return R2+'/assets/backs/mecha-back.png';
+  return R2+'/assets/backs/couture-back.png';
+}
+function msg(t){$('message-box').textContent=t;}
+function updateScoreBar(){$('round-info').textContent=`Round ${S.roundNum}`;$('session-score').textContent=`Score: ${S.sessionScore.toLocaleString()}`;}
+function playerHasCards(idx){return idx===0?S.playerHand.length>0:S.oppHands[idx-1].length>0;}
+function getActivePlayers(){const a=[];if(S.playerHand.length>0)a.push(0);S.oppHands.forEach((h,i)=>{if(h.length>0)a.push(i+1);});return a;}
+function updatePlayerBack(){const t=S.playerHand[0];$('player-back').src=t?backFor(t):R2+'/assets/backs/couture-back.png';$('player-count').textContent=S.playerHand.length;}
+function updateOppBack(i){const b=$(`opp-back-${i}`),c=$(`opp-count-${i}`);if(b)b.src=S.oppHands[i].length?backFor(S.oppHands[i][0]):R2+'/assets/backs/couture-back.png';if(c)c.textContent=S.oppHands[i].length;}
+function updateAllCounts(){updatePlayerBack();for(let i=0;i<S.numOpponents;i++)updateOppBack(i);updateScoreBar();}
+function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);updatePlayerBack();}else{S.oppHands[wi-1].push(...cards);updateOppBack(wi-1);}}
+
+// ── Auth ─────────────────────────────────────────────────
+async function initAuth() {
+  show('auth'); $('auth-status').textContent='Checking wallet…';
+  try { const cfg=await fetch('/api/config').then(r=>r.json()); R2=(cfg.r2BaseUrl||'').replace(/\/$/,'')+'/apemodx'; } catch(e){}
+  S.wallet=localStorage.getItem('gbg_wallet');
+  if(!S.wallet){
+    $('auth-status').innerHTML='Please <a href="/" style="color:var(--gold)">connect your wallet</a> on the main site first.';
+    return;
   }
-  return arr;
+  try {
+    const res=await fetch(`/api/user/${S.wallet}`);
+    if(res.ok){S.user=await res.json();goToLobby();}
+    else show('register');
+  } catch(e){ S.user={username:'Guest',wallet_address:S.wallet}; goToLobby(); }
 }
 
-function pickAnim(card) {
-  const anims = card.animations;
-  return anims[Math.floor(Math.random() * anims.length)];
+$('btn-register').addEventListener('click', async()=>{
+  const username=$('username-input').value.trim();
+  if(!username){$('register-error').textContent='Please enter a username.';return;}
+  $('register-error').textContent=''; $('btn-register').disabled=true;
+  try {
+    const res=await fetch('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({walletAddress:S.wallet,username})});
+    if(res.ok){S.user=await res.json();goToLobby();}
+    else $('register-error').textContent='Username already taken or server error.';
+  } catch(e){ S.user={username,wallet_address:S.wallet};goToLobby(); }
+  finally{$('btn-register').disabled=false;}
+});
+
+// ── Lobby ────────────────────────────────────────────────
+function goToLobby() {
+  show('lobby');
+  $('lobby-welcome').textContent=`Welcome, ${S.user.username}!`;
 }
 
-function backFor(card) {
-  if (!card) return R2 + '/assets/backs/couture-back.png';
-  const d = card.deck;
-  if (d === 'Mutants') return R2 + '/assets/backs/mutants-back.png';
-  if (d === 'Mecha')   return R2 + '/assets/backs/mecha-back.png';
-  return R2 + '/assets/backs/couture-back.png';
-}
-
-function msg(text) { msgBox.textContent = text; }
-function updateScoreBar() {
-  sessionScoreEl.textContent = `Score: ${S.sessionScore.toLocaleString()}`;
-  roundInfoEl.textContent    = `Round ${S.roundNum}`;
-}
-
-// ── Init ────────────────────────────────────
-document.querySelectorAll('.opp-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.opp-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    S.numOpponents = parseInt(btn.dataset.opp);
+document.querySelectorAll('.opp-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.opp-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); S.numOpponents=parseInt(btn.dataset.opp);
   });
 });
 
-document.getElementById('btn-start').addEventListener('click', async () => {
-  const [cfgRes, cardsRes] = await Promise.all([
-    fetch('/api/config'),
-    fetch('data/cards.json')
-  ]);
-  const cfg = await cfgRes.json();
-  R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
-
-  S.allCards = await cardsRes.json();
-  // Rewrite all asset paths to full R2 URLs
-  S.allCards.forEach(c => {
-    c.image      = r2url(c.image);
-    c.animations = c.animations.map(r2url);
-  });
+$('btn-start').addEventListener('click', async()=>{
+  show('dealing'); $('dealing-msg').textContent='Loading cards…';
+  const cardsRes=await fetch('data/cards.json');
+  S.allCards=await cardsRes.json();
+  S.allCards.forEach(c=>{c.image=r2url(c.image);c.animations=c.animations.map(r2url);});
+  await dealingAnimation();
   startGame();
 });
 
-// ── Start / Deal ────────────────────────────
+// ── Dealing animation ─────────────────────────────────────
+async function dealingAnimation() {
+  const deckImg=$('dealing-deck').querySelector('.dealing-card-back');
+  const countEl=$('dealing-deck').querySelector('.dealing-count');
+  deckImg.src=R2+'/assets/backs/couture-back.png';
+  countEl.textContent='150';
+  $('dealing-msg').textContent='Shuffling the deck…';
+  await sleep(800);
+  $('dealing-msg').textContent=`Dealing 10 cards to each player…`;
+  for(let n=10;n>=1;n--){countEl.textContent=n*((S.numOpponents+1));await sleep(120);}
+  countEl.textContent='0';
+  await sleep(400);
+  $('dealing-msg').textContent='Choosing who goes first…';
+  await sleep(900);
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ── Start game ───────────────────────────────────────────
 function startGame() {
-  S.frozenPile = [];
-  S.roundNum = 0;
-
-  // Deal 10 random cards each
-  const deck = shuffle([...S.allCards]);
-  const total = S.numOpponents + 1;
-  S.playerHand = deck.splice(0, 10);
-  S.oppHands = [];
-  for (let i = 0; i < S.numOpponents; i++) {
-    S.oppHands.push(deck.splice(0, 10));
-  }
-
-  // Random first caller
-  S.callerIndex = Math.floor(Math.random() * total);
-
-  showScreen('game');
-  buildTableUI();
-  startRound();
+  S.frozenPile=[]; S.roundNum=0;
+  const deck=shuffle([...S.allCards]);
+  S.playerHand=deck.splice(0,10); S.oppHands=[];
+  for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
+  S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
+  show('game'); buildTableUI(); startRound();
 }
 
-// ── Build static table UI ───────────────────
+// ── Build table ───────────────────────────────────────────
 function buildTableUI() {
-  oppZone.innerHTML = '';
-  for (let i = 0; i < S.numOpponents; i++) {
-    const slot = document.createElement('div');
-    slot.className = 'opponent-slot';
-    slot.id = `opp-slot-${i}`;
-    slot.innerHTML = `
-      <div class="opp-stack">
-        <img class="card-back-img opp-back" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" alt="Opp deck" />
-        <span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span>
-      </div>
-      <div id="opp-active-${i}"></div>
-      <span class="opp-label">Player ${i + 2}</span>`;
-    oppZone.appendChild(slot);
+  const oz=$('opponents-zone'); oz.innerHTML='';
+  for(let i=0;i<S.numOpponents;i++){
+    const slot=document.createElement('div'); slot.className='opponent-slot'; slot.id=`opp-slot-${i}`;
+    slot.innerHTML=`<div class="opp-stack"><img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" /><span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span></div><div id="opp-active-${i}"></div><span class="opp-label">Player ${i+2}</span>`;
+    oz.appendChild(slot);
   }
+  $('player-name-label').textContent=S.user?S.user.username:'You';
   updatePlayerBack();
 }
 
-function updatePlayerBack() {
-  const top = S.playerHand[0];
-  playerBack.src = top ? backFor(top) : R2 + '/assets/backs/couture-back.png';
-  playerCountEl.textContent = S.playerHand.length;
-}
-
-// ── Round start ─────────────────────────────
+// ── Round ────────────────────────────────────────────────
 function startRound() {
-  S.roundNum++;
-  updateScoreBar();
-  playArea.innerHTML = '';
-  playerCardArea.innerHTML = '';
-
-  // Check for eliminations (0 active cards)
-  checkEliminations();
-
-  const activePlayers = getActivePlayers();
-  if (activePlayers.length === 1) { endGame(); return; }
-
-  // Ensure caller still has cards; if not, pick next
-  while (!playerHasCards(S.callerIndex)) {
-    S.callerIndex = (S.callerIndex + 1) % (S.numOpponents + 1);
-  }
-
-  if (S.callerIndex === 0) {
-    humanCallPhase();
-  } else {
-    computerCallPhase();
-  }
+  S.roundNum++; updateScoreBar();
+  $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
+  clearContinueTimer();
+  if(getActivePlayers().length===1){endGame();return;}
+  while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
+  if(S.callerIndex===0) humanCallPhase(); else computerCallPhase();
 }
 
-function playerHasCards(idx) {
-  return idx === 0 ? S.playerHand.length > 0 : S.oppHands[idx - 1].length > 0;
-}
-
-function getActivePlayers() {
-  const active = [];
-  if (S.playerHand.length > 0) active.push(0);
-  S.oppHands.forEach((h, i) => { if (h.length > 0) active.push(i + 1); });
-  return active;
-}
-
-function checkEliminations() {
-  // Nothing to do visually here — zero-card players are just skipped
-}
-
-// ── Human calls ─────────────────────────────
+// ── Human turn ───────────────────────────────────────────
 function humanCallPhase() {
-  const card = S.playerHand[0];
-  msg(`Your turn to call! Pick the trait you want to play. (You are the caller — no XTRA bonus for you this round)`);
-  playerCardArea.innerHTML = '';
-
-  const cardEl = document.createElement('div');
-  cardEl.className = 'player-card';
-  cardEl.innerHTML = `<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
+  const card=S.playerHand[0];
+  msg('Your turn! Pick the trait you want to play. (As caller, your XTRA does not apply this round.)');
+  const cardEl=document.createElement('div'); cardEl.className='player-card flip-in';
+  cardEl.innerHTML=`<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
     <div class="trait-list">
-      ${card.traits.map((t, i) => `
-        <button class="trait-btn" data-idx="${i}">
-          <span class="t-name">${t.name}</span>
-          <span class="t-val">${t.value}</span>
-        </button>`).join('')}
-      <div class="trait-btn xtra-row" style="pointer-events:none">
-        <span class="t-name">XTRA: ${card.xtra.name}</span>
-        <span class="t-val">${card.xtra.value}</span>
-      </div>
+      ${card.traits.map((t,i)=>`<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
+      <div class="trait-btn xtra-row"><span class="t-name">XTRA: ${card.xtra.name}</span><span class="t-val">${card.xtra.value}</span></div>
     </div>`;
-
-  cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      S.calledTraitIdx = parseInt(btn.dataset.idx);
-      resolveRound();
-    });
+  cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn=>{
+    btn.addEventListener('click',()=>{S.calledTraitIdx=parseInt(btn.dataset.idx);resolveRound();});
   });
-
-  playerCardArea.appendChild(cardEl);
-  btnContinue.style.display = 'none';
-  S.phase = 'human-pick';
+  $('player-card-area').appendChild(cardEl);
+  hideContinue();
 }
 
-// ── Computer calls ───────────────────────────
+// ── Computer turn ────────────────────────────────────────
 function computerCallPhase() {
-  const oppIdx = S.callerIndex - 1;
-  const card = S.oppHands[oppIdx][0];
-
-  // Computer picks highest base trait
-  let best = 0;
-  card.traits.forEach((t, i) => { if (t.value > card.traits[best].value) best = i; });
-  S.calledTraitIdx = best;
-
-  const traitName = card.traits[best].name;
-  const traitVal  = card.traits[best].value;
-
-  msg(`Player ${S.callerIndex + 1} calls: "${traitName}" — ${traitVal}. Revealing all cards...`);
-  showOppCallerCard(oppIdx, card);
-
-  // Show player's card face up
-  showPlayerFaceUp(false); // not caller, so XTRA applies
-
-  // Show other opps face up
-  for (let i = 0; i < S.numOpponents; i++) {
-    if (i !== oppIdx && S.oppHands[i].length > 0) {
-      showOppFaceUp(i, false);
-    }
-  }
-
-  btnContinue.style.display = 'block';
-  btnContinue.onclick = () => resolveRound();
+  const oppIdx=S.callerIndex-1; const card=S.oppHands[oppIdx][0];
+  let best=0; card.traits.forEach((t,i)=>{if(t.value>card.traits[best].value)best=i;});
+  S.calledTraitIdx=best;
+  msg(`Player ${S.callerIndex+1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. All cards revealed…`);
+  renderOppFaceUp(oppIdx,card,true); renderPlayerFaceUp(false);
+  for(let i=0;i<S.numOpponents;i++){if(i!==oppIdx&&S.oppHands[i].length>0)renderOppFaceUp(i,S.oppHands[i][0],false);}
+  showContinue(()=>resolveRound());
 }
 
-function showOppCallerCard(oppIdx, card) {
-  const el = document.getElementById(`opp-active-${oppIdx}`);
-  if (!el) return;
-  el.innerHTML = `<img class="opp-active-card" src="${card.image}" alt="${card.id}" onerror="this.style.background='#333'" />`;
-}
-
-function showPlayerFaceUp(isCaller) {
-  if (S.playerHand.length === 0) return;
-  const card = S.playerHand[0];
-  const cardEl = document.createElement('div');
-  cardEl.className = 'player-card';
-  cardEl.innerHTML = `<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
+// ── Render cards face-up ──────────────────────────────────
+function renderPlayerFaceUp(isCaller) {
+  if(!S.playerHand.length)return;
+  const card=S.playerHand[0];
+  const el=document.createElement('div'); el.className='player-card flip-in';
+  el.innerHTML=`<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
     <div class="trait-list">
-      ${card.traits.map((t, i) => `
-        <div class="trait-btn ${i === S.calledTraitIdx ? 'selected' : ''}" style="pointer-events:none">
-          <span class="t-name">${t.name}</span>
-          <span class="t-val">${t.value}</span>
-        </div>`).join('')}
-      ${!isCaller && card.xtra.value > 0 ? `
-        <div class="trait-btn xtra-row" style="pointer-events:none">
-          <span class="t-name">+XTRA: ${card.xtra.name}</span>
-          <span class="t-val">+${card.xtra.value}</span>
-        </div>` : ''}
+      ${card.traits.map((t,i)=>`<div class="trait-btn${i===S.calledTraitIdx?' highlighted':''}" style="pointer-events:none"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></div>`).join('')}
+      ${!isCaller&&card.xtra.value>0?`<div class="trait-btn xtra-add" style="pointer-events:none"><span class="t-name">+XTRA: ${card.xtra.name}</span><span class="t-val">+${card.xtra.value}</span></div>`:''}
     </div>`;
-  playerCardArea.appendChild(cardEl);
+  $('player-card-area').innerHTML=''; $('player-card-area').appendChild(el);
 }
 
-function showOppFaceUp(oppIdx, isCaller) {
-  if (S.oppHands[oppIdx].length === 0) return;
-  const card = S.oppHands[oppIdx][0];
-  const el = document.getElementById(`opp-active-${oppIdx}`);
-  if (!el) return;
-  el.innerHTML = `<img class="opp-active-card" src="${card.image}" alt="${card.id}" onerror="this.style.background='#333'" />`;
+function renderOppFaceUp(oppIdx,card,isCaller) {
+  const el=$(`opp-active-${oppIdx}`); if(!el)return;
+  el.innerHTML=`<div class="opp-face-card flip-in">
+    <div class="opp-name">Player ${oppIdx+2}</div>
+    <img src="${card.image}" alt="${card.id}" onerror="this.style.background='#333'" />
+    ${card.traits.map((t,i)=>`<div class="opp-trait-row${i===S.calledTraitIdx?' called':''}">${t.name}<span>${t.value}</span></div>`).join('')}
+    ${!isCaller&&card.xtra.value>0?`<div class="opp-trait-row xtra">+XTRA: ${card.xtra.name}<span>+${card.xtra.value}</span></div>`:''}
+  </div>`;
 }
 
-// ── Resolve round ────────────────────────────
+// ── Resolve round ────────────────────────────────────────
 function resolveRound() {
-  btnContinue.style.display = 'none';
-  const traitIdx = S.calledTraitIdx;
-
-  // Calculate scores for each active player
-  // Caller gets base trait value only; others add XTRA
-  const scores = [];
-
-  // Player (index 0)
-  if (S.playerHand.length > 0) {
-    const card = S.playerHand[0];
-    const base = card.traits[traitIdx].value;
-    const xtra = (S.callerIndex !== 0) ? card.xtra.value : 0;
-    scores.push({ playerIdx: 0, card, score: base + xtra, base, xtra });
-  }
-
-  // Opponents
-  for (let i = 0; i < S.numOpponents; i++) {
-    if (S.oppHands[i].length === 0) continue;
-    const card = S.oppHands[i][0];
-    const base = card.traits[traitIdx].value;
-    const xtra = (S.callerIndex !== i + 1) ? card.xtra.value : 0;
-    scores.push({ playerIdx: i + 1, card, score: base + xtra, base, xtra });
-  }
-
-  // Find max score
-  const maxScore = Math.max(...scores.map(s => s.score));
-  const winners  = scores.filter(s => s.score === maxScore);
-  const losers   = scores.filter(s => s.score < maxScore);
-  const isTie    = winners.length > 1;
-
-  // All played cards (one per active player)
-  const roundCards = scores.map(s => s.card);
-
-  if (isTie) {
-    // Freeze all round cards + existing frozen pile
+  hideContinue(); clearContinueTimer();
+  const traitIdx=S.calledTraitIdx; const scores=[];
+  if(S.playerHand.length>0){const card=S.playerHand[0];const base=card.traits[traitIdx].value;const xtra=S.callerIndex!==0?card.xtra.value:0;scores.push({playerIdx:0,card,score:base+xtra});}
+  for(let i=0;i<S.numOpponents;i++){if(!S.oppHands[i].length)continue;const card=S.oppHands[i][0];const base=card.traits[traitIdx].value;const xtra=S.callerIndex!==i+1?card.xtra.value:0;scores.push({playerIdx:i+1,card,score:base+xtra});}
+  const maxScore=Math.max(...scores.map(s=>s.score));
+  const winners=scores.filter(s=>s.score===maxScore); const isTie=winners.length>1;
+  const roundCards=scores.map(s=>s.card);
+  if(isTie){
     S.frozenPile.push(...roundCards);
-
-    // Remove top card from each active player (they go to frozen)
-    if (S.playerHand.length > 0) S.playerHand.shift();
-    for (let i = 0; i < S.numOpponents; i++) {
-      if (S.oppHands[i].length > 0) S.oppHands[i].shift();
-    }
-
-    // Check if any tying player now has 0 cards → eliminated
-    const stillAlive = winners.filter(w => playerHasCards(w.playerIdx));
-    if (stillAlive.length === 1) {
-      // Only one tying player left — they win the frozen pile
-      giveCardsToWinner(stillAlive[0].playerIdx, S.frozenPile);
-      S.frozenPile = [];
-    }
-
-    const tieNames = winners.map(w => w.playerIdx === 0 ? 'You' : `Player ${w.playerIdx + 1}`).join(' & ');
-    msg(`Tie between ${tieNames}! Cards frozen. ${S.frozenPile.length} cards on the table. Same caller goes again...`);
-    updateAllCounts();
-    btnContinue.style.display = 'block';
-    btnContinue.onclick = () => startRound();
+    if(S.playerHand.length>0)S.playerHand.shift();
+    for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
+    const stillAlive=winners.filter(w=>playerHasCards(w.playerIdx));
+    if(stillAlive.length===1){giveCardsToWinner(stillAlive[0].playerIdx,S.frozenPile);S.frozenPile=[];}
+    msg(`Tie! ${S.frozenPile.length} card(s) frozen. Same caller goes again with their next card…`);
+    updateAllCounts(); showContinue(()=>startRound());
   } else {
-    const winnerData = winners[0];
-    const winnerIdx  = winnerData.playerIdx;
-    const winnerName = winnerIdx === 0 ? 'You' : `Player ${winnerIdx + 1}`;
-
-    // Remove top card from each active player, put all in won pile + frozen
-    const won = [...roundCards, ...S.frozenPile];
-    S.frozenPile = [];
-
-    if (S.playerHand.length > 0) S.playerHand.shift();
-    for (let i = 0; i < S.numOpponents; i++) {
-      if (S.oppHands[i].length > 0) S.oppHands[i].shift();
-    }
-
-    giveCardsToWinner(winnerIdx, won);
-    S.callerIndex = winnerIdx; // winner calls next
-
-    const traitName = scores[0].card.traits[traitIdx].name;
-    msg(`${winnerName} wins the round! (${traitName}: ${maxScore}) — ${won.length} card(s) won.`);
+    const winner=winners[0]; const wi=winner.playerIdx;
+    const wname=wi===0?'You':`Player ${wi+1}`;
+    const won=[...roundCards,...S.frozenPile]; S.frozenPile=[];
+    if(S.playerHand.length>0)S.playerHand.shift();
+    for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
+    giveCardsToWinner(wi,won); S.callerIndex=wi;
+    msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
+    // Highlight winner card then play animation
+    highlightWinnerCard(wi);
+    setTimeout(()=>{
+      playWinAnimation(winner.card,()=>{
+        if(getActivePlayers().length===1){endGame();return;}
+        // Show player their next card face-up, then Continue
+        if(S.playerHand.length>0)renderPlayerFaceUp(S.callerIndex!==0);
+        showContinue(()=>startRound());
+      });
+    }, 600);
+  }
+}
 
-    // Play winning card animation
-    playWinAnimation(winnerData.card, () => {
-      const activePlayers = getActivePlayers();
-      if (activePlayers.length === 1) { endGame(); return; }
-      btnContinue.style.display = 'block';
-      btnContinue.onclick = () => startRound();
+function highlightWinnerCard(wi) {
+  if(wi===0){const c=$('player-card-area').querySelector('.player-card');if(c)c.classList.add('card-winner');}
+  else{const c=$(`opp-active-${wi-1}`).querySelector('.opp-face-card');if(c)c.classList.add('card-winner');}
+  // Star ping
+  const star=$('star-ping'); star.style.display='block';
+  star.style.left=Math.random()*60+20+'%'; star.style.top=Math.random()*40+20+'%';
+  setTimeout(()=>star.style.display='none',850);
+}
+
+// ── Continue button + countdown ───────────────────────────
+let _continueTimer=null;
+function showContinue(cb){
+  const btn=$('btn-continue'); btn.style.display='block';
+  let t=10; $('continue-timer').textContent=`(${t}s)`;
+  btn.onclick=()=>{clearContinueTimer();cb();};
+  _continueTimer=setInterval(()=>{t--;$('continue-timer').textContent=`(${t}s)`;if(t<=0){clearContinueTimer();cb();}},1000);
+}
+function hideContinue(){$('btn-continue').style.display='none';}
+function clearContinueTimer(){if(_continueTimer){clearInterval(_continueTimer);_continueTimer=null;}$('continue-timer').textContent='';}
+
+// ── Win animation ─────────────────────────────────────────
+function playWinAnimation(card,callback){
+  const ov=$('win-overlay'),vid=$('win-video');
+  vid.src=pickAnim(card); ov.style.display='flex';
+  vid.muted=false; vid.play().catch(()=>{vid.muted=true;vid.play();});
+  const close=()=>{ov.style.display='none';vid.src='';ov.removeEventListener('click',close);vid.removeEventListener('ended',close);callback();};
+  vid.addEventListener('ended',close); ov.addEventListener('click',close);
+}
+
+// ── End game ──────────────────────────────────────────────
+async function endGame(){
+  const humanWon=S.playerHand.length>0;
+  const points=humanWon?1000*S.numOpponents:0;
+  S.sessionScore+=points;
+  // Submit score to DB (non-blocking)
+  if(S.wallet&&humanWon){
+    fetch('/api/scores/amx',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({walletAddress:S.wallet,score:points,opponents:S.numOpponents})}).catch(()=>{});
+  }
+  $('result-icon').textContent=humanWon?'🏆':'💀';
+  $('result-title').textContent=humanWon?'You Win!':'You Lost!';
+  $('result-msg').textContent=humanWon?`You beat ${S.numOpponents} opponent(s) and collected all the cards!`:'Better luck next time — the computer took all the cards.';
+  $('result-points').textContent=`+${points.toLocaleString()}`;
+  $('result-total').textContent=S.sessionScore.toLocaleString();
+  show('result');
+  $('btn-next-game').onclick=()=>{S.callerIndex=0;startGame();};
+  $('btn-view-lb').onclick=()=>loadLeaderboard();
+  $('btn-quit').onclick=()=>window.location.href='/games/';
+}
+
+// ── Leaderboard ───────────────────────────────────────────
+async function loadLeaderboard(){
+  show('leaderboard');
+  try{
+    const rows=await fetch('/api/leaderboard/amx').then(r=>r.json());
+    const tbody=$('lb-body'); tbody.innerHTML='';
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">No scores yet.</td></tr>';return;}
+    rows.forEach((r,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="lb-rank">${i+1}</td><td>${r.username}</td><td>${Number(r.score).toLocaleString()}</td><td>${r.opponents}v${r.opponents}</td>`;
+      tbody.appendChild(tr);
     });
-  }
+  }catch(e){$('lb-body').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">Could not load scores.</td></tr>';}
+  $('btn-lb-play').onclick=()=>goToLobby();
+  $('btn-lb-quit').onclick=()=>window.location.href='/games/';
 }
 
-function giveCardsToWinner(winnerIdx, cards) {
-  if (winnerIdx === 0) {
-    S.playerHand.push(...cards);
-    updatePlayerBack();
-  } else {
-    S.oppHands[winnerIdx - 1].push(...cards);
-    updateOppBack(winnerIdx - 1);
-  }
-}
-
-function updateAllCounts() {
-  updatePlayerBack();
-  for (let i = 0; i < S.numOpponents; i++) updateOppBack(i);
-  updateScoreBar();
-}
-
-// ── Win animation ─────────────────────────────
-function playWinAnimation(card, callback) {
-  const overlay = document.getElementById('win-animation-overlay');
-  const video   = document.getElementById('win-video');
-  const src     = pickAnim(card);
-
-  video.src = src;
-  video.muted = false; // enable sound
-  overlay.style.display = 'flex';
-
-  video.play().catch(() => { video.muted = true; video.play(); });
-
-  const close = () => {
-    overlay.style.display = 'none';
-    video.src = '';
-    overlay.removeEventListener('click', close);
-    video.removeEventListener('ended', close);
-    callback();
-  };
-  video.addEventListener('ended', close);
-  overlay.addEventListener('click', close);
-}
-
-// ── End game ──────────────────────────────────
-function endGame() {
-  const humanWon = S.playerHand.length > 0;
-  const points   = humanWon ? 1000 * S.numOpponents : 0;
-  S.sessionScore += points;
-
-  document.getElementById('result-icon').textContent  = humanWon ? '🏆' : '💀';
-  document.getElementById('result-title').textContent = humanWon ? 'You Win!' : 'You Lost!';
-  document.getElementById('result-msg').textContent   = humanWon
-    ? `You collected all the cards and beat ${S.numOpponents} opponent(s)!`
-    : 'Better luck next time — the computer took all the cards.';
-  document.getElementById('result-points').textContent = `+${points.toLocaleString()}`;
-  document.getElementById('result-total').textContent  = S.sessionScore.toLocaleString();
-
-  showScreen('result');
-
-  // Play again countdown (60s)
-  if (humanWon) {
-    let t = 60;
-    const timerEl = document.getElementById('play-again-timer');
-    timerEl.textContent = `Auto-play again in ${t}s...`;
-    const iv = setInterval(() => {
-      t--;
-      timerEl.textContent = `Auto-play again in ${t}s...`;
-      if (t <= 0) { clearInterval(iv); playAgain(); }
-    }, 1000);
-    document.getElementById('btn-play-again').onclick = () => { clearInterval(iv); playAgain(); };
-    document.getElementById('btn-quit').onclick = () => { clearInterval(iv); goToMenu(); };
-  } else {
-    document.getElementById('btn-play-again').onclick = playAgain;
-    document.getElementById('btn-quit').onclick = goToMenu;
-    document.getElementById('play-again-timer').textContent = '';
-  }
-}
-
-function playAgain() {
-  S.callerIndex = 0; // winner (human) starts next game
-  startGame();
-}
-
-function goToMenu() { window.location.href = '/games/'; }
-
-
-function updateOppBack(i) {
-  const back = document.getElementById(`opp-back-${i}`);
-  const count = document.getElementById(`opp-count-${i}`);
-  if (back) back.src = S.oppHands[i].length ? backFor(S.oppHands[i][0]) : R2 + '/assets/backs/couture-back.png';
-  if (count) count.textContent = S.oppHands[i].length;
-}
+// ── Boot ──────────────────────────────────────────────────
+initAuth();

@@ -149,3 +149,17 @@ export function getSession() {
   if (!provider) return null;
   return provider.session || null;
 }
+
+// Returns the first connected wallet address (any namespace)
+export function getAddress() {
+  const session = provider && provider.session;
+  if (!session || !session.namespaces) return null;
+  for (const ns of Object.values(session.namespaces)) {
+    if (ns.accounts && ns.accounts.length > 0) {
+      // Format is "chain:networkId:address" — return the address part
+      const parts = ns.accounts[0].split(':');
+      return parts[parts.length - 1] || null;
+    }
+  }
+  return null;
+}
