@@ -179,11 +179,23 @@ function startGame() {
 }
 
 // ── Build table ──────────────────────────────────────────
+const BEE_AVATARS = ['bee-1.png','bee-3.png','bee-8.png','bee-19.png'];
+
 function buildTableUI() {
   const oz=$('opponents-zone'); oz.innerHTML='';
   for(let i=0;i<S.numOpponents;i++){
+    const avatar=BEE_AVATARS[i % BEE_AVATARS.length];
     const slot=document.createElement('div'); slot.className='opponent-slot'; slot.id=`opp-slot-${i}`;
-    slot.innerHTML=`<div class="opp-stack"><img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" /><span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span></div><div id="opp-active-${i}"></div><span class="opp-label">Player ${i+2}</span>`;
+    slot.innerHTML=`
+      <img class="opp-avatar" src="assets/avatars/${avatar}" alt="Bee ${i+2}" />
+      <div class="opp-identity">
+        <div class="opp-stack">
+          <img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" />
+          <span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span>
+        </div>
+        <span class="opp-label" id="opp-label-${i}">Bee ${i+2}</span>
+      </div>
+      <div class="opp-active-area" id="opp-active-${i}"></div>`;
     oz.appendChild(slot);
   }
   $('player-name-label').textContent=S.user?S.user.username:'You';
@@ -194,6 +206,8 @@ function buildTableUI() {
 function startRound() {
   S.roundNum++; updateScoreBar();
   $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
+  // Clear opponent face-up card areas from previous round
+  for(let i=0;i<S.numOpponents;i++){const el=$(`opp-active-${i}`);if(el)el.innerHTML='';}
   clearContinueTimer();
   if(getActivePlayers().length===1){endGame();return;}
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
@@ -210,7 +224,19 @@ function humanCallPhase() {
       ${card.traits.map((t,i)=>`<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
     </div>`;
   cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn=>{
-    btn.addEventListener('click',()=>{S.calledTraitIdx=parseInt(btn.dataset.idx);resolveRound();});
+    btn.addEventListener('click',()=>{
+      S.calledTraitIdx=parseInt(btn.dataset.idx);
+      // Disable further clicks
+      cardEl.querySelectorAll('.trait-btn').forEach(b=>{b.disabled=true;b.style.cursor='default';});
+      // Highlight chosen trait on player card
+      renderPlayerFaceUp();
+      // Reveal all opponent cards face-up
+      for(let i=0;i<S.numOpponents;i++){
+        if(S.oppHands[i].length>0) renderOppFaceUp(i,S.oppHands[i][0],false);
+      }
+      msg(`You called "${card.traits[S.calledTraitIdx].name}" — ${card.traits[S.calledTraitIdx].value}. All cards revealed!`);
+      showContinue(()=>resolveRound());
+    });
   });
   $('player-card-area').appendChild(cardEl);
   hideContinue();

@@ -71,36 +71,46 @@
 
 <!-- ── SCREEN: GAME ── -->
 <div id="screen-game" class="screen">
-  <div class="score-bar">
+
+  <!-- HUD bar floats above the table -->
+  <div class="hud-bar">
     <span id="round-info" class="round-info">Round 1</span>
+    <div id="message-box" class="message-box"></div>
     <span id="session-score" class="session-score">Score: 0</span>
   </div>
 
-  <div class="table-wrap">
-    <div class="table-felt">
-      <div id="opponents-zone" class="opponents-zone"></div>
+  <!-- Poker table arena -->
+  <div class="table-arena">
 
-      <div class="play-area">
-        <div id="message-box" class="message-box"></div>
-        <div id="cards-in-play" class="cards-in-play"></div>
-      </div>
+    <!-- Opponents along top of table (populated by JS) -->
+    <div id="opponents-zone" class="opponents-zone"></div>
 
-      <div id="player-zone" class="player-zone">
+    <!-- Center play area -->
+    <div class="table-center">
+      <div id="cards-in-play" class="cards-in-play"></div>
+    </div>
+
+    <!-- Player at bottom of table -->
+    <div id="player-zone" class="player-zone">
+      <div class="player-identity">
         <div class="stack-wrap">
           <img id="player-back" class="card-back-img" src="" alt="Your deck" />
           <span id="player-count" class="card-count">10</span>
         </div>
         <span id="player-name-label" class="player-label">You</span>
-        <div id="player-card-area" class="player-card-area"></div>
       </div>
+      <div id="player-card-area" class="player-card-area"></div>
     </div>
-  </div>
 
+  </div><!-- /table-arena -->
+
+  <!-- Continue action bar -->
   <div class="action-bar">
     <button id="btn-continue" class="btn-primary" style="display:none">
       Continue ▶ <span id="continue-timer" class="continue-timer"></span>
     </button>
   </div>
+
 </div>
 
 <!-- ── SCREEN: RESULT ── -->
