@@ -14,7 +14,8 @@ app.use('/games/apemodx', express.static(path.join(__dirname, 'games', 'apemodx'
 // Config endpoint for frontend env vars
 app.get('/api/config', (req, res) => {
   res.json({
-    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID || ''
+    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID || '',
+    r2BaseUrl: process.env.R2_BASE_URL || ''
   });
 });
 

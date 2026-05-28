@@ -7,8 +7,8 @@
 
 'use strict';
 
-// ── R2 Asset Base ──────────────────────────
-const R2 = 'https://pub-c055016499774b6f8e04d8e07613e848.r2.dev/apemodx';
+// ── R2 Asset Base (set from /api/config on load) ───
+let R2 = '';
 
 function r2url(path) {
   // path is like "assets/cards/AM#1.png" — encode # so browsers don't treat it as fragment
@@ -88,8 +88,14 @@ document.querySelectorAll('.opp-btn').forEach(btn => {
 });
 
 document.getElementById('btn-start').addEventListener('click', async () => {
-  const res = await fetch('data/cards.json');
-  S.allCards = await res.json();
+  const [cfgRes, cardsRes] = await Promise.all([
+    fetch('/api/config'),
+    fetch('data/cards.json')
+  ]);
+  const cfg = await cfgRes.json();
+  R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
+
+  S.allCards = await cardsRes.json();
   // Rewrite all asset paths to full R2 URLs
   S.allCards.forEach(c => {
     c.image      = r2url(c.image);
