@@ -298,44 +298,93 @@ function buildTableUI() {
   updatePlayerBack();
 }
 
+// ── Turn-banner helpers ──────────────────────────────────
+async function showTurnBanner(name, avatarSrc, label) {
+  const banner = $('turn-banner');
+  banner.innerHTML = `<img class="tb-avatar" src="${avatarSrc}" alt="${name}" /><div class="tb-name">${name}</div><div class="tb-label">${label}</div>`;
+  banner.classList.remove('tb-out');
+  banner.classList.add('tb-in');
+  banner.style.display = 'flex';
+  await sleep(1700);
+  banner.classList.remove('tb-in');
+  banner.classList.add('tb-out');
+  await sleep(350);
+  banner.style.display = 'none';
+  banner.classList.remove('tb-out');
+}
+
+function setCallerSeat(playerIdx) {
+  clearCallerSeat();
+  const el = playerIdx === 0 ? $('player-zone') : $(`opp-slot-${playerIdx-1}`);
+  if (el) el.classList.add('seat-caller');
+}
+function clearCallerSeat() {
+  document.querySelectorAll('.seat-caller').forEach(el => el.classList.remove('seat-caller'));
+}
+
+// ── Count-badge pop helper ────────────────────────────────
+function popCount(el) {
+  if (!el) return;
+  el.classList.remove('count-pop');
+  void el.offsetWidth;
+  el.classList.add('count-pop');
+}
+
 // ── Round ────────────────────────────────────────────────
 function startRound() {
   S.roundNum++; updateScoreBar();
   $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
-  clearContinueTimer();
+  clearContinueTimer(); clearCallerSeat();
   if(getActivePlayers().length===1){endGame();return;}
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
-  // 3b: Decrement counts visually the moment the round begins (cards go "in play")
+  // Decrement counts visually the moment the round begins (cards go "in play")
   updateAllCounts();
   if(S.callerIndex===0) humanCallPhase(); else computerCallPhase();
 }
 
 // ── Human turn ───────────────────────────────────────────
-function humanCallPhase() {
-  const card=S.playerHand[0];
-  msg('Your turn! Pick the trait you want to play. (As caller, your XTRA does not apply this round.)');
-  const cardEl=document.createElement('div'); cardEl.className='player-card flip-in';
-  cardEl.innerHTML=`<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
+async function humanCallPhase() {
+  const playerName = S.user ? S.user.username : 'You';
+  await showTurnBanner(playerName, '/assets/goodebags-logo.png', 'YOUR TURN — Pick a trait!');
+  setCallerSeat(0);
+  const card = S.playerHand[0];
+  const mb = $('message-box');
+  mb.classList.add('player-turn');
+  msg('Your turn! Pick a trait to play. (As caller, your XTRA does not apply this round.)');
+  const cardEl = document.createElement('div'); cardEl.className = 'player-card flip-in';
+  cardEl.innerHTML = `<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
     <div class="trait-list">
-      ${card.traits.map((t,i)=>`<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
+      ${card.traits.map((t,i) => `<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
       <div class="trait-btn xtra-row"><span class="t-name">XTRA: ${card.xtra.name}</span><span class="t-val">${card.xtra.value}</span></div>
     </div>`;
-  cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn=>{
-    btn.addEventListener('click',()=>{S.calledTraitIdx=parseInt(btn.dataset.idx);resolveRound();});
+  cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn => {
+    btn.addEventListener('click', () => { S.calledTraitIdx = parseInt(btn.dataset.idx); resolveRound(); });
   });
   $('player-card-area').appendChild(cardEl);
   hideContinue();
 }
 
 // ── Computer turn ────────────────────────────────────────
-function computerCallPhase() {
-  const oppIdx=S.callerIndex-1; const card=S.oppHands[oppIdx][0];
-  let best=0; card.traits.forEach((t,i)=>{if(t.value>card.traits[best].value)best=i;});
-  S.calledTraitIdx=best;
-  msg(`Player ${S.callerIndex+1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. All cards revealed…`);
-  renderOppFaceUp(oppIdx,card,true); renderPlayerFaceUp(false);
-  for(let i=0;i<S.numOpponents;i++){if(i!==oppIdx&&S.oppHands[i].length>0)renderOppFaceUp(i,S.oppHands[i][0],false);}
-  showContinue(()=>resolveRound());
+async function computerCallPhase() {
+  const oppIdx = S.callerIndex - 1;
+  const card = S.oppHands[oppIdx][0];
+  const avatarSrc = AMX_AVATARS[oppIdx % 2];
+  await showTurnBanner(`Player ${S.callerIndex + 1}`, avatarSrc, 'is choosing a trait…');
+  setCallerSeat(S.callerIndex);
+  $('message-box').classList.remove('player-turn');
+  msg(`Player ${S.callerIndex + 1} is thinking…`);
+  await sleep(1500);
+  let best = 0;
+  card.traits.forEach((t, i) => { if (t.value > card.traits[best].value) best = i; });
+  S.calledTraitIdx = best;
+  msg(`Player ${S.callerIndex + 1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. Revealing cards…`);
+  renderOppFaceUp(oppIdx, card, true);
+  renderPlayerFaceUp(false);
+  // Stagger other opponents 150ms apart
+  const others = [];
+  for (let i = 0; i < S.numOpponents; i++) { if (i !== oppIdx && S.oppHands[i].length > 0) others.push(i); }
+  for (const i of others) { await sleep(150); renderOppFaceUp(i, S.oppHands[i][0], false); }
+  showContinue(() => resolveRound());
 }
 
 // ── Render cards face-up ──────────────────────────────────
@@ -363,7 +412,8 @@ function renderOppFaceUp(oppIdx,card,isCaller) {
 
 // ── Resolve round ────────────────────────────────────────
 function resolveRound() {
-  hideContinue(); clearContinueTimer();
+  hideContinue(); clearContinueTimer(); clearCallerSeat();
+  $('message-box').classList.remove('player-turn');
   const traitIdx=S.calledTraitIdx; const scores=[];
   if(S.playerHand.length>0){const card=S.playerHand[0];const base=card.traits[traitIdx].value;const xtra=S.callerIndex!==0?card.xtra.value:0;scores.push({playerIdx:0,card,score:base+xtra});}
   for(let i=0;i<S.numOpponents;i++){if(!S.oppHands[i].length)continue;const card=S.oppHands[i][0];const base=card.traits[traitIdx].value;const xtra=S.callerIndex!==i+1?card.xtra.value:0;scores.push({playerIdx:i+1,card,score:base+xtra});}
@@ -416,10 +466,10 @@ let _continueTimer=null;
 let _resultTimer=null;
 function clearResultTimer(){if(_resultTimer){clearInterval(_resultTimer);_resultTimer=null;}}
 function showContinue(cb){
-  const btn=$('btn-continue'); btn.style.display='block';
-  let t=10; $('continue-timer').textContent=`(${t}s)`;
-  btn.onclick=()=>{clearContinueTimer();cb();};
-  _continueTimer=setInterval(()=>{t--;$('continue-timer').textContent=`(${t}s)`;if(t<=0){clearContinueTimer();cb();}},1000);
+  const btn=$('btn-continue');
+  btn.style.display='block';
+  $('continue-timer').textContent='';
+  btn.onclick=()=>{hideContinue();cb();};
 }
 function hideContinue(){$('btn-continue').style.display='none';}
 function clearContinueTimer(){if(_continueTimer){clearInterval(_continueTimer);_continueTimer=null;}$('continue-timer').textContent='';}

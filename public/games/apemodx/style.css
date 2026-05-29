@@ -160,7 +160,7 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .play-area {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   display:flex; flex-direction:column; align-items:center; gap:12px;
-  width:46%; z-index:2;
+  width:46%; z-index:2; pointer-events:none;
 }
 .message-box { background:rgba(0,0,0,.72); border:1px solid var(--border); border-radius:12px;
   padding:10px 18px; font-size:.88rem; text-align:center; width:100%; line-height:1.5; }
@@ -181,7 +181,7 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .trait-btn   { display:flex; justify-content:space-between; align-items:center; padding:7px 10px;
   border:none; border-top:1px solid var(--border); background:transparent; color:var(--text);
   font-size:.7rem; font-weight:600; cursor:pointer; transition:background .15s; width:100%; font-family:inherit; }
-.trait-btn:hover { background:rgba(255,215,0,.13); color:var(--gold); }
+.trait-btn:hover { background:rgba(255,215,0,.18); color:var(--gold); transform:scale(1.02); }
 .trait-btn .t-val { font-weight:800; color:var(--gold); margin-left:6px; min-width:18px; text-align:right; }
 .trait-btn.xtra-row {
   background:rgba(255,215,0,.12); color:var(--green); pointer-events:none;
@@ -238,6 +238,46 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 /* ── Seat active highlight (choosing-who-goes-first) ── */
 .seat-active { outline:3px solid var(--gold); outline-offset:6px; border-radius:10px;
   box-shadow:0 0 18px rgba(255,215,0,.55); }
+
+/* ── Caller seat: persistent glow throughout the round ── */
+.seat-caller { outline:3px solid var(--gold); outline-offset:6px; border-radius:10px;
+  animation:callerPulse 2s ease-in-out infinite; }
+@keyframes callerPulse {
+  0%,100% { box-shadow:0 0 16px rgba(255,215,0,.5); }
+  50%      { box-shadow:0 0 36px rgba(255,215,0,.9); }
+}
+.seat-caller .opp-avatar { transform:scale(1.18); transition:transform .35s ease; }
+
+/* ── Turn banner (slide-in overlay centred on the board) ── */
+.turn-banner {
+  position:absolute; top:38%; left:50%; transform:translateX(-50%);
+  display:none; flex-direction:column; align-items:center; gap:10px;
+  z-index:50; pointer-events:none;
+  background:rgba(0,0,0,.88); border:2px solid var(--gold);
+  border-radius:18px; padding:22px 40px; text-align:center;
+  min-width:220px;
+}
+.turn-banner.tb-in  { animation:tbIn  .35s ease-out forwards; }
+.turn-banner.tb-out { animation:tbOut .35s ease-in  forwards; }
+@keyframes tbIn  { from{opacity:0;transform:translateX(-50%) translateY(-14px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+@keyframes tbOut { from{opacity:1} to{opacity:0} }
+.tb-avatar { width:72px; height:72px; object-fit:contain; border-radius:50%;
+  border:3px solid var(--gold); box-shadow:0 0 20px rgba(255,215,0,.55); }
+.tb-name  { font-size:1.15rem; font-weight:900; color:var(--gold); }
+.tb-label { font-size:.82rem; color:var(--text); opacity:.85; }
+
+/* ── Message-box highlight on player's turn ── */
+.message-box.player-turn {
+  border-color:var(--gold); background:rgba(255,215,0,.07);
+}
+
+/* ── Card-count badge pop animation ── */
+@keyframes countPop {
+  0%   { transform:scale(1); }
+  45%  { transform:scale(1.55); }
+  100% { transform:scale(1); }
+}
+.count-pop { animation:countPop .32s ease-out; }
 
 /* ── Star ping ───────────────────────────── */
 .star-ping { position:fixed; font-size:1.6rem; font-weight:900; color:var(--gold);
