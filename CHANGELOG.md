@@ -188,3 +188,19 @@ Format: `[Date] — Description`
 - Restored navbar padding + reduced logo height to keep navbar at original thickness
 - Logo now `36px` height (visually sized to the actual text in the PNG — note: PNG may have built-in transparent padding; adjust `height` in `style.css` `.logo-img` if needed)
 - Hero top padding restored to `160px`
+
+
+---
+
+## [2026-05-29] — Center-Table Showdown UI Overhaul
+
+### Changed
+- **Seat cards are now compact references only** (both games) — `renderPlayerFaceUp()` and `renderOppFaceUp()` render small image-only `.seat-card` cards at each player's seat position. Trait lists removed from seat cards to eliminate overlap and visual clutter.
+- **Round flow updated for center-stage reveal** (both games) — after a trait is called, each active player's card is rendered as both a compact `.seat-card` at their seat and a large `.center-card` inside `.cards-in-play` (absolute center of table). Opponent center cards enter with a 300ms stagger after their seat card appears.
+- **Win/tie timing adjusted** (both games) — winner is highlighted on center cards immediately, center cards dismiss with a 0.4s fade-and-shrink, then the win overlay plays. Tie rounds dismiss center cards before auto-starting the next round.
+
+### Added
+- `renderCenterCard(playerIdx, card)` — builds a large 140px-wide detailed card in `.cards-in-play` showing player name, card image, highlighted called trait, XTRA bonus (AMX only), and computed TOTAL.
+- `animateCenterCardsWinner(winnerIdx)` — applies `.winner` (gold border + glow + scale 1.06) to the winning center card and `.loser` (dim + grayscale) to losing center cards.
+- `dismissCenterCards()` — fades all `.center-card` elements out with `scale(0.8) translateY(20px)` over 0.4s, then clears `.cards-in-play`.
+- CSS classes added to both `style.css` files: `.seat-card`, `.center-card`, `.center-card.in`, `.center-card.winner`, `.center-card.loser`, `.center-card-name`, `.center-traits`, `.center-trait`, `.center-trait.called`, `.center-xtra`, `.center-total`.

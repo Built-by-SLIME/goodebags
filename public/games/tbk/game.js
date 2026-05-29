@@ -342,8 +342,9 @@ async function humanCallPhase() {
       S.calledTraitIdx = parseInt(btn.dataset.idx);
       cardEl.querySelectorAll('.trait-btn').forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
       renderPlayerFaceUp();
+      renderCenterCard(0,card);
       for (let i = 0; i < S.numOpponents; i++) {
-        if (S.oppHands[i].length > 0) { renderOppFaceUp(i, S.oppHands[i][0], false); await sleep(300); }
+        if (S.oppHands[i].length > 0) { renderOppFaceUp(i, S.oppHands[i][0]); await sleep(300); renderCenterCard(i+1,S.oppHands[i][0]); }
       }
       msg(`You called "${card.traits[S.calledTraitIdx].name}" — ${card.traits[S.calledTraitIdx].value}. All cards revealed!`);
       await sleep(1200);
@@ -368,11 +369,13 @@ async function computerCallPhase() {
   card.traits.forEach((t, i) => { if (t.value > card.traits[best].value) best = i; });
   S.calledTraitIdx = best;
   msg(`Player ${S.callerIndex + 1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. Revealing cards…`);
-  renderOppFaceUp(oppIdx, card, true);
-  renderPlayerFaceUp();
-  const others = [];
-  for (let i = 0; i < S.numOpponents; i++) { if (i !== oppIdx && S.oppHands[i].length > 0) others.push(i); }
-  for (const i of others) { await sleep(300); renderOppFaceUp(i, S.oppHands[i][0], false); }
+  renderOppFaceUp(oppIdx, card);
+  renderCenterCard(S.callerIndex,card);
+  await sleep(300);
+  if(S.playerHand.length>0){renderPlayerFaceUp();renderCenterCard(0,S.playerHand[0]);}
+  const others=[];
+  for(let i=0;i<S.numOpponents;i++){if(i!==oppIdx&&S.oppHands[i].length>0)others.push(i);}
+  for(const i of others){await sleep(300);renderOppFaceUp(i,S.oppHands[i][0]);renderCenterCard(i+1,S.oppHands[i][0]);}
   msg(`Player ${S.callerIndex + 1} called "${card.traits[best].name}" — ${card.traits[best].value}. All cards revealed!`);
   await sleep(1200);
   resolveRound();
@@ -382,21 +385,50 @@ async function computerCallPhase() {
 function renderPlayerFaceUp() {
   if(!S.playerHand.length)return;
   const card=S.playerHand[0];
-  const el=document.createElement('div'); el.className='player-card flip-in';
-  el.innerHTML=`<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
-    <div class="trait-list">
-      ${card.traits.map((t,i)=>`<div class="trait-btn${i===S.calledTraitIdx?' highlighted':''}" style="pointer-events:none"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></div>`).join('')}
-    </div>`;
+  const el=document.createElement('div'); el.className='seat-card flip-in';
+  el.innerHTML=`<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />`;
   $('player-card-area').innerHTML=''; $('player-card-area').appendChild(el);
 }
 
-function renderOppFaceUp(oppIdx,card,isCaller) {
+function renderOppFaceUp(oppIdx,card) {
   const el=$(`opp-active-${oppIdx}`); if(!el)return;
-  el.innerHTML=`<div class="opp-face-card flip-in">
-    <div class="opp-name">Player ${oppIdx+2}</div>
-    <img src="${card.image}" alt="${card.id}" onerror="this.style.background='#333'" />
-    ${card.traits.map((t,i)=>`<div class="opp-trait-row${i===S.calledTraitIdx?' called':''}">${t.name}<span>${t.value}</span></div>`).join('')}
-  </div>`;
+  el.innerHTML=`<div class="seat-card flip-in"><img src="${card.image}" alt="${card.id}" onerror="this.style.background='#333'" /></div>`;
+}
+
+// ── Center showdown card (large, in play area) ───────────────────────────────────────────
+function renderCenterCard(playerIdx,card) {
+  const container=$('cards-in-play');
+  const name=playerIdx===0?(S.user?S.user.username:'You'):`Player ${playerIdx+1}`;
+  const el=document.createElement('div'); el.className='center-card'; el.dataset.player=String(playerIdx);
+  const trait=card.traits[S.calledTraitIdx];
+  let total=trait.value; let xtraHtml='';
+  if(typeof card.xtra!=='undefined'&&card.xtra&&card.xtra.value>0&&playerIdx!==S.callerIndex){
+    total+=card.xtra.value;
+    xtraHtml=`<div class="center-xtra">+XTRA: ${card.xtra.name}<span>+${card.xtra.value}</span></div>`;
+  }
+  el.innerHTML=`<div class="center-card-name">${name}</div>
+    <img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
+    <div class="center-traits">
+      <div class="center-trait called">${trait.name}<span>${trait.value}</span></div>
+      ${xtraHtml}
+      <div class="center-trait center-total">TOTAL<span>${total}</span></div>
+    </div>`;
+  container.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
+}
+
+function animateCenterCardsWinner(winnerIdx){
+  document.querySelectorAll('.center-card').forEach(c=>{
+    const p=parseInt(c.dataset.player);
+    c.classList.add(p===winnerIdx?'winner':'loser');
+  });
+}
+
+function dismissCenterCards(){
+  const cards=document.querySelectorAll('.center-card');
+  if(!cards.length)return;
+  cards.forEach(c=>{c.style.transition='all 0.4s ease-out';c.style.opacity='0';c.style.transform='scale(0.8) translateY(20px)';});
+  setTimeout(()=>{const cp=$('cards-in-play');if(cp)cp.innerHTML='';},400);
 }
 
 // ── Resolve round ────────────────────────────────────────
@@ -418,6 +450,7 @@ function resolveRound() {
     if(stillAlive.length===1){giveCardsToWinner(stillAlive[0].playerIdx,S.frozenPile);S.frozenPile=[];}
     msg(`Tie! ${S.frozenPile.length} card(s) frozen. Same caller goes again…`);
     updateAllCounts();
+    dismissCenterCards();
     setTimeout(()=>startRound(), 1500);
   } else {
     const winner=winners[0]; const wi=winner.playerIdx;
@@ -428,20 +461,25 @@ function resolveRound() {
     giveCardsToWinner(wi,won); S.callerIndex=wi;
     msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
+    // Center stage: highlight winner, dismiss, then play animation
+    animateCenterCardsWinner(wi);
     highlightWinnerCard(wi);
     setTimeout(()=>{
-      playWinAnimation(winner.card,()=>{
-        if(getActivePlayers().length===1){endGame();return;}
-        if(S.playerHand.length>0)renderPlayerFaceUp();
-        setTimeout(()=>startRound(), 1500);
-      });
-    }, 600);
+      dismissCenterCards();
+      setTimeout(()=>{
+        playWinAnimation(winner.card,()=>{
+          if(getActivePlayers().length===1){endGame();return;}
+          if(S.playerHand.length>0)renderPlayerFaceUp();
+          setTimeout(()=>startRound(), 1500);
+        });
+      },300);
+    },1200);
   }
 }
 
 function highlightWinnerCard(wi) {
-  if(wi===0){const c=$('player-card-area').querySelector('.player-card');if(c)c.classList.add('card-winner');}
-  else{const c=$(`opp-active-${wi-1}`).querySelector('.opp-face-card');if(c)c.classList.add('card-winner');}
+  const centerCard=document.querySelector(`.center-card[data-player="${wi}"]`);
+  if(centerCard){centerCard.classList.add('card-winner');}
   // 3d: Star ping shows winning score
   const star=$('star-ping');
   star.textContent=`⭐ +${(1000*S.numOpponents).toLocaleString()}`;

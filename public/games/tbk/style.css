@@ -220,6 +220,35 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   display:flex; gap:12px; flex-wrap:wrap; justify-content:center; align-items:flex-start;
 }
 
+/* ── Seat reference card (compact) ── */
+.seat-card {
+  width:80px; background:rgba(0,0,0,.75); border:2px solid var(--border);
+  border-radius:10px; overflow:hidden;
+}
+.seat-card img { width:100%; height:112px; object-fit:cover; display:block; }
+
+/* ── Center showdown card ── */
+.center-card {
+  width:140px; background:rgba(0,0,0,.85); border:2px solid var(--border);
+  border-radius:12px; overflow:hidden;
+  transform:translateY(30px) scale(.92); opacity:0;
+  transition:transform .5s ease-out, opacity .5s ease-out, border-color .4s, box-shadow .4s;
+  flex-shrink:0;
+}
+.center-card.in { transform:translateY(0) scale(1); opacity:1; }
+.center-card.winner { border-color:var(--gold) !important; box-shadow:0 0 32px rgba(245,166,35,.6) !important; transform:scale(1.06); }
+.center-card.loser { opacity:.45; transform:scale(.95); filter:grayscale(.6); }
+.center-card img { width:100%; height:196px; object-fit:cover; display:block; }
+.center-card-name { font-size:.6rem; padding:3px 6px; color:var(--muted); text-align:center; border-bottom:1px solid var(--border); }
+.center-traits { display:flex; flex-direction:column; }
+.center-trait { display:flex; justify-content:space-between; padding:4px 8px; font-size:.62rem; border-top:1px solid var(--border); color:var(--text); }
+.center-trait span { font-weight:800; color:var(--gold); margin-left:6px; }
+.center-trait.called { background:rgba(245,166,35,.22); color:var(--gold); font-weight:700; }
+.center-xtra { display:flex; justify-content:space-between; padding:4px 8px; font-size:.58rem; border-top:1px solid var(--border); background:rgba(59,220,150,.12); color:#3BDC96; font-weight:700; border-left:3px solid #3BDC96; font-style:italic; }
+.center-xtra span { font-weight:800; color:#3BDC96; margin-left:6px; }
+.center-total { background:rgba(245,166,35,.14); font-weight:800; font-size:.68rem; }
+.center-total span { font-weight:900; color:var(--gold); }
+
 /* ── Player zone (human seat, bottom-center) ── */
 .player-zone {
   display:flex; align-items:center; justify-content:center;
