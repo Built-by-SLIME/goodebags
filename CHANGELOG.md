@@ -17,6 +17,26 @@ Format: `[Date] — Description`
 
 ---
 
+## [2026-05-29] — Chunk 6: Game Logic Fixes
+
+### Added
+- `public/js/wallet-utils.js` — shared `getWalletFromWC()` function extracted from both `game.js` files; reads the connected XRPL/Hedera wallet address from WalletConnect v2 IndexedDB with no network request
+- `submitSessionScore()` in both `game.js` files — dedicated async function that posts the full session score to the DB; only called at session end (loss, quit, or 60s AFK timeout after a win)
+- `clearResultTimer()` / `_resultTimer` in both `game.js` files — timer management for the result-screen 60s countdown, parallel to the existing `_continueTimer` pattern
+
+### Changed
+- **Score submission timing** — score is no longer submitted on every win; it now submits at session end only:
+  - **Win path:** 60s countdown appears on "Next Game ▶"; if countdown expires, session score is submitted and player is redirected to `/games/`; "Quit" also submits and redirects
+  - **Loss path:** session score is submitted immediately when `endGame()` is called with a loss; "Play Again" resets session and goes to lobby; "Leaderboard" and "Quit" are shown
+- **Winner goes first** — `startGame()` now accepts a `keepCaller` boolean parameter; when "Next Game ▶" is clicked after a win, `startGame(true)` is called so `S.callerIndex` (already set to the winner from `resolveRound()`) is preserved instead of re-randomised
+- **`goToLobby()`** — now resets `S.sessionScore = 0` and calls `clearResultTimer()` so a new session always starts fresh
+- **Dealing animation count** — both games now correctly count down from the full deck size to the remainder:
+  - AMX: `150 → 150 - (10 × numPlayers)` over 10 animated steps
+  - TBK: `50 → 50 - (10 × numPlayers)` over 10 animated steps (fixes the old random-looking countdown)
+- **`getWalletFromWC()` deduplicated** — removed from both `game.js` files (was ~40 lines duplicated); both HTML files now include `/js/wallet-utils.js` before `game.js`
+
+---
+
 ## [2026-05-28] — Chunk 2: New Board Assets
 
 ### Added
@@ -45,6 +65,33 @@ Format: `[Date] — Description`
 ### Changed
 - TBK `#screen-game` background is now set dynamically by `buildTableUI()` from the board selected; removed hardcoded `url('assets/table.jpg')` from CSS
 - AMX `buildTableUI()` applies the selected board image to `.table-felt` at game start
+
+---
+
+## [2026-05-29] — Chunk 5: Table Layout Rebuild (5-Seat, Aspect-Ratio Locked)
+
+### Changed
+- **`#screen-game`** — now `height:100vh; overflow:hidden` instead of `min-height:100vh` to prevent scroll during gameplay
+- **`.table-wrap`** — replaced padding-based flex wrapper with a proper `display:flex; align-items:center; justify-content:center; background:#000` container that centers the board
+- **`.table-felt`** — replaced oval wooden felt (gradient, border-radius 50%/35%, border, box-shadow) with a clean `aspect-ratio:16/9; width:100%; max-height:100%; background center/cover` container that locks the board art to 16:9 at all sizes
+- **`buildTableUI()` (both games)** — opponent slots are now appended directly to `.table-felt` (not `#opponents-zone`); board image is set via `felt.style.backgroundImage`; old `#screen-game.style.backgroundImage` path removed from TBK
+
+### Added
+- **Seat position classes** — six CSS classes that absolutely-position elements within `.table-felt` using percentage coordinates:
+  - `.seat-tc` — top-center (1 opp)
+  - `.seat-tl` — top-left (2–4 opps)
+  - `.seat-tr` — top-right (2–4 opps)
+  - `.seat-bl` — bottom-left (3–4 opps)
+  - `.seat-br` — bottom-right (4 opps only)
+  - `.seat-human` — bottom-center (always the human player)
+- **`SEAT_CLASSES` constant** in both `game.js` files — maps opponent count (1–4) to the correct ordered array of seat class names; e.g. `4: ['seat-bl','seat-tl','seat-tr','seat-br']`
+- **`.play-area`** repositioned to `position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)` so message box and cards-in-play float in the true center of the board art
+
+### Removed
+- `<div id="opponents-zone">` from both HTML files — no longer needed; opponent slots are injected directly into `.table-felt` with seat classes
+- Old `.opponents-zone` CSS rule from both stylesheets
+- `.table-arena` wrapper and `#screen-game::before` dark overlay from TBK (replaced by unified `table-wrap/table-felt` structure)
+- Hardcoded wooden oval table styling (gradient background, `border-radius:50%/35%`, `border:18px solid`, heavy `box-shadow`) from AMX — board art now provides all visual table context
 
 ---
 

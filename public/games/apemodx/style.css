@@ -116,43 +116,58 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .dealing-count { display:block; margin-top:8px; font-size:1.4rem; font-weight:900; color:var(--gold); }
 
 /* ── Game screen ─────────────────────────── */
-#screen-game { background:var(--dark); }
+#screen-game { background:var(--dark); height:100vh; overflow:hidden; }
 .score-bar   { display:flex; justify-content:space-between; align-items:center;
   padding:8px 20px; background:rgba(0,0,0,.7); border-bottom:1px solid var(--border); font-size:.85rem; flex-shrink:0; }
 .round-info   { color:var(--muted); }
 .session-score { font-weight:700; color:var(--gold); }
 
-.table-wrap  { flex:1; display:flex; align-items:stretch; justify-content:center; padding:12px; overflow:hidden; }
-.table-felt  {
-  flex:1; max-width:1100px; position:relative;
-  background: radial-gradient(ellipse at 50% 50%, #4a2e14 0%, var(--wood) 55%, var(--wood-edge) 100%);
-  border-radius:50% / 35%;
-  border:18px solid var(--wood-edge);
-  box-shadow:0 0 80px rgba(0,0,0,.9), inset 0 0 50px rgba(0,0,0,.5), 0 0 0 4px rgba(255,215,0,.06);
-  display:flex; flex-direction:column; padding:28px 40px; gap:8px; min-height:75vh;
+/* ── Table: 16:9 aspect-ratio locked board ─ */
+.table-wrap {
+  flex:1; display:flex; align-items:center; justify-content:center;
+  background:#000; overflow:hidden; min-height:0;
+}
+.table-felt {
+  position:relative; width:100%; max-height:100%;
+  aspect-ratio:16 / 9;
+  background:var(--dark) center/cover no-repeat;
+  overflow:hidden;
 }
 
-/* ── Opponent zone ───────────────────────── */
-.opponents-zone { display:flex; justify-content:space-around; align-items:flex-start; gap:16px; flex-wrap:wrap; }
-.opponent-slot  { display:flex; flex-direction:column; align-items:center; gap:6px; }
-.opp-stack      { position:relative; }
-.card-back-img  { width:72px; height:101px; object-fit:cover; border-radius:8px;
+/* ── Seat position classes (absolute within .table-felt) ── */
+.seat-tc    { position:absolute; top:5%;    left:50%; transform:translateX(-50%); }
+.seat-tl    { position:absolute; top:8%;    left:5%; }
+.seat-tr    { position:absolute; top:8%;    right:5%; }
+.seat-bl    { position:absolute; bottom:8%; left:5%; }
+.seat-br    { position:absolute; bottom:8%; right:5%; }
+.seat-human { position:absolute; bottom:4%; left:50%; transform:translateX(-50%); }
+
+/* ── Opponent slot (seat class handles positioning; slot handles internal layout) ── */
+.opponent-slot { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.opp-stack     { position:relative; }
+.card-back-img { width:72px; height:101px; object-fit:cover; border-radius:8px;
   border:2px solid rgba(255,255,255,.2); box-shadow:3px 3px 10px rgba(0,0,0,.6); }
-.card-count     { position:absolute; bottom:-10px; right:-10px; background:var(--gold); color:#000;
+.card-count    { position:absolute; bottom:-10px; right:-10px; background:var(--gold); color:#000;
   font-weight:800; font-size:.72rem; width:26px; height:26px; border-radius:50%;
   display:flex; align-items:center; justify-content:center; border:2px solid #000; }
-.opp-label      { font-size:.72rem; color:rgba(255,255,255,.65); font-weight:700; letter-spacing:.04em; }
+.opp-label     { font-size:.72rem; color:rgba(255,255,255,.65); font-weight:700; letter-spacing:.04em;
+  text-shadow:0 1px 4px rgba(0,0,0,.9); }
 
-/* ── Play area ───────────────────────────── */
-.play-area   { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; }
-.message-box { background:rgba(0,0,0,.65); border:1px solid var(--border); border-radius:12px;
-  padding:12px 20px; font-size:.92rem; text-align:center; max-width:580px; line-height:1.5; }
+/* ── Center play area (absolute, mid-board) ── */
+.play-area {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  width:46%; z-index:2;
+}
+.message-box { background:rgba(0,0,0,.72); border:1px solid var(--border); border-radius:12px;
+  padding:10px 18px; font-size:.88rem; text-align:center; width:100%; line-height:1.5; }
 .cards-in-play { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
 
-/* ── Player zone ─────────────────────────── */
-.player-zone { display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; }
-.stack-wrap  { position:relative; }
-.player-label { font-size:.78rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.04em; }
+/* ── Player zone (human seat, bottom-center) ── */
+.player-zone  { display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center; }
+.stack-wrap   { position:relative; }
+.player-label { font-size:.78rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.04em;
+  text-shadow:0 1px 4px rgba(0,0,0,.9); }
 .player-card-area { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
 
 /* ── Card (player face-up) ───────────────── */
@@ -241,7 +256,7 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 /* ── Responsive ──────────────────────────── */
 @media (max-width:640px) {
   :root { --card-w:130px; --card-h:182px; }
-  .table-felt { border-radius:24px; padding:14px 16px; border-width:10px; }
   .opp-face-card { width:90px; }
   .opp-face-card img { height:126px; }
+  .card-back-img { width:54px; height:76px; }
 }

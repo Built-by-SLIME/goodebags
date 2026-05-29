@@ -93,30 +93,30 @@
     <span id="session-score" class="session-score">Score: 0</span>
   </div>
 
-  <!-- Poker table arena -->
-  <div class="table-arena">
+  <!-- Aspect-ratio locked board container -->
+  <div class="table-wrap">
+    <div class="table-felt">
+      <!-- Opponent slots injected by JS with seat-tc / seat-tl / seat-tr / seat-bl / seat-br -->
 
-    <!-- Opponents along top of table (populated by JS) -->
-    <div id="opponents-zone" class="opponents-zone"></div>
-
-    <!-- Center play area -->
-    <div class="table-center">
-      <div id="cards-in-play" class="cards-in-play"></div>
-    </div>
-
-    <!-- Player at bottom of table -->
-    <div id="player-zone" class="player-zone">
-      <div class="player-identity">
-        <div class="stack-wrap">
-          <img id="player-back" class="card-back-img" src="" alt="Your deck" />
-          <span id="player-count" class="card-count">10</span>
-        </div>
-        <span id="player-name-label" class="player-label">You</span>
+      <!-- Center play area -->
+      <div class="play-area">
+        <div id="cards-in-play" class="cards-in-play"></div>
       </div>
-      <div id="player-card-area" class="player-card-area"></div>
-    </div>
 
-  </div><!-- /table-arena -->
+      <!-- Human player (always bottom-center) -->
+      <div id="player-zone" class="player-zone seat-human">
+        <div class="player-identity">
+          <div class="stack-wrap">
+            <img id="player-back" class="card-back-img" src="" alt="Your deck" />
+            <span id="player-count" class="card-count">10</span>
+          </div>
+          <span id="player-name-label" class="player-label">You</span>
+        </div>
+        <div id="player-card-area" class="player-card-area"></div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Continue action bar -->
   <div class="action-bar">
@@ -172,6 +172,7 @@
 <div id="star-ping" class="star-ping" style="display:none">🐝</div>
 
 <script src="/js/device-guard.js"></script>
+<script src="/js/wallet-utils.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

@@ -50,48 +50,7 @@ function updateOppBack(i){const b=$(`opp-back-${i}`),c=$(`opp-count-${i}`);if(b)
 function updateAllCounts(){updatePlayerBack();for(let i=0;i<S.numOpponents;i++)updateOppBack(i);updateScoreBar();}
 function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);updatePlayerBack();}else{S.oppHands[wi-1].push(...cards);updateOppBack(wi-1);}}
 
-// ── Read wallet from WalletConnect's own IndexedDB (no relay needed) ─────────
-// WC v2 stores sessions in IndexedDB: db=WALLET_CONNECT_V2_INDEXED_DB, store=keyvaluestorage
-function getWalletFromWC() {
-  return new Promise(resolve => {
-    try {
-      const req = indexedDB.open('WALLET_CONNECT_V2_INDEXED_DB');
-      req.onerror = () => resolve(null);
-      req.onsuccess = () => {
-        const db = req.result;
-        if (!db.objectStoreNames.contains('keyvaluestorage')) { resolve(null); return; }
-        const store = db.transaction('keyvaluestorage', 'readonly').objectStore('keyvaluestorage');
-        const keysReq = store.getAllKeys();
-        keysReq.onerror = () => resolve(null);
-        keysReq.onsuccess = () => {
-          // Find the key that holds session data (contains 'session')
-          const sessionKey = keysReq.result.find(k => typeof k === 'string' && k.includes('session'));
-          if (!sessionKey) { resolve(null); return; }
-          const valReq = store.get(sessionKey);
-          valReq.onerror = () => resolve(null);
-          valReq.onsuccess = () => {
-            try {
-              const raw = valReq.result;
-              const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
-              for (const session of Object.values(data || {})) {
-                if (!session?.namespaces) continue;
-                for (const ns of Object.values(session.namespaces)) {
-                  if (ns.accounts?.length) {
-                    // Account format: "chain:networkId:address"
-                    const parts = ns.accounts[0].split(':');
-                    resolve(parts[parts.length - 1] || null);
-                    return;
-                  }
-                }
-              }
-              resolve(null);
-            } catch(e) { resolve(null); }
-          };
-        };
-      };
-    } catch(e) { resolve(null); }
-  });
-}
+// getWalletFromWC() is provided by /js/wallet-utils.js
 
 // ── Auth ─────────────────────────────────────────────────
 async function initAuth() {
@@ -136,6 +95,8 @@ $('btn-register').addEventListener('click', async()=>{
 
 // ── Lobby ────────────────────────────────────────────────
 function goToLobby() {
+  clearResultTimer();
+  S.sessionScore=0;
   show('lobby');
   $('lobby-welcome').textContent=`Welcome, ${S.user.username}!`;
 }
@@ -210,43 +171,55 @@ async function dealingAnimation() {
   const deckImg=$('dealing-deck').querySelector('.dealing-card-back');
   const countEl=$('dealing-deck').querySelector('.dealing-count');
   deckImg.src=R2+'/assets/backs/couture-back.png';
+  const totalDealt=10*(S.numOpponents+1);
   countEl.textContent='150';
   $('dealing-msg').textContent='Shuffling the deck…';
   await sleep(800);
-  $('dealing-msg').textContent=`Dealing 10 cards to each player…`;
-  for(let n=10;n>=1;n--){countEl.textContent=n*((S.numOpponents+1));await sleep(120);}
-  countEl.textContent='0';
-  await sleep(400);
+  $('dealing-msg').textContent='Dealing 10 cards to each player…';
+  for(let step=1;step<=10;step++){countEl.textContent=String(150-Math.round(totalDealt*step/10));await sleep(120);}
   $('dealing-msg').textContent='Choosing who goes first…';
   await sleep(900);
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 // ── Start game ───────────────────────────────────────────
-function startGame() {
+function startGame(keepCaller=false) {
+  clearResultTimer();
   S.frozenPile=[]; S.roundNum=0;
   const deck=shuffle([...S.allCards]);
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
-  S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
+  if(!keepCaller) S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
   show('game'); buildTableUI(); startRound();
 }
 
 // ── Build table ───────────────────────────────────────────
+// Seat assignments by opponent count
+const SEAT_CLASSES = {
+  1: ['seat-tc'],
+  2: ['seat-tl', 'seat-tr'],
+  3: ['seat-bl', 'seat-tl', 'seat-tr'],
+  4: ['seat-bl', 'seat-tl', 'seat-tr', 'seat-br'],
+};
+
 function buildTableUI() {
-  // Apply selected board image to table felt
   const felt = document.querySelector('.table-felt');
+  // Apply selected board image
   if (felt && S.selectedBoard) {
-    felt.style.background = `url('${S.selectedBoard}') center/cover no-repeat`;
-    felt.style.borderRadius = '50% / 35%';
+    felt.style.backgroundImage = `url('${S.selectedBoard}')`;
   }
-  const oz=$('opponents-zone'); oz.innerHTML='';
-  for(let i=0;i<S.numOpponents;i++){
-    const slot=document.createElement('div'); slot.className='opponent-slot'; slot.id=`opp-slot-${i}`;
-    slot.innerHTML=`<div class="opp-stack"><img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" /><span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span></div><div id="opp-active-${i}"></div><span class="opp-label">Player ${i+2}</span>`;
-    oz.appendChild(slot);
+  // Remove any opponent slots from a previous game
+  felt.querySelectorAll('.opponent-slot').forEach(el => el.remove());
+  // Build opponent seats with position class based on count
+  const seats = SEAT_CLASSES[S.numOpponents];
+  for (let i = 0; i < S.numOpponents; i++) {
+    const slot = document.createElement('div');
+    slot.className = `opponent-slot ${seats[i]}`;
+    slot.id = `opp-slot-${i}`;
+    slot.innerHTML = `<div class="opp-stack"><img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" /><span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span></div><div id="opp-active-${i}"></div><span class="opp-label">Player ${i+2}</span>`;
+    felt.appendChild(slot);
   }
-  $('player-name-label').textContent=S.user?S.user.username:'You';
+  $('player-name-label').textContent = S.user ? S.user.username : 'You';
   updatePlayerBack();
 }
 
@@ -359,8 +332,10 @@ function highlightWinnerCard(wi) {
   setTimeout(()=>star.style.display='none',850);
 }
 
-// ── Continue button + countdown ───────────────────────────
+// ── Continue / result timers ──────────────────────────────
 let _continueTimer=null;
+let _resultTimer=null;
+function clearResultTimer(){if(_resultTimer){clearInterval(_resultTimer);_resultTimer=null;}}
 function showContinue(cb){
   const btn=$('btn-continue'); btn.style.display='block';
   let t=10; $('continue-timer').textContent=`(${t}s)`;
@@ -379,24 +354,52 @@ function playWinAnimation(card,callback){
   vid.addEventListener('ended',close); ov.addEventListener('click',close);
 }
 
+// ── Submit session score to DB ────────────────────────────
+async function submitSessionScore(){
+  if(!S.wallet||S.sessionScore<=0)return;
+  try{
+    await fetch('/api/scores/amx',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({walletAddress:S.wallet,score:S.sessionScore,opponents:S.numOpponents})});
+  }catch(e){}
+}
+
 // ── End game ──────────────────────────────────────────────
 async function endGame(){
+  clearResultTimer();
   const humanWon=S.playerHand.length>0;
   const points=humanWon?1000*S.numOpponents:0;
   S.sessionScore+=points;
-  // Submit score to DB (non-blocking)
-  if(S.wallet&&humanWon){
-    fetch('/api/scores/amx',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({walletAddress:S.wallet,score:points,opponents:S.numOpponents})}).catch(()=>{});
-  }
   $('result-icon').textContent=humanWon?'🏆':'💀';
   $('result-title').textContent=humanWon?'You Win!':'You Lost!';
-  $('result-msg').textContent=humanWon?`You beat ${S.numOpponents} opponent(s) and collected all the cards!`:'Better luck next time — the computer took all the cards.';
+  $('result-msg').textContent=humanWon
+    ?`You beat ${S.numOpponents} opponent(s) and collected all the cards!`
+    :'Better luck next time — the computer took all the cards.';
   $('result-points').textContent=`+${points.toLocaleString()}`;
   $('result-total').textContent=S.sessionScore.toLocaleString();
   show('result');
-  $('btn-next-game').onclick=()=>{S.callerIndex=0;startGame();};
-  $('btn-view-lb').onclick=()=>loadLeaderboard();
-  $('btn-quit').onclick=()=>window.location.href='/games/';
+
+  if(humanWon){
+    // Win: 60s countdown to next game; quitting or timeout submits session score
+    const nextBtn=$('btn-next-game');
+    nextBtn.style.display=''; $('btn-view-lb').style.display='none';
+    let t=60;
+    const tick=()=>{nextBtn.textContent=`Next Game ▶ (${t}s)`;};
+    tick();
+    _resultTimer=setInterval(async()=>{
+      t--;tick();
+      if(t<=0){clearResultTimer();await submitSessionScore();window.location.href='/games/';}
+    },1000);
+    nextBtn.onclick=()=>{clearResultTimer();startGame(true);};
+    $('btn-quit').onclick=async()=>{clearResultTimer();await submitSessionScore();window.location.href='/games/';};
+  }else{
+    // Loss: submit score immediately; offer fresh-session play-again
+    await submitSessionScore();
+    $('btn-next-game').textContent='Play Again'; $('btn-next-game').style.display='';
+    $('btn-view-lb').style.display='';
+    $('btn-next-game').onclick=()=>goToLobby();
+    $('btn-view-lb').onclick=()=>loadLeaderboard();
+    $('btn-quit').onclick=()=>window.location.href='/games/';
+  }
 }
 
 // ── Leaderboard ───────────────────────────────────────────
