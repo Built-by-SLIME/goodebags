@@ -143,8 +143,10 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .seat-human { position:absolute; bottom:4%; left:50%; transform:translateX(-50%); }
 
 /* ── Opponent slot (seat class handles positioning; slot handles internal layout) ── */
-.opponent-slot { display:flex; flex-direction:column; align-items:center; gap:6px; }
-.opp-stack     { position:relative; }
+.opponent-slot { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.opp-avatar    { width:80px; height:auto; filter:drop-shadow(0 4px 12px rgba(0,0,0,.8)); margin-bottom:2px; }
+.opp-identity  { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.opp-stack     { position:relative; display:inline-block; }
 .card-back-img { width:72px; height:101px; object-fit:cover; border-radius:8px;
   border:2px solid rgba(255,255,255,.2); box-shadow:3px 3px 10px rgba(0,0,0,.6); }
 .card-count    { position:absolute; bottom:-10px; right:-10px; background:var(--gold); color:#000;
@@ -152,6 +154,7 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   display:flex; align-items:center; justify-content:center; border:2px solid #000; }
 .opp-label     { font-size:.72rem; color:rgba(255,255,255,.65); font-weight:700; letter-spacing:.04em;
   text-shadow:0 1px 4px rgba(0,0,0,.9); }
+.opp-active-area { margin-top:4px; min-height:0; }
 
 /* ── Center play area (absolute, mid-board) ── */
 .play-area {
@@ -180,11 +183,27 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   font-size:.7rem; font-weight:600; cursor:pointer; transition:background .15s; width:100%; font-family:inherit; }
 .trait-btn:hover { background:rgba(255,215,0,.13); color:var(--gold); }
 .trait-btn .t-val { font-weight:800; color:var(--gold); margin-left:6px; min-width:18px; text-align:right; }
-.trait-btn.xtra-row { background:rgba(59,220,150,.08); color:var(--green); pointer-events:none; }
+.trait-btn.xtra-row {
+  background:rgba(255,215,0,.12); color:var(--green); pointer-events:none;
+  border-left:3px solid var(--green); font-style:italic; position:relative;
+}
+.trait-btn.xtra-row .t-name::after {
+  content:'BONUS'; font-size:.55rem; font-style:normal; font-weight:800;
+  background:var(--green); color:#000; border-radius:4px;
+  padding:1px 5px; margin-left:6px; vertical-align:middle; letter-spacing:.04em;
+}
 .trait-btn.xtra-row .t-val { color:var(--green); }
 .trait-btn.selected   { background:rgba(255,215,0,.22); color:var(--gold); }
 .trait-btn.highlighted { background:rgba(255,215,0,.28); color:var(--gold); font-weight:800; }
-.trait-btn.xtra-add   { background:rgba(59,220,150,.18); color:var(--green); font-weight:800; }
+.trait-btn.xtra-add {
+  background:rgba(255,215,0,.12); color:var(--green); font-weight:800;
+  border-left:3px solid var(--green); font-style:italic; position:relative;
+}
+.trait-btn.xtra-add .t-name::after {
+  content:'BONUS'; font-size:.55rem; font-style:normal; font-weight:800;
+  background:var(--green); color:#000; border-radius:4px;
+  padding:1px 5px; margin-left:6px; vertical-align:middle; letter-spacing:.04em;
+}
 
 /* Opponent face-up card */
 .opp-face-card { width:110px; background:var(--panel); border:2px solid var(--border);
@@ -193,7 +212,10 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .opp-face-card .opp-trait-row { display:flex; justify-content:space-between; padding:4px 7px;
   font-size:.66rem; border-top:1px solid var(--border); }
 .opp-face-card .opp-trait-row.called { background:rgba(255,215,0,.22); color:var(--gold); font-weight:700; }
-.opp-face-card .opp-trait-row.xtra   { background:rgba(59,220,150,.15); color:var(--green); font-weight:700; }
+.opp-face-card .opp-trait-row.xtra {
+  background:rgba(255,215,0,.12); color:var(--green); font-weight:700;
+  border-left:3px solid var(--green); font-style:italic;
+}
 .opp-face-card .opp-name  { font-size:.62rem; padding:3px 7px; color:var(--muted); text-align:center; }
 
 /* Winner / frozen highlights */
@@ -213,9 +235,14 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 }
 .flip-in { animation:flipIn .45s ease-out forwards; }
 
+/* ── Seat active highlight (choosing-who-goes-first) ── */
+.seat-active { outline:3px solid var(--gold); outline-offset:6px; border-radius:10px;
+  box-shadow:0 0 18px rgba(255,215,0,.55); }
+
 /* ── Star ping ───────────────────────────── */
-.star-ping { position:fixed; font-size:3rem; z-index:900; pointer-events:none;
-  animation:starPing .8s ease-out forwards; }
+.star-ping { position:fixed; font-size:1.6rem; font-weight:900; color:var(--gold);
+  text-shadow:0 2px 8px rgba(0,0,0,.8); z-index:900; pointer-events:none;
+  white-space:nowrap; animation:starPing .8s ease-out forwards; }
 @keyframes starPing {
   0%   { transform:scale(0) translateY(0); opacity:1; }
   60%  { transform:scale(1.5) translateY(-40px); opacity:1; }

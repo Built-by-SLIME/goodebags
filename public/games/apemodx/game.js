@@ -190,7 +190,47 @@ function startGame(keepCaller=false) {
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
   if(!keepCaller) S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
-  show('game'); buildTableUI(); startRound();
+  show('game'); buildTableUI();
+  animateCallerSelection(()=>startRound());
+}
+
+// ── Choosing-who-goes-first animation ────────────────────
+function animateCallerSelection(callback) {
+  // Build ordered list of seat elements: opps (0..n-1) then human
+  const seats = SEAT_CLASSES[S.numOpponents];
+  const seatEls = [];
+  for(let i=0;i<S.numOpponents;i++) seatEls.push($(`opp-slot-${i}`));
+  seatEls.push(document.getElementById('player-zone'));
+
+  // callerIndex 0 = human (last in seatEls), 1..n = opp i-1
+  const winnerEl = S.callerIndex===0 ? document.getElementById('player-zone') : $(`opp-slot-${S.callerIndex-1}`);
+
+  const MS_PER_SEAT = 200;
+  const CYCLES = 2;
+  const totalSteps = CYCLES * seatEls.length;
+  let step = 0;
+
+  function tick() {
+    // Remove highlight from all
+    seatEls.forEach(el=>{ if(el) el.classList.remove('seat-active'); });
+    const el = seatEls[step % seatEls.length];
+    if(el) el.classList.add('seat-active');
+    step++;
+    if(step < totalSteps) {
+      setTimeout(tick, MS_PER_SEAT);
+    } else {
+      // Final settle: remove cycling highlight, land on winner
+      seatEls.forEach(el=>{ if(el) el.classList.remove('seat-active'); });
+      setTimeout(()=>{
+        if(winnerEl) winnerEl.classList.add('seat-active');
+        setTimeout(()=>{
+          if(winnerEl) winnerEl.classList.remove('seat-active');
+          callback();
+        }, 600);
+      }, 150);
+    }
+  }
+  tick();
 }
 
 // ── Build table ───────────────────────────────────────────
@@ -201,6 +241,12 @@ const SEAT_CLASSES = {
   3: ['seat-bl', 'seat-tl', 'seat-tr'],
   4: ['seat-bl', 'seat-tl', 'seat-tr', 'seat-br'],
 };
+
+// Avatars: odd opponents (1,3) use avatar 1; even opponents (2,4) use avatar 2
+const AMX_AVATARS = [
+  'assets/avatars/amx-avatar-1.png',
+  'assets/avatars/amx-avatar-2.png',
+];
 
 function buildTableUI() {
   const felt = document.querySelector('.table-felt');
@@ -213,10 +259,20 @@ function buildTableUI() {
   // Build opponent seats with position class based on count
   const seats = SEAT_CLASSES[S.numOpponents];
   for (let i = 0; i < S.numOpponents; i++) {
+    const avatar = AMX_AVATARS[i % 2];
     const slot = document.createElement('div');
     slot.className = `opponent-slot ${seats[i]}`;
     slot.id = `opp-slot-${i}`;
-    slot.innerHTML = `<div class="opp-stack"><img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" /><span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span></div><div id="opp-active-${i}"></div><span class="opp-label">Player ${i+2}</span>`;
+    slot.innerHTML = `
+      <img class="opp-avatar" src="${avatar}" alt="Player ${i+2}" />
+      <div class="opp-identity">
+        <div class="opp-stack">
+          <img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" />
+          <span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span>
+        </div>
+        <span class="opp-label">Player ${i+2}</span>
+      </div>
+      <div class="opp-active-area" id="opp-active-${i}"></div>`;
     felt.appendChild(slot);
   }
   $('player-name-label').textContent = S.user ? S.user.username : 'You';
@@ -230,6 +286,8 @@ function startRound() {
   clearContinueTimer();
   if(getActivePlayers().length===1){endGame();return;}
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
+  // 3b: Decrement counts visually the moment the round begins (cards go "in play")
+  updateAllCounts();
   if(S.callerIndex===0) humanCallPhase(); else computerCallPhase();
 }
 
@@ -326,8 +384,10 @@ function resolveRound() {
 function highlightWinnerCard(wi) {
   if(wi===0){const c=$('player-card-area').querySelector('.player-card');if(c)c.classList.add('card-winner');}
   else{const c=$(`opp-active-${wi-1}`).querySelector('.opp-face-card');if(c)c.classList.add('card-winner');}
-  // Star ping
-  const star=$('star-ping'); star.style.display='block';
+  // 3d: Star ping shows winning score
+  const star=$('star-ping');
+  star.textContent=`⭐ +${(1000*S.numOpponents).toLocaleString()}`;
+  star.style.display='block';
   star.style.left=Math.random()*60+20+'%'; star.style.top=Math.random()*40+20+'%';
   setTimeout(()=>star.style.display='none',850);
 }

@@ -178,11 +178,46 @@ function startGame(keepCaller=false) {
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
   if(!keepCaller) S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
-  show('game'); buildTableUI(); startRound();
+  show('game'); buildTableUI();
+  animateCallerSelection(()=>startRound());
+}
+
+// ── Choosing-who-goes-first animation ────────────────────
+function animateCallerSelection(callback) {
+  const seatEls = [];
+  for(let i=0;i<S.numOpponents;i++) seatEls.push($(`opp-slot-${i}`));
+  seatEls.push(document.getElementById('player-zone'));
+
+  const winnerEl = S.callerIndex===0 ? document.getElementById('player-zone') : $(`opp-slot-${S.callerIndex-1}`);
+
+  const MS_PER_SEAT = 200;
+  const CYCLES = 2;
+  const totalSteps = CYCLES * seatEls.length;
+  let step = 0;
+
+  function tick() {
+    seatEls.forEach(el=>{ if(el) el.classList.remove('seat-active'); });
+    const el = seatEls[step % seatEls.length];
+    if(el) el.classList.add('seat-active');
+    step++;
+    if(step < totalSteps) {
+      setTimeout(tick, MS_PER_SEAT);
+    } else {
+      seatEls.forEach(el=>{ if(el) el.classList.remove('seat-active'); });
+      setTimeout(()=>{
+        if(winnerEl) winnerEl.classList.add('seat-active');
+        setTimeout(()=>{
+          if(winnerEl) winnerEl.classList.remove('seat-active');
+          callback();
+        }, 600);
+      }, 150);
+    }
+  }
+  tick();
 }
 
 // ── Build table ──────────────────────────────────────────
-const BEE_AVATARS = ['bee-1.png','bee-3.png','bee-8.png','bee-19.png'];
+const BEE_AVATARS = ['tbk-avatar.png'];
 
 // Seat assignments by opponent count
 const SEAT_CLASSES = {
@@ -232,6 +267,8 @@ function startRound() {
   clearContinueTimer();
   if(getActivePlayers().length===1){endGame();return;}
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
+  // 3b: Decrement counts visually the moment the round begins (cards go "in play")
+  updateAllCounts();
   if(S.callerIndex===0) humanCallPhase(); else computerCallPhase();
 }
 
@@ -336,7 +373,10 @@ function resolveRound() {
 function highlightWinnerCard(wi) {
   if(wi===0){const c=$('player-card-area').querySelector('.player-card');if(c)c.classList.add('card-winner');}
   else{const c=$(`opp-active-${wi-1}`).querySelector('.opp-face-card');if(c)c.classList.add('card-winner');}
-  const star=$('star-ping'); star.style.display='block';
+  // 3d: Star ping shows winning score
+  const star=$('star-ping');
+  star.textContent=`⭐ +${(1000*S.numOpponents).toLocaleString()}`;
+  star.style.display='block';
   star.style.left=Math.random()*60+20+'%'; star.style.top=Math.random()*40+20+'%';
   setTimeout(()=>star.style.display='none',850);
 }

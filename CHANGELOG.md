@@ -17,6 +17,35 @@ Format: `[Date] — Description`
 
 ---
 
+## [2026-05-29] — Layout & Asset Standardisation (post-Chunk 7)
+
+### Changed
+- **Card back sizes unified** — TBK `card-back-img` resized from `60×84px` to `72×101px` (matching AMX); `card-count` badge resized from `22×22px` to `26×26px` to match
+- **Opponent avatars — AMX** — Added `AMX_AVATARS` array; `buildTableUI()` now alternates `amx-avatar-1.png` (opponents 1, 3) and `amx-avatar-2.png` (opponents 2, 4); HTML structure updated to wrap stack + label in `.opp-identity` alongside the `.opp-avatar` image element
+- **Opponent avatars — TBK** — Switched `BEE_AVATARS` from four bee images to single `tbk-avatar.png` (same avatar for every computer opponent)
+- **Message box position — TBK** — `#message-box` moved from inside `.hud-bar` to the top of `.play-area` (matching AMX); `.hud-bar` is now a clean two-item bar (round-info + session-score); `.message-box` CSS changed from `flex:1` strip to a `border-radius:12px` floating panel matching AMX
+
+### Added
+- `public/games/apemodx/assets/avatars/amx-avatar-1.png` — AMX computer opponent avatar (positions 1 & 3)
+- `public/games/apemodx/assets/avatars/amx-avatar-2.png` — AMX computer opponent avatar (positions 2 & 4)
+- `public/games/tbk/assets/avatars/tbk-avatar.png` — TBK computer opponent avatar
+- `.opp-avatar`, `.opp-identity`, `.opp-active-area` CSS classes added to both `style.css` files for consistent opponent slot structure
+
+---
+
+## [2026-05-29] — Chunk 7: Visual Polish
+
+### Changed
+- **Choosing-who-goes-first animation** (both games) — `startGame()` now calls `animateCallerSelection()` before `startRound()`; a `.seat-active` gold glow cycles through every active seat element (2 full loops at 200ms per seat) then settles on the actual first caller for 600ms before the round begins
+- **Card counts drop at round start** (both games) — `startRound()` now calls `updateAllCounts()` immediately after selecting the caller, before any card is revealed; visible card counts now decrement the moment a round begins rather than after `resolveRound()`
+- **XTRA row visually distinct** (AMX only — TBK has no XTRA) — `.xtra-row` and `.xtra-add` now have a gold-tint background (`rgba(255,215,0,.12)`), a `3px` green left-border accent, italic text, and an inline **BONUS** badge appended via `::after`; `.opp-trait-row.xtra` receives matching left-border and italic treatment
+- **Star ping shows winning score** (both games) — `highlightWinnerCard()` now sets `star.textContent` to `⭐ +{1000 × numOpponents}` before displaying the ping; `.star-ping` CSS updated from `font-size:3rem` emoji-only to `font-size:1.6rem` text with gold colour, bold weight, and `white-space:nowrap`
+
+### Added
+- `.seat-active` CSS class (both `style.css` files) — `outline:3px solid gold`, `outline-offset:6px`, gold `box-shadow` glow; used by the choosing-who-goes-first animation
+
+---
+
 ## [2026-05-29] — Chunk 6: Game Logic Fixes
 
 ### Added
