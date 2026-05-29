@@ -123,6 +123,14 @@ img {
   border-radius: 8px;
 }
 
+.btn-coming-soon:disabled {
+  opacity: 1;
+  cursor: default;
+  pointer-events: none;
+  background: var(--green);
+  color: #000;
+}
+
 /* ═══════════════════════════════════════════
    PLACEHOLDER IMAGES
 ═══════════════════════════════════════════ */
