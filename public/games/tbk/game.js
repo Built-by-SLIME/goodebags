@@ -125,6 +125,11 @@ document.querySelectorAll('.opp-btn').forEach(btn=>{
 });
 
 $('btn-start').addEventListener('click', () => goToBoardSelect());
+$('btn-quit-game').addEventListener('click', async () => {
+  if(!confirm('Quit this game? Your session score will be saved.')) return;
+  await submitSessionScore();
+  window.location.href='/games/';
+});
 
 // ── Board selector ────────────────────────────────────────
 const TBK_BOARDS = [
@@ -508,8 +513,8 @@ function playWinAnimation(card,callback){
   const ov=$('win-overlay'),vid=$('win-video');
   vid.src=pickAnim(card); ov.style.display='flex';
   vid.muted=false; vid.play().catch(()=>{vid.muted=true;vid.play();});
-  const close=()=>{ov.style.display='none';vid.src='';ov.removeEventListener('click',close);vid.removeEventListener('ended',close);callback();};
-  vid.addEventListener('ended',close); ov.addEventListener('click',close);
+  const close=()=>{ov.style.display='none';vid.src='';ov.removeEventListener('click',close);vid.removeEventListener('ended',close);vid.removeEventListener('error',close);callback();};
+  vid.addEventListener('ended',close); vid.addEventListener('error',close); ov.addEventListener('click',close);
 }
 
 // ── Submit session score to DB ────────────────────────────

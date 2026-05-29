@@ -214,3 +214,12 @@ Format: `[Date] — Description`
 - **Score accumulates live during gameplay** (both games): `resolveRound()` now adds `1000 × numOpponents` to `S.sessionScore` immediately when the player wins a round, and `updateScoreBar()` refreshes the HUD. `endGame()` no longer adds a flat end-game bonus; instead it shows `S.roundsWon × 1000 × numOpponents` as "Points This Game" and the live `sessionScore` as "Session Total".
 - **Human always calls** (both games): `startRound()` forces `S.callerIndex = 0` whenever the player has cards, so the human chooses the trait every round. If the player is eliminated, the `while` loop falls back to the next active computer caller.
 - **Card count clarity** (both games): Every `.card-count` badge now has `title="Cards remaining in deck"` for hover tooltip. Opponent and player labels dynamically update to show the player name + card count, e.g. `Player 2 (13 cards)` and `You (8 cards)`. Labels refresh automatically via `updatePlayerBack()` / `updateOppBack()` every round.
+
+## [2026-05-29] — Mecha Animation Fix + Leaderboard + Quit Button
+
+### Fixed
+- **AMX mecha win animation no longer hangs**: `playWinAnimation()` in both AMX and TBK now listens for `error` events on the `<video>` element. If a win animation file is missing or fails to load (notably Mecha deck cards with lowercase `amme#X` IDs), the overlay automatically dismisses and the game flow continues instead of freezing.
+
+### Added
+- **Leaderboard on game selector** (`public/games/index.html`): A third card (🏆 Leaderboard) joins the two game cards on the selector screen. Clicking it opens a modal overlay with tabs for AMX and TBK, live-fetched from `/api/leaderboard/amx` and `/api/leaderboard/tbk`. Top 3 rows are styled gold/silver/bronze.
+- **In-game quit button** (both games): A small "Quit" button appears in the top HUD/score bar during active gameplay. Clicking it shows a confirmation dialog, submits the current session score to the DB via `submitSessionScore()`, and returns to `/games/`.

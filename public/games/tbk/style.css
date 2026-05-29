@@ -126,6 +126,22 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 }
 .round-info    { color:var(--muted); font-size:.82rem; }
 .session-score { font-weight:800; color:var(--gold); font-size:.88rem; }
+.btn-quit-game {
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  color:var(--muted);
+  border-radius:8px;
+  padding:4px 12px;
+  font-size:0.78rem;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-family:inherit;
+}
+.btn-quit-game:hover {
+  background:rgba(255,0,0,0.15);
+  border-color:rgba(255,0,0,0.3);
+  color:#f55;
+}
 
 /* Message box — floats on board inside .play-area (matches AMX) */
 .message-box {
