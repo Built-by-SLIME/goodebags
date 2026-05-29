@@ -204,3 +204,11 @@ Format: `[Date] — Description`
 - `animateCenterCardsWinner(winnerIdx)` — applies `.winner` (gold border + glow + scale 1.06) to the winning center card and `.loser` (dim + grayscale) to losing center cards.
 - `dismissCenterCards()` — fades all `.center-card` elements out with `scale(0.8) translateY(20px)` over 0.4s, then clears `.cards-in-play`.
 - CSS classes added to both `style.css` files: `.seat-card`, `.center-card`, `.center-card.in`, `.center-card.winner`, `.center-card.loser`, `.center-card-name`, `.center-traits`, `.center-trait`, `.center-trait.called`, `.center-xtra`, `.center-total`.
+
+---
+
+## [2026-05-29] — TBK Board Label + Human-Always-Caller
+
+### Changed
+- **TBK board label**: `universal-02.png` label corrected from `Classic Table 2` → `SLIME Table` (was only fixed in AMX previously).
+- **Human always calls** (both games): `startRound()` now forces `S.callerIndex = 0` whenever `playerHasCards(0)` is true, so the human player chooses the trait category every single round instead of winner-goes-first. If the player is eliminated, the existing `while` loop falls back to the next active computer caller.

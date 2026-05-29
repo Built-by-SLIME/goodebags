@@ -336,6 +336,7 @@ function startRound() {
   $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
   clearContinueTimer(); clearCallerSeat();
   if(getActivePlayers().length===1){endGame();return;}
+  if(playerHasCards(0)) S.callerIndex=0;
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
   // Decrement counts visually the moment the round begins (cards go "in play")
   updateAllCounts();

@@ -131,7 +131,7 @@ const TBK_BOARDS = [
   { file:'tbk-01.jpg',       label:'Hive Table 1' },
   { file:'tbk-02.jpg',       label:'Hive Table 2' },
   { file:'universal-01.jpg', label:'Classic Table 1' },
-  { file:'universal-02.png', label:'Classic Table 2' },
+  { file:'universal-02.png', label:'SLIME Table' },
 ];
 
 function goToBoardSelect() {
@@ -317,6 +317,7 @@ function startRound() {
   for(let i=0;i<S.numOpponents;i++){const el=$(`opp-active-${i}`);if(el)el.innerHTML='';}
   clearContinueTimer(); clearCallerSeat();
   if(getActivePlayers().length===1){endGame();return;}
+  if(playerHasCards(0)) S.callerIndex=0;
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
   // Decrement counts visually the moment the round begins (cards go "in play")
   updateAllCounts();
