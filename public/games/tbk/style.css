@@ -146,16 +146,21 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 }
 
 /* ── Seat position classes (absolute within .table-felt) ── */
-.seat-tc    { position:absolute; top:5%;    left:50%; transform:translateX(-50%); }
-.seat-tl    { position:absolute; top:8%;    left:5%; }
-.seat-tr    { position:absolute; top:8%;    right:5%; }
-.seat-bl    { position:absolute; bottom:8%; left:5%; }
-.seat-br    { position:absolute; bottom:8%; right:5%; }
-.seat-human { position:absolute; bottom:4%; left:50%; transform:translateX(-50%); }
+.seat-tc    { position:absolute; top:3%;    left:50%; transform:translateX(-50%); }
+.seat-tl    { position:absolute; top:3%;    left:4%; }
+.seat-tr    { position:absolute; top:3%;    right:4%; }
+.seat-bl    { position:absolute; bottom:18%; left:4%; }
+.seat-br    { position:absolute; bottom:18%; right:4%; }
+.seat-human { position:absolute; bottom:2%; left:50%; transform:translateX(-50%); z-index:10; }
 
 /* ── Opponent slot (seat class handles positioning; slot handles internal layout) ── */
 .opponent-slot {
   display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+/* Bottom opponent seats: face-up card above the stack so it doesn't overlap the human */
+.opponent-slot.seat-bl,
+.opponent-slot.seat-br {
+  flex-direction: column-reverse;
 }
 
 .opp-avatar {
@@ -194,16 +199,16 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 }
 
 .opp-face-card {
-  width:100px; background:rgba(0,0,0,.75); border:2px solid var(--border);
+  width:80px; background:rgba(0,0,0,.75); border:2px solid var(--border);
   border-radius:10px; overflow:hidden;
 }
-.opp-face-card img { width:100%; height:140px; object-fit:cover; display:block; }
+.opp-face-card img { width:100%; height:112px; object-fit:cover; display:block; }
 .opp-face-card .opp-trait-row {
-  display:flex; justify-content:space-between; padding:3px 6px;
-  font-size:.6rem; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; padding:2px 4px;
+  font-size:.52rem; border-top:1px solid var(--border);
 }
 .opp-face-card .opp-trait-row.called { background:rgba(245,166,35,.25); color:var(--gold); font-weight:700; }
-.opp-face-card .opp-name { font-size:.58rem; padding:2px 6px; color:var(--muted); text-align:center; }
+.opp-face-card .opp-name { font-size:.5rem; padding:1px 4px; color:var(--muted); text-align:center; }
 
 /* ── Center play area (absolute, mid-board) ── */
 .play-area {

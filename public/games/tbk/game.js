@@ -338,18 +338,16 @@ async function humanCallPhase() {
       ${card.traits.map((t,i) => `<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
     </div>`;
   cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       S.calledTraitIdx = parseInt(btn.dataset.idx);
       cardEl.querySelectorAll('.trait-btn').forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
       renderPlayerFaceUp();
-      // Stagger opponent reveals 150ms apart
-      (async () => {
-        for (let i = 0; i < S.numOpponents; i++) {
-          if (S.oppHands[i].length > 0) { renderOppFaceUp(i, S.oppHands[i][0], false); await sleep(150); }
-        }
-        msg(`You called "${card.traits[S.calledTraitIdx].name}" — ${card.traits[S.calledTraitIdx].value}. All cards revealed!`);
-        showContinue(() => resolveRound());
-      })();
+      for (let i = 0; i < S.numOpponents; i++) {
+        if (S.oppHands[i].length > 0) { renderOppFaceUp(i, S.oppHands[i][0], false); await sleep(300); }
+      }
+      msg(`You called "${card.traits[S.calledTraitIdx].name}" — ${card.traits[S.calledTraitIdx].value}. All cards revealed!`);
+      await sleep(1200);
+      resolveRound();
     });
   });
   $('player-card-area').appendChild(cardEl);
@@ -372,11 +370,12 @@ async function computerCallPhase() {
   msg(`Player ${S.callerIndex + 1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. Revealing cards…`);
   renderOppFaceUp(oppIdx, card, true);
   renderPlayerFaceUp();
-  // Stagger other opponents 150ms apart
   const others = [];
   for (let i = 0; i < S.numOpponents; i++) { if (i !== oppIdx && S.oppHands[i].length > 0) others.push(i); }
-  for (const i of others) { await sleep(150); renderOppFaceUp(i, S.oppHands[i][0], false); }
-  showContinue(() => resolveRound());
+  for (const i of others) { await sleep(300); renderOppFaceUp(i, S.oppHands[i][0], false); }
+  msg(`Player ${S.callerIndex + 1} called "${card.traits[best].name}" — ${card.traits[best].value}. All cards revealed!`);
+  await sleep(1200);
+  resolveRound();
 }
 
 // ── Render cards face-up ─────────────────────────────────
@@ -418,7 +417,8 @@ function resolveRound() {
     const stillAlive=winners.filter(w=>playerHasCards(w.playerIdx));
     if(stillAlive.length===1){giveCardsToWinner(stillAlive[0].playerIdx,S.frozenPile);S.frozenPile=[];}
     msg(`Tie! ${S.frozenPile.length} card(s) frozen. Same caller goes again…`);
-    updateAllCounts(); showContinue(()=>startRound());
+    updateAllCounts();
+    setTimeout(()=>startRound(), 1500);
   } else {
     const winner=winners[0]; const wi=winner.playerIdx;
     const wname=wi===0?'You':`Player ${wi+1}`;
@@ -433,7 +433,7 @@ function resolveRound() {
       playWinAnimation(winner.card,()=>{
         if(getActivePlayers().length===1){endGame();return;}
         if(S.playerHand.length>0)renderPlayerFaceUp();
-        showContinue(()=>startRound());
+        setTimeout(()=>startRound(), 1500);
       });
     }, 600);
   }
