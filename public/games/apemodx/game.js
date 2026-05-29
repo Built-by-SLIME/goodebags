@@ -53,20 +53,26 @@ function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);upda
 // getWalletFromWC() is provided by /js/wallet-utils.js
 
 // ── Auth ─────────────────────────────────────────────────
-async function initAuth() {
-  show('auth'); $('auth-status').textContent = 'Checking wallet…';
+let _walletProjectId = '';
 
-  // Load R2 config
+async function initAuth() {
+  show('auth');
+  $('auth-status').textContent = 'Checking wallet…';
+  $('btn-connect-wallet').style.display = 'none';
+
+  // Load R2 config + wallet project ID
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
     R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
+    _walletProjectId = cfg.walletConnectProjectId || '';
   } catch(e) {}
 
   // Read wallet address directly from WC's IndexedDB — instant, no network
   S.wallet = await getWalletFromWC();
 
   if (!S.wallet) {
-    $('auth-status').innerHTML = 'Please <a href="/" style="color:var(--gold)">connect your wallet</a> on the main site first, then return here.';
+    $('auth-status').textContent = 'Connect your wallet to play.';
+    $('btn-connect-wallet').style.display = '';
     return;
   }
 
@@ -80,6 +86,19 @@ async function initAuth() {
     goToLobby();
   }
 }
+
+$('btn-connect-wallet').addEventListener('click', async () => {
+  const btn = $('btn-connect-wallet');
+  btn.disabled = true; btn.textContent = 'Connecting…';
+  try {
+    if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
+    await WalletModule.openConnect(_walletProjectId);
+    await initAuth();
+  } catch(e) {
+    $('auth-status').textContent = 'Connection failed — please try again.';
+    btn.disabled = false; btn.textContent = 'Connect Wallet';
+  }
+});
 
 $('btn-register').addEventListener('click', async()=>{
   const username=$('username-input').value.trim();
