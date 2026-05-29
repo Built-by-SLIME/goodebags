@@ -15,7 +15,7 @@ const S = {
   user: null, wallet: null, allCards: [],
   numOpponents: 1, playerHand: [], oppHands: [],
   frozenPile: [], callerIndex: -1, calledTraitIdx: -1,
-  sessionScore: 0, roundNum: 0, continueTimer: null,
+  sessionScore: 0, roundNum: 0, roundsWon: 0, continueTimer: null,
   selectedBoard: null,
 };
 
@@ -45,8 +45,8 @@ function msg(t){$('message-box').textContent=t;}
 function updateScoreBar(){$('round-info').textContent=`Round ${S.roundNum}`;$('session-score').textContent=`Score: ${S.sessionScore.toLocaleString()}`;}
 function playerHasCards(idx){return idx===0?S.playerHand.length>0:S.oppHands[idx-1].length>0;}
 function getActivePlayers(){const a=[];if(S.playerHand.length>0)a.push(0);S.oppHands.forEach((h,i)=>{if(h.length>0)a.push(i+1);});return a;}
-function updatePlayerBack(){const t=S.playerHand[0];$('player-back').src=t?backFor(t):R2+'/assets/backs/couture-back.png';$('player-count').textContent=S.playerHand.length;}
-function updateOppBack(i){const b=$(`opp-back-${i}`),c=$(`opp-count-${i}`);if(b)b.src=S.oppHands[i].length?backFor(S.oppHands[i][0]):R2+'/assets/backs/couture-back.png';if(c)c.textContent=S.oppHands[i].length;}
+function updatePlayerBack(){const t=S.playerHand[0];$('player-back').src=t?backFor(t):R2+'/assets/backs/couture-back.png';const pc=$('player-count');pc.textContent=S.playerHand.length;pc.title='Cards remaining in deck';const pl=$('player-name-label');if(pl)pl.textContent=(S.user?S.user.username:'You')+` (${S.playerHand.length} cards)`;}
+function updateOppBack(i){const b=$(`opp-back-${i}`),c=$(`opp-count-${i}`),l=$(`opp-name-${i}`);if(b)b.src=S.oppHands[i].length?backFor(S.oppHands[i][0]):R2+'/assets/backs/couture-back.png';if(c){c.textContent=S.oppHands[i].length;c.title='Cards remaining in deck';}if(l)l.textContent=`Player ${i+2} (${S.oppHands[i].length} cards)`;}
 function updateAllCounts(){updatePlayerBack();for(let i=0;i<S.numOpponents;i++)updateOppBack(i);updateScoreBar();}
 function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);updatePlayerBack();}else{S.oppHands[wi-1].push(...cards);updateOppBack(wi-1);}}
 
@@ -204,7 +204,7 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 // ── Start game ───────────────────────────────────────────
 function startGame(keepCaller=false) {
   clearResultTimer();
-  S.frozenPile=[]; S.roundNum=0;
+  S.frozenPile=[]; S.roundNum=0; S.roundsWon=0;
   const deck=shuffle([...S.allCards]);
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
@@ -287,14 +287,14 @@ function buildTableUI() {
       <div class="opp-identity">
         <div class="opp-stack">
           <img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" />
-          <span class="card-count" id="opp-count-${i}">${S.oppHands[i].length}</span>
+          <span class="card-count" id="opp-count-${i}" title="Cards remaining in deck">${S.oppHands[i].length}</span>
         </div>
-        <span class="opp-label">Player ${i+2}</span>
+        <span class="opp-label" id="opp-name-${i}">Player ${i+2} (${S.oppHands[i].length} cards)</span>
       </div>
       <div class="opp-active-area" id="opp-active-${i}"></div>`;
     felt.appendChild(slot);
   }
-  $('player-name-label').textContent = S.user ? S.user.username : 'You';
+  $('player-name-label').textContent = (S.user ? S.user.username : 'You') + ` (${S.playerHand.length} cards)`;
   updatePlayerBack();
 }
 
@@ -336,7 +336,6 @@ function startRound() {
   $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
   clearContinueTimer(); clearCallerSeat();
   if(getActivePlayers().length===1){endGame();return;}
-  if(playerHasCards(0)) S.callerIndex=0;
   while(!playerHasCards(S.callerIndex)) S.callerIndex=(S.callerIndex+1)%(S.numOpponents+1);
   // Decrement counts visually the moment the round begins (cards go "in play")
   updateAllCounts();
@@ -479,6 +478,7 @@ function resolveRound() {
     if(S.playerHand.length>0)S.playerHand.shift();
     for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
     giveCardsToWinner(wi,won); S.callerIndex=wi;
+    if(wi===0){S.roundsWon++; S.sessionScore += 1000 * S.numOpponents; updateScoreBar();}
     msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
     // Center stage: highlight winner, dismiss, then play animation
@@ -543,14 +543,13 @@ async function submitSessionScore(){
 async function endGame(){
   clearResultTimer();
   const humanWon=S.playerHand.length>0;
-  const points=humanWon?1000*S.numOpponents:0;
-  S.sessionScore+=points;
+  const gamePoints=S.roundsWon*1000*S.numOpponents;
   $('result-icon').textContent=humanWon?'🏆':'💀';
   $('result-title').textContent=humanWon?'You Win!':'You Lost!';
   $('result-msg').textContent=humanWon
     ?`You beat ${S.numOpponents} opponent(s) and collected all the cards!`
-    :'Better luck next time — the computer took all the cards.';
-  $('result-points').textContent=`+${points.toLocaleString()}`;
+    :`You won ${S.roundsWon} round(s) before the computer took all the cards.`;
+  $('result-points').textContent=`+${gamePoints.toLocaleString()}`;
   $('result-total').textContent=S.sessionScore.toLocaleString();
   show('result');
 

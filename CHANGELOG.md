@@ -207,8 +207,10 @@ Format: `[Date] — Description`
 
 ---
 
-## [2026-05-29] — TBK Board Label + Human-Always-Caller
+## [2026-05-29] — Live Score Accumulation + Card Count Clarity + Winner-Becomes-Caller
 
 ### Changed
 - **TBK board label**: `universal-02.png` label corrected from `Classic Table 2` → `SLIME Table` (was only fixed in AMX previously).
-- **Human always calls** (both games): `startRound()` now forces `S.callerIndex = 0` whenever `playerHasCards(0)` is true, so the human player chooses the trait category every single round instead of winner-goes-first. If the player is eliminated, the existing `while` loop falls back to the next active computer caller.
+- **Score accumulates live during gameplay** (both games): `resolveRound()` now adds `1000 × numOpponents` to `S.sessionScore` immediately when the player wins a round, and `updateScoreBar()` refreshes the HUD. `endGame()` no longer adds a flat end-game bonus; instead it shows `S.roundsWon × 1000 × numOpponents` as "Points This Game" and the live `sessionScore` as "Session Total".
+- **Winner-becomes-caller restored** (both games): Removed the `if(playerHasCards(0)) S.callerIndex=0;` override from `startRound()`. The winner of each round again becomes the next caller per standard top-trumps rules.
+- **Card count clarity** (both games): Every `.card-count` badge now has `title="Cards remaining in deck"` for hover tooltip. Opponent and player labels dynamically update to show the player name + card count, e.g. `Player 2 (13 cards)` and `You (8 cards)`. Labels refresh automatically via `updatePlayerBack()` / `updateOppBack()` every round.
