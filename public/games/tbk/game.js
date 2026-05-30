@@ -241,7 +241,7 @@ function animateCallerSelection(callback) {
 }
 
 // ── Build table ──────────────────────────────────────────
-const BEE_AVATARS = ['tbk-avatar.png'];
+const TBK_OPP_AVATARS = ['tbk-opp-1.png','tbk-opp-2.png','tbk-opp-3.png','tbk-opp-4.png'];
 
 // Seat assignments by opponent count
 const SEAT_CLASSES = {
@@ -262,7 +262,7 @@ function buildTableUI() {
   // Build opponent seats with position class based on count
   const seats = SEAT_CLASSES[S.numOpponents];
   for (let i = 0; i < S.numOpponents; i++) {
-    const avatar = BEE_AVATARS[i % BEE_AVATARS.length];
+    const avatar = TBK_OPP_AVATARS[i];
     const slot = document.createElement('div');
     slot.className = `opponent-slot ${seats[i]}`;
     slot.id = `opp-slot-${i}`;
@@ -332,7 +332,7 @@ function startRound() {
 // ── Human turn ───────────────────────────────────────────
 async function humanCallPhase() {
   const playerName = S.user ? S.user.username : 'You';
-  await showTurnBanner(playerName, '/assets/goodebags-logo.png', 'YOUR TURN — Pick a trait!');
+  await showTurnBanner(playerName, 'assets/avatars/tbk-player.png', 'YOUR TURN — Pick a trait!');
   setCallerSeat(0);
   const card = S.playerHand[0];
   const mb = $('message-box');
@@ -365,7 +365,7 @@ async function humanCallPhase() {
 async function computerCallPhase() {
   const oppIdx = S.callerIndex - 1;
   const card = S.oppHands[oppIdx][0];
-  const avatarSrc = `assets/avatars/${BEE_AVATARS[oppIdx % BEE_AVATARS.length]}`;
+  const avatarSrc = `assets/avatars/${TBK_OPP_AVATARS[oppIdx]}`;
   await showTurnBanner(`Player ${S.callerIndex + 1}`, avatarSrc, 'is choosing a trait…');
   setCallerSeat(S.callerIndex);
   $('message-box').classList.remove('player-turn');

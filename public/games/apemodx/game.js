@@ -266,10 +266,11 @@ const SEAT_CLASSES = {
   4: ['seat-bl', 'seat-tl', 'seat-tr', 'seat-br'],
 };
 
-// Avatars: odd opponents (1,3) use avatar 1; even opponents (2,4) use avatar 2
-const AMX_AVATARS = [
-  'assets/avatars/amx-avatar-1.png',
-  'assets/avatars/amx-avatar-2.png',
+const AMX_OPP_AVATARS = [
+  'assets/avatars/amx-opp-1.png',
+  'assets/avatars/amx-opp-2.png',
+  'assets/avatars/amx-opp-3.png',
+  'assets/avatars/amx-opp-4.png',
 ];
 
 function buildTableUI() {
@@ -283,7 +284,7 @@ function buildTableUI() {
   // Build opponent seats with position class based on count
   const seats = SEAT_CLASSES[S.numOpponents];
   for (let i = 0; i < S.numOpponents; i++) {
-    const avatar = AMX_AVATARS[i % 2];
+    const avatar = AMX_OPP_AVATARS[i];
     const slot = document.createElement('div');
     slot.className = `opponent-slot ${seats[i]}`;
     slot.id = `opp-slot-${i}`;
@@ -351,7 +352,7 @@ function startRound() {
 // ── Human turn ───────────────────────────────────────────
 async function humanCallPhase() {
   const playerName = S.user ? S.user.username : 'You';
-  await showTurnBanner(playerName, '/assets/goodebags-logo.png', 'YOUR TURN — Pick a trait!');
+  await showTurnBanner(playerName, 'assets/avatars/amx-player.png', 'YOUR TURN — Pick a trait!');
   setCallerSeat(0);
   const card = S.playerHand[0];
   const mb = $('message-box');
@@ -385,7 +386,7 @@ async function humanCallPhase() {
 async function computerCallPhase() {
   const oppIdx = S.callerIndex - 1;
   const card = S.oppHands[oppIdx][0];
-  const avatarSrc = AMX_AVATARS[oppIdx % 2];
+  const avatarSrc = AMX_OPP_AVATARS[oppIdx];
   await showTurnBanner(`Player ${S.callerIndex + 1}`, avatarSrc, 'is choosing a trait…');
   setCallerSeat(S.callerIndex);
   $('message-box').classList.remove('player-turn');
