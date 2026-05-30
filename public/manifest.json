@@ -1,0 +1,16 @@
+{
+  "name": "Goodebags Games",
+  "short_name": "Goodebags",
+  "start_url": "/games/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/assets/goodebags-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

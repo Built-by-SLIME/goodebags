@@ -95,6 +95,13 @@
       // Small delay — orientationchange fires before innerWidth updates
       setTimeout(evaluate, 100);
     });
+
+    // Attempt to collapse mobile browser address bar on load
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        window.scrollTo(0, 1);
+      }, 100);
+    });
   }
 
   if (document.readyState === 'loading') {
