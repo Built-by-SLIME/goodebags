@@ -3403,7 +3403,7 @@
   {
     "id": "AMME#1",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#1.png",
+    "image": "assets/cards/amme#1.png",
     "animations": [
       "assets/animations/AMME#1.mp4"
     ],
@@ -3437,7 +3437,7 @@
   {
     "id": "AMME#2",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#2.png",
+    "image": "assets/cards/amme#2.png",
     "animations": [
       "assets/animations/AMME#2.mp4"
     ],
@@ -3471,7 +3471,7 @@
   {
     "id": "AMME#3",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#3.png",
+    "image": "assets/cards/amme#3.png",
     "animations": [
       "assets/animations/AMME#3.mp4"
     ],
@@ -3505,7 +3505,7 @@
   {
     "id": "AMME#4",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#4.png",
+    "image": "assets/cards/amme#4.png",
     "animations": [
       "assets/animations/AMME#4.mp4"
     ],
@@ -3539,7 +3539,7 @@
   {
     "id": "AMME#5",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#5.png",
+    "image": "assets/cards/amme#5.png",
     "animations": [
       "assets/animations/AMME#5.mp4"
     ],
@@ -3573,7 +3573,7 @@
   {
     "id": "AMME#6",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#6.png",
+    "image": "assets/cards/amme#6.png",
     "animations": [
       "assets/animations/AMME#6.mp4"
     ],
@@ -3607,7 +3607,7 @@
   {
     "id": "AMME#7",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#7.png",
+    "image": "assets/cards/amme#7.png",
     "animations": [
       "assets/animations/AMME#7.mp4"
     ],
@@ -3641,7 +3641,7 @@
   {
     "id": "AMME#8",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#8.png",
+    "image": "assets/cards/amme#8.png",
     "animations": [
       "assets/animations/AMME#8.mp4"
     ],
@@ -3675,7 +3675,7 @@
   {
     "id": "AMME#9",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#9.png",
+    "image": "assets/cards/amme#9.png",
     "animations": [
       "assets/animations/AMME#9.mp4"
     ],
@@ -3709,7 +3709,7 @@
   {
     "id": "AMME#10",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#10.png",
+    "image": "assets/cards/amme#10.png",
     "animations": [
       "assets/animations/AMME#10.mp4"
     ],
@@ -3743,7 +3743,7 @@
   {
     "id": "AMME#11",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#11.png",
+    "image": "assets/cards/amme#11.png",
     "animations": [
       "assets/animations/AMME#11.mp4"
     ],
@@ -3777,7 +3777,7 @@
   {
     "id": "AMME#12",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#12.png",
+    "image": "assets/cards/amme#12.png",
     "animations": [
       "assets/animations/AMME#12.mp4"
     ],
@@ -3811,7 +3811,7 @@
   {
     "id": "AMME#13",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#13.png",
+    "image": "assets/cards/amme#13.png",
     "animations": [
       "assets/animations/AMME#13.mp4"
     ],
@@ -3845,7 +3845,7 @@
   {
     "id": "AMME#14",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#14.png",
+    "image": "assets/cards/amme#14.png",
     "animations": [
       "assets/animations/AMME#14.mp4"
     ],
@@ -3879,7 +3879,7 @@
   {
     "id": "AMME#15",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#15.png",
+    "image": "assets/cards/amme#15.png",
     "animations": [
       "assets/animations/AMME#15.mp4"
     ],
@@ -3913,7 +3913,7 @@
   {
     "id": "AMME#16",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#16.png",
+    "image": "assets/cards/amme#16.png",
     "animations": [
       "assets/animations/AMME#16.mp4"
     ],
@@ -3947,7 +3947,7 @@
   {
     "id": "AMME#17",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#17.png",
+    "image": "assets/cards/amme#17.png",
     "animations": [
       "assets/animations/AMME#17.mp4"
     ],
@@ -3981,7 +3981,7 @@
   {
     "id": "AMME#18",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#18.png",
+    "image": "assets/cards/amme#18.png",
     "animations": [
       "assets/animations/AMME#18.mp4"
     ],
@@ -4015,7 +4015,7 @@
   {
     "id": "AMME#19",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#19.png",
+    "image": "assets/cards/amme#19.png",
     "animations": [
       "assets/animations/AMME#19.mp4"
     ],
@@ -4049,7 +4049,7 @@
   {
     "id": "AMME#20",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#20.png",
+    "image": "assets/cards/amme#20.png",
     "animations": [
       "assets/animations/AMME#20.mp4"
     ],
@@ -4083,7 +4083,7 @@
   {
     "id": "AMME#21",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#21.png",
+    "image": "assets/cards/amme#21.png",
     "animations": [
       "assets/animations/AMME#21.mp4"
     ],
@@ -4117,7 +4117,7 @@
   {
     "id": "AMME#22",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#22.png",
+    "image": "assets/cards/amme#22.png",
     "animations": [
       "assets/animations/AMME#22.mp4"
     ],
@@ -4151,7 +4151,7 @@
   {
     "id": "AMME#23",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#23.png",
+    "image": "assets/cards/amme#23.png",
     "animations": [
       "assets/animations/AMME#23.mp4"
     ],
@@ -4185,7 +4185,7 @@
   {
     "id": "AMME#24",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#24.png",
+    "image": "assets/cards/amme#24.png",
     "animations": [
       "assets/animations/AMME#24.mp4"
     ],
@@ -4219,7 +4219,7 @@
   {
     "id": "AMME#25",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#25.png",
+    "image": "assets/cards/amme#25.png",
     "animations": [
       "assets/animations/AMME#25.mp4"
     ],
@@ -4253,7 +4253,7 @@
   {
     "id": "AMME#26",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#26.png",
+    "image": "assets/cards/amme#26.png",
     "animations": [
       "assets/animations/AMME#26.mp4"
     ],
@@ -4287,7 +4287,7 @@
   {
     "id": "AMME#27",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#27.png",
+    "image": "assets/cards/amme#27.png",
     "animations": [
       "assets/animations/AMME#27.mp4"
     ],
@@ -4321,7 +4321,7 @@
   {
     "id": "AMME#28",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#28.png",
+    "image": "assets/cards/amme#28.png",
     "animations": [
       "assets/animations/AMME#28.mp4"
     ],
@@ -4355,7 +4355,7 @@
   {
     "id": "AMME#29",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#29.png",
+    "image": "assets/cards/amme#29.png",
     "animations": [
       "assets/animations/AMME#29.mp4"
     ],
@@ -4389,7 +4389,7 @@
   {
     "id": "AMME#30",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#30.png",
+    "image": "assets/cards/amme#30.png",
     "animations": [
       "assets/animations/AMME#30.mp4"
     ],
@@ -4423,7 +4423,7 @@
   {
     "id": "AMME#31",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#31.png",
+    "image": "assets/cards/amme#31.png",
     "animations": [
       "assets/animations/AMME#31.mp4"
     ],
@@ -4457,7 +4457,7 @@
   {
     "id": "AMME#32",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#32.png",
+    "image": "assets/cards/amme#32.png",
     "animations": [
       "assets/animations/AMME#32.mp4"
     ],
@@ -4491,7 +4491,7 @@
   {
     "id": "AMME#33",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#33.png",
+    "image": "assets/cards/amme#33.png",
     "animations": [
       "assets/animations/AMME#33.mp4"
     ],
@@ -4525,7 +4525,7 @@
   {
     "id": "AMME#34",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#34.png",
+    "image": "assets/cards/amme#34.png",
     "animations": [
       "assets/animations/AMME#34.mp4"
     ],
@@ -4559,7 +4559,7 @@
   {
     "id": "AMME#35",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#35.png",
+    "image": "assets/cards/amme#35.png",
     "animations": [
       "assets/animations/AMME#35.mp4"
     ],
@@ -4593,7 +4593,7 @@
   {
     "id": "AMME#36",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#36.png",
+    "image": "assets/cards/amme#36.png",
     "animations": [
       "assets/animations/AMME#36.mp4"
     ],
@@ -4627,7 +4627,7 @@
   {
     "id": "AMME#37",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#37.png",
+    "image": "assets/cards/amme#37.png",
     "animations": [
       "assets/animations/AMME#37.mp4"
     ],
@@ -4661,7 +4661,7 @@
   {
     "id": "AMME#38",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#38.png",
+    "image": "assets/cards/amme#38.png",
     "animations": [
       "assets/animations/AMME#38.mp4"
     ],
@@ -4695,7 +4695,7 @@
   {
     "id": "AMME#39",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#39.png",
+    "image": "assets/cards/amme#39.png",
     "animations": [
       "assets/animations/AMME#39.mp4"
     ],
@@ -4729,7 +4729,7 @@
   {
     "id": "AMME#40",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#40.png",
+    "image": "assets/cards/amme#40.png",
     "animations": [
       "assets/animations/AMME#40.mp4"
     ],
@@ -4763,7 +4763,7 @@
   {
     "id": "AMME#41",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#41.png",
+    "image": "assets/cards/amme#41.png",
     "animations": [
       "assets/animations/AMME#41.mp4"
     ],
@@ -4797,7 +4797,7 @@
   {
     "id": "AMME#42",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#42.png",
+    "image": "assets/cards/amme#42.png",
     "animations": [
       "assets/animations/AMME#42.mp4"
     ],
@@ -4831,7 +4831,7 @@
   {
     "id": "AMME#43",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#43.png",
+    "image": "assets/cards/amme#43.png",
     "animations": [
       "assets/animations/AMME#43.mp4"
     ],
@@ -4865,7 +4865,7 @@
   {
     "id": "AMME#44",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#44.png",
+    "image": "assets/cards/amme#44.png",
     "animations": [
       "assets/animations/AMME#44.mp4"
     ],
@@ -4899,7 +4899,7 @@
   {
     "id": "AMME#45",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#45.png",
+    "image": "assets/cards/amme#45.png",
     "animations": [
       "assets/animations/AMME#45.mp4"
     ],
@@ -4933,7 +4933,7 @@
   {
     "id": "AMME#46",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#46.png",
+    "image": "assets/cards/amme#46.png",
     "animations": [
       "assets/animations/AMME#46.mp4"
     ],
@@ -4967,7 +4967,7 @@
   {
     "id": "AMME#47",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#47.png",
+    "image": "assets/cards/amme#47.png",
     "animations": [
       "assets/animations/AMME#47.mp4"
     ],
@@ -5001,7 +5001,7 @@
   {
     "id": "AMME#48",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#48.png",
+    "image": "assets/cards/amme#48.png",
     "animations": [
       "assets/animations/AMME#48.mp4"
     ],
@@ -5035,7 +5035,7 @@
   {
     "id": "AMME#49",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#49.png",
+    "image": "assets/cards/amme#49.png",
     "animations": [
       "assets/animations/AMME#49.mp4"
     ],
@@ -5069,7 +5069,7 @@
   {
     "id": "AMME#50",
     "deck": "Mecha",
-    "image": "assets/cards/AMME#50.png",
+    "image": "assets/cards/amme#50.png",
     "animations": [
       "assets/animations/AMME#50.mp4"
     ],
