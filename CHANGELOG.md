@@ -3,6 +3,10 @@
 All notable changes to this project are documented here.
 Format: `[Date] — Description`
 
+## 2025-05-30 — Open AMX to Guest Play
+- **AMX no longer requires wallet connection** to play. `initAuth()` in `public/games/apemodx/game.js` bypasses the auth screen entirely when no wallet is found — sets `S.user = { username: 'Guest' }` and calls `goToLobby()` directly. If a wallet IS connected, the existing auth/register flow still works normally.
+- **TBK remains token-gated** on the game selector via Hedera Token ID `0.0.7295055`.
+
 ---
 
 ## [2026-05-28] — Chunk 1: Codebase Cleanup
