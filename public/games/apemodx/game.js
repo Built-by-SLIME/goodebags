@@ -56,10 +56,6 @@ function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);upda
 let _walletProjectId = '';
 
 async function initAuth() {
-  show('auth');
-  $('auth-status').textContent = 'Checking wallet…';
-  $('btn-connect-wallet').style.display = 'none';
-
   // Load R2 config + wallet project ID
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
@@ -67,14 +63,20 @@ async function initAuth() {
     _walletProjectId = cfg.walletConnectProjectId || '';
   } catch(e) {}
 
-  // Read wallet address directly from WC's IndexedDB — instant, no network
+  // Try to read wallet address from WC's IndexedDB
   S.wallet = await getWalletFromWC();
 
   if (!S.wallet) {
-    $('auth-status').textContent = 'Connect your wallet to play.';
-    $('btn-connect-wallet').style.display = '';
+    // No wallet connected — play as guest (AMX is open until Xaman Connect is added)
+    S.user = { username: 'Guest' };
+    goToLobby();
     return;
   }
+
+  // Wallet found — show auth/register flow
+  show('auth');
+  $('auth-status').textContent = 'Checking wallet…';
+  $('btn-connect-wallet').style.display = 'none';
 
   // Look up or register user
   try {
