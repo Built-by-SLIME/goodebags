@@ -201,7 +201,7 @@ function startGame(keepCaller=false) {
   const deck=shuffle([...S.allCards]);
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
-  if(!keepCaller) S.callerIndex=Math.floor(Math.random()*(S.numOpponents+1));
+  if(!keepCaller) S.callerIndex=0;
   show('game'); buildTableUI();
   animateCallerSelection(()=>startRound());
 }
