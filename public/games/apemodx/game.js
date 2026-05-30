@@ -487,17 +487,19 @@ function resolveRound() {
     if(wi===0){S.roundsWon++; S.sessionScore += 1000 * S.numOpponents; updateScoreBar();}
     msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
-    // Center stage: highlight winner, dismiss, then play animation
+    // Center stage: highlight winner, dismiss, then play animation (human only)
     animateCenterCardsWinner(wi);
     highlightWinnerCard(wi);
     setTimeout(()=>{
       dismissCenterCards();
       setTimeout(()=>{
-        playWinAnimation(winner.card,()=>{
+        const onDone=()=>{
           if(getActivePlayers().length===1){endGame();return;}
           if(S.playerHand.length>0)renderPlayerFaceUp();
           setTimeout(()=>startRound(), 1500);
-        });
+        };
+        if(wi===0) playWinAnimation(winner.card,onDone);
+        else onDone();
       },300);
     },1200);
   }
