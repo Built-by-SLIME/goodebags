@@ -73,14 +73,7 @@
     const h = window.innerHeight;
     const isPortrait = h > w;
 
-    if (w <= MOBILE_MAX_PX) {
-      // Hard block — phone-sized screen
-      icon.textContent  = '📵';
-      title.textContent = 'Desktop or Tablet Required';
-      msg.textContent   = 'This game is designed for PC and tablets only. Please switch to a larger screen to play.';
-      overlay.classList.add('visible');
-
-    } else if (w <= TABLET_MAX_PX && isPortrait) {
+    if (w <= TABLET_MAX_PX && isPortrait) {
       // Soft prompt — tablet held in portrait
       icon.textContent  = '🔄';
       title.textContent = 'Rotate Your Device';
@@ -88,7 +81,7 @@
       overlay.classList.add('visible');
 
     } else {
-      // All good — PC or landscape tablet
+      // All good — PC, tablet landscape, or mobile
       overlay.classList.remove('visible');
     }
   }
