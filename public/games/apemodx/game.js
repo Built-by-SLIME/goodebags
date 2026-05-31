@@ -481,7 +481,7 @@ function resolveRound() {
     setTimeout(()=>startRound(), 1500);
   } else {
     const winner=winners[0]; const wi=winner.playerIdx;
-    const wname=wi===0?'You':`Player ${wi+1}`;
+    const wname=wi===0?(S.user?S.user.username:'You'):`Player ${wi+1}`;
     const won=[...roundCards,...S.frozenPile]; S.frozenPile=[];
     if(S.playerHand.length>0)S.playerHand.shift();
     for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
