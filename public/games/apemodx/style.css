@@ -394,7 +394,21 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   .opp-face-card img { height:126px; }
   .card-back-img { width:54px; height:76px; }
   .player-avatar { width:54px; }
-  .seat-card { display:none !important; }
+  .opponent-slot {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+  .opponent-slot.seat-bl,
+  .opponent-slot.seat-br {
+    flex-direction: row-reverse;
+  }
+  .opponent-slot.seat-tc {
+    flex-direction: column;
+    align-items: center;
+  }
+  .seat-card { width: 60px; }
+  .seat-card img { height: 84px; }
 }
 
 /* Phone landscape mini-mode: everything scales to ~50 % */
@@ -442,5 +456,17 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   .continue-timer{ font-size:.65rem; }
   .seat-active   { outline:2px solid var(--gold); outline-offset:3px; }
   .seat-caller   { outline:2px solid var(--gold); outline-offset:3px; }
-  .seat-card { display:none !important; }
+  .opponent-slot {
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+  .opponent-slot.seat-bl,
+  .opponent-slot.seat-br {
+    flex-direction: row-reverse;
+  }
+  .opponent-slot.seat-tc {
+    flex-direction: column;
+    align-items: center;
+  }
 }
