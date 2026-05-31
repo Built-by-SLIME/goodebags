@@ -379,3 +379,50 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   .card-back-img { width:54px; height:76px; }
   .player-avatar { width:54px; }
 }
+
+/* Phone landscape mini-mode: everything scales to ~50 % */
+@media (max-height: 420px) and (orientation: landscape) {
+  :root { --card-w:80px; --card-h:112px; }
+  .score-bar   { padding:3px 8px; font-size:.7rem; }
+  .btn-quit-game { padding:2px 8px; font-size:.65rem; }
+  .seat-tc,.seat-tl,.seat-tr { top:1%; }
+  .seat-bl,.seat-br { bottom:10%; }
+  .seat-human { bottom:1%; }
+  .opponent-slot { gap:2px; }
+  .opp-avatar    { width:30px; }
+  .player-avatar { width:30px; }
+  .card-back-img { width:32px; height:45px; }
+  .card-count    { width:20px; height:20px; font-size:.58rem; bottom:-6px; right:-6px; }
+  .opp-label     { font-size:.55rem; }
+  .player-label  { font-size:.58rem; }
+  .opp-face-card { width:48px; }
+  .opp-face-card img { height:67px; }
+  .opp-face-card .opp-trait-row { padding:1px 3px; font-size:.45rem; }
+  .opp-face-card .opp-name { font-size:.42rem; padding:1px 3px; }
+  .player-zone   { gap:8px; }
+  .player-card-area { gap:6px; }
+  .trait-btn     { padding:2px 5px; font-size:.52rem; }
+  .trait-btn .t-val { min-width:14px; margin-left:4px; }
+  .trait-btn.xtra-row .t-name::after { font-size:.45rem; padding:1px 3px; margin-left:4px; }
+  .seat-card     { width:45px; }
+  .seat-card img { height:63px; }
+  .play-area     { gap:6px; }
+  .cards-in-play { gap:6px; }
+  .center-card   { width:80px; }
+  .center-card img { height:112px; }
+  .center-card-name { font-size:.5rem; padding:2px 4px; }
+  .center-trait  { padding:2px 5px; font-size:.5rem; }
+  .center-trait span { margin-left:4px; }
+  .center-xtra   { padding:2px 5px; font-size:.48rem; }
+  .center-xtra span { margin-left:4px; }
+  .center-total  { font-size:.55rem; }
+  .turn-banner   { padding:10px 16px; min-width:140px; border-radius:12px; gap:6px; }
+  .tb-avatar     { width:40px; height:40px; }
+  .tb-name       { font-size:.85rem; }
+  .tb-label      { font-size:.65rem; }
+  .message-box   { padding:6px 10px; font-size:.72rem; }
+  .action-bar    { padding:6px; gap:8px; }
+  .continue-timer{ font-size:.65rem; }
+  .seat-active   { outline:2px solid var(--gold); outline-offset:3px; }
+  .seat-caller   { outline:2px solid var(--gold); outline-offset:3px; }
+}
