@@ -15,7 +15,7 @@ const S = {
   user: null, wallet: null, allCards: [],
   numOpponents: 1, playerHand: [], oppHands: [],
   frozenPile: [], callerIndex: -1, calledTraitIdx: -1,
-  sessionScore: 0, roundNum: 0, roundsWon: 0,
+  sessionScore: 0, gameScore: 0, roundNum: 0, roundsWon: 0,
   selectedBoard: null,
 };
 
@@ -112,7 +112,7 @@ $('btn-register').addEventListener('click', async()=>{
 // ── Lobby ────────────────────────────────────────────────
 function goToLobby() {
   clearResultTimer();
-  S.sessionScore=0;
+  S.sessionScore=0; S.gameScore=0;
   show('lobby');
   $('lobby-welcome').textContent=`Welcome, ${S.user.username}!`;
 }
@@ -203,7 +203,7 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 // ── Start game ───────────────────────────────────────────
 function startGame(keepCaller=false) {
   clearResultTimer();
-  S.frozenPile=[]; S.roundNum=0; S.roundsWon=0;
+  S.frozenPile=[]; S.roundNum=0; S.roundsWon=0; S.gameScore=0;
   const deck=shuffle([...S.allCards]);
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
@@ -470,12 +470,13 @@ function resolveRound() {
     if(S.playerHand.length>0)S.playerHand.shift();
     for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
     giveCardsToWinner(wi,won); S.callerIndex=wi;
-    if(wi===0){S.roundsWon++; S.sessionScore += 1000 * S.numOpponents;}
+    const roundPoints=1000*(scores.length-1);
+    if(wi===0){S.roundsWon++; S.sessionScore+=roundPoints; S.gameScore+=roundPoints;}
     msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
     // Center stage: highlight winner, dismiss, then play animation (human only)
     animateCenterCardsWinner(wi);
-    highlightWinnerCard(wi);
+    highlightWinnerCard(wi,roundPoints);
     setTimeout(()=>{
       dismissCenterCards();
       setTimeout(()=>{
@@ -491,12 +492,12 @@ function resolveRound() {
   }
 }
 
-function highlightWinnerCard(wi) {
+function highlightWinnerCard(wi,points) {
   const centerCard=document.querySelector(`.center-card[data-player="${wi}"]`);
   if(centerCard){centerCard.classList.add('card-winner');}
   // 3d: Star ping shows winning score
   const star=$('star-ping');
-  star.textContent=`⭐ +${(1000*S.numOpponents).toLocaleString()}`;
+  star.textContent=`⭐ +${points.toLocaleString()}`;
   star.style.display='block';
   star.style.left=Math.random()*60+20+'%'; star.style.top=Math.random()*40+20+'%';
   setTimeout(()=>star.style.display='none',850);
@@ -537,7 +538,7 @@ async function submitSessionScore(){
 async function endGame(){
   clearResultTimer();
   const humanWon=S.playerHand.length>0;
-  const gamePoints=S.roundsWon*1000*S.numOpponents;
+  const gamePoints=S.gameScore;
   $('result-icon').textContent=humanWon?'🏆':'💀';
   $('result-title').textContent=humanWon?'You Win!':'You Lost!';
   $('result-msg').textContent=humanWon
