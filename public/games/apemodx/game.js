@@ -348,6 +348,7 @@ function popCount(el) {
 function startRound() {
   S.roundNum++; updateScoreBar();
   $('cards-in-play').innerHTML=''; $('player-card-area').innerHTML='';
+  for(let i=0;i<S.numOpponents;i++){const el=$(`opp-active-${i}`);if(el)el.innerHTML='';}
   clearContinueTimer(); clearCallerSeat();
   if(getActivePlayers().length===1){endGame();return;}
   if(S.tiePlayers){
@@ -506,7 +507,31 @@ function resolveRound() {
       for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
     }
     const stillAlive=winners.filter(w=>playerHasCards(w.playerIdx));
-    if(stillAlive.length===1){giveCardsToWinner(stillAlive[0].playerIdx,S.frozenPile);S.frozenPile=[];S.tiePlayers=null;S.tieTraits=[];}
+    if(stillAlive.length===1){
+      const wi=stillAlive[0].playerIdx;
+      giveCardsToWinner(wi,S.frozenPile);S.frozenPile=[];
+      const wname=wi===0?(S.user?S.user.username:'You'):`Player ${wi+1}`;
+      const roundPoints=1000*(scores.length-1);
+      if(wi===0){S.roundsWon++; S.sessionScore+=roundPoints; S.gameScore+=roundPoints;}
+      msg(`${wname} wins by default — other tied players out of cards!`);
+      S.tiePlayers=null;S.tieTraits=[];
+      updateAllCounts();
+      animateCenterCardsWinner(wi);
+      highlightWinnerCard(wi,roundPoints);
+      setTimeout(()=>{
+        dismissCenterCards();
+        setTimeout(()=>{
+          const onDone=()=>{
+            if(getActivePlayers().length===1){endGame();return;}
+            if(S.playerHand.length>0)renderPlayerFaceUp();
+            setTimeout(()=>startRound(),1500);
+          };
+          if(wi===0) playWinAnimation(stillAlive[0].card,onDone);
+          else onDone();
+        },300);
+      },1200);
+      return;
+    }
     if(!S.tiePlayers){
       S.tiePlayers=winners.map(w=>w.playerIdx);S.tieTraits=[S.calledTraitIdx];
     }else{
