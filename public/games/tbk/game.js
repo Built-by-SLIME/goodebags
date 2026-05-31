@@ -470,7 +470,7 @@ function resolveRound() {
     if(S.playerHand.length>0)S.playerHand.shift();
     for(let i=0;i<S.numOpponents;i++){if(S.oppHands[i].length>0)S.oppHands[i].shift();}
     giveCardsToWinner(wi,won); S.callerIndex=wi;
-    if(wi===0){S.roundsWon++;}
+    if(wi===0){S.roundsWon++; S.sessionScore += 1000 * S.numOpponents;}
     msg(`${wname} wins the round! (${scores[0].card.traits[traitIdx].name}: ${maxScore}) — ${won.length} card(s) won.`);
     updateAllCounts();
     // Center stage: highlight winner, dismiss, then play animation (human only)
@@ -538,7 +538,6 @@ async function endGame(){
   clearResultTimer();
   const humanWon=S.playerHand.length>0;
   const gamePoints=S.roundsWon*1000*S.numOpponents;
-  S.sessionScore += gamePoints;
   $('result-icon').textContent=humanWon?'🏆':'💀';
   $('result-title').textContent=humanWon?'You Win!':'You Lost!';
   $('result-msg').textContent=humanWon
