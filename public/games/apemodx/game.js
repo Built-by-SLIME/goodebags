@@ -130,10 +130,16 @@ document.querySelectorAll('.opp-btn').forEach(btn=>{
 });
 
 $('btn-start').addEventListener('click', () => goToBoardSelect());
-$('btn-quit-game').addEventListener('click', async () => {
-  if(!confirm('Quit this game? Your session score will be saved.')) return;
-  await submitSessionScore();
-  window.location.href='/games/';
+$('btn-quit-game').addEventListener('click', () => {
+  const modal=$('quit-modal'), backdrop=modal.querySelector('.quit-modal-backdrop');
+  const cancelBtn=$('btn-quit-cancel'), confirmBtn=$('btn-quit-confirm');
+  const hide=()=>{modal.style.display='none';};
+  const onCancel=()=>{hide(); cancelBtn.removeEventListener('click',onCancel); confirmBtn.removeEventListener('click',onConfirm); backdrop.removeEventListener('click',onCancel);};
+  const onConfirm=async()=>{hide(); cancelBtn.removeEventListener('click',onCancel); confirmBtn.removeEventListener('click',onConfirm); backdrop.removeEventListener('click',onCancel); await submitSessionScore(); window.location.href='/games/';};
+  modal.style.display='flex';
+  cancelBtn.addEventListener('click',onCancel);
+  confirmBtn.addEventListener('click',onConfirm);
+  backdrop.addEventListener('click',onCancel);
 });
 
 // ── Board selector ────────────────────────────────────────

@@ -346,6 +346,16 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .win-video  { max-width:90vw; max-height:85vh; border-radius:16px; }
 .win-tap-hint { color:rgba(255,255,255,.4); font-size:.8rem; margin-top:12px; }
 
+/* ── Quit confirm modal ─────────────────── */
+.quit-modal { position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center; }
+.quit-modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,.88); }
+.quit-modal-panel { position:relative; background:var(--panel); border:2px solid var(--gold); border-radius:var(--radius);
+  padding:28px 32px; max-width:360px; width:90%; text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px; z-index:1; }
+.quit-modal-panel h3 { font-size:1.3rem; font-weight:800; margin:0; color:var(--gold); }
+.quit-modal-panel p { color:var(--muted); font-size:.9rem; margin:0; }
+.quit-modal-btns { display:flex; gap:12px; width:100%; justify-content:center; flex-wrap:wrap; }
+.quit-modal-btns button { flex:1; max-width:140px; min-width:100px; }
+
 /* ── Result screen ───────────────────────── */
 #screen-result { align-items:center; justify-content:center; padding:40px 20px;
   background:radial-gradient(ellipse at 50% 0%, rgba(255,215,0,.07), transparent 70%), var(--dark); }
