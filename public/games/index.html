@@ -78,6 +78,10 @@
     .lb-table tr:nth-child(1) td { color: #FFD700; font-weight: 700; }
     .lb-table tr:nth-child(2) td { color: #c0c0c0; font-weight: 600; }
     .lb-table tr:nth-child(3) td { color: #cd7f32; font-weight: 600; }
+    .lb-filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; justify-content: center; }
+    .lb-filter-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #141414; color: #888; cursor: pointer; font-size: 0.78rem; font-weight: 600; }
+    .lb-filter-btn.active { background: rgba(255,215,0,0.12); color: #FFD700; border-color: rgba(255,215,0,0.3); }
+    .lb-filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.2); color: #ccc; }
 
     @media (max-width: 700px) { .game-cards { grid-template-columns: 1fr; } }
   </style>
@@ -137,14 +141,28 @@
         <button class="lb-tab" data-tab="tbk">The Bee's Knees</button>
       </div>
       <div id="lb-amx" class="lb-panel active">
+        <div class="lb-filters">
+          <button class="lb-filter-btn active" data-game="amx" data-opp="">All-Time</button>
+          <button class="lb-filter-btn" data-game="amx" data-opp="1">2 Players</button>
+          <button class="lb-filter-btn" data-game="amx" data-opp="2">3 Players</button>
+          <button class="lb-filter-btn" data-game="amx" data-opp="3">4 Players</button>
+          <button class="lb-filter-btn" data-game="amx" data-opp="4">5 Players</button>
+        </div>
         <table class="lb-table">
-          <thead><tr><th>#</th><th>Player</th><th>Score</th><th>vs</th></tr></thead>
+          <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Players</th></tr></thead>
           <tbody id="lb-body-amx"><tr><td colspan="4" style="text-align:center;color:#888">Loading…</td></tr></tbody>
         </table>
       </div>
       <div id="lb-tbk" class="lb-panel">
+        <div class="lb-filters">
+          <button class="lb-filter-btn active" data-game="tbk" data-opp="">All-Time</button>
+          <button class="lb-filter-btn" data-game="tbk" data-opp="1">2 Players</button>
+          <button class="lb-filter-btn" data-game="tbk" data-opp="2">3 Players</button>
+          <button class="lb-filter-btn" data-game="tbk" data-opp="3">4 Players</button>
+          <button class="lb-filter-btn" data-game="tbk" data-opp="4">5 Players</button>
+        </div>
         <table class="lb-table">
-          <thead><tr><th>#</th><th>Player</th><th>Score</th><th>vs</th></tr></thead>
+          <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Players</th></tr></thead>
           <tbody id="lb-body-tbk"><tr><td colspan="4" style="text-align:center;color:#888">Loading…</td></tr></tbody>
         </table>
       </div>
@@ -168,16 +186,28 @@
         $('lb-' + tab.dataset.tab).classList.add('active');
       });
     });
-    async function loadLb(game) {
+    async function loadLb(game, opponents) {
       try {
-        const rows = await fetch('/api/leaderboard/' + game).then(r => r.json());
+        const url = '/api/leaderboard/' + game + (opponents ? '?opponents=' + opponents : '');
+        const rows = await fetch(url).then(r => r.json());
         const tbody = $('lb-body-' + game);
         if (!rows.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888">No scores yet.</td></tr>'; return; }
-        tbody.innerHTML = rows.map((r, i) => '<tr><td>' + (i + 1) + '</td><td>' + r.username + '</td><td>' + Number(r.score).toLocaleString() + '</td><td>' + r.opponents + 'v' + r.opponents + '</td></tr>').join('');
+        tbody.innerHTML = rows.map((r, i) => '<tr><td>' + (i + 1) + '</td><td>' + r.username + '</td><td>' + Number(r.score).toLocaleString() + '</td><td>' + (r.opponents + 1) + '</td></tr>').join('');
       } catch (e) {
         $('lb-body-' + game).innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888">Could not load scores.</td></tr>';
       }
     }
+    // Filter button clicks
+    document.querySelectorAll('.lb-filters').forEach(container => {
+      container.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('lb-filter-btn')) return;
+        const game = e.target.dataset.game;
+        const opp = e.target.dataset.opp;
+        container.querySelectorAll('.lb-filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        loadLb(game, opp);
+      });
+    });
   })();
   </script>
 

@@ -573,18 +573,26 @@ async function endGame(){
 }
 
 // ── Leaderboard ───────────────────────────────────────────
-async function loadLeaderboard(){
+async function loadLeaderboard(opponents){
   show('leaderboard');
   try{
-    const rows=await fetch('/api/leaderboard/tbk').then(r=>r.json());
+    const url='/api/leaderboard/tbk'+(opponents?'?opponents='+opponents:'');
+    const rows=await fetch(url).then(r=>r.json());
     const tbody=$('lb-body'); tbody.innerHTML='';
     if(!rows.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">No scores yet.</td></tr>';return;}
     rows.forEach((r,i)=>{
       const tr=document.createElement('tr');
-      tr.innerHTML=`<td class="lb-rank">${i+1}</td><td>${r.username}</td><td>${Number(r.score).toLocaleString()}</td><td>${r.opponents}v${r.opponents}</td>`;
+      tr.innerHTML=`<td class="lb-rank">${i+1}</td><td>${r.username}</td><td>${Number(r.score).toLocaleString()}</td><td>${r.opponents+1}</td>`;
       tbody.appendChild(tr);
     });
   }catch(e){$('lb-body').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">Could not load scores.</td></tr>';}
+  document.querySelectorAll('#screen-leaderboard .lb-filter-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('#screen-leaderboard .lb-filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      loadLeaderboard(btn.dataset.opp||'');
+    };
+  });
   $('btn-lb-play').onclick=()=>goToLobby();
   $('btn-lb-quit').onclick=()=>window.location.href='/games/';
 }

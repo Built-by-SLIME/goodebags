@@ -72,11 +72,26 @@ app.post('/api/scores/tbk', (req, res) => submitScore('tbk_scores', req, res));
 
 // ── Leaderboards ──────────────────────────────────────────
 async function getLeaderboard(table, req, res) {
-  const r = await query(
-    `SELECT u.username, s.score, s.opponents, s.played_at
-     FROM ${table} s JOIN users u ON u.id = s.user_id
-     ORDER BY s.score DESC LIMIT 50`
-  );
+  const opponents = req.query.opponents;
+  let sql, params = [];
+  if (opponents) {
+    // Best score per user for a specific opponent count
+    sql = `SELECT u.username, MAX(s.score) as score, s.opponents
+           FROM ${table} s JOIN users u ON u.id = s.user_id
+           WHERE s.opponents = $1
+           GROUP BY u.id, u.username, s.opponents
+           ORDER BY MAX(s.score) DESC LIMIT 50`;
+    params = [parseInt(opponents, 10)];
+  } else {
+    // All-time best score per user across all opponent counts
+    sql = `SELECT * FROM (
+             SELECT DISTINCT ON (u.id) u.username, s.score, s.opponents
+             FROM ${table} s JOIN users u ON u.id = s.user_id
+             ORDER BY u.id, s.score DESC
+           ) best
+           ORDER BY score DESC LIMIT 50`;
+  }
+  const r = await query(sql, params);
   res.json(r ? r.rows : []);
 }
 

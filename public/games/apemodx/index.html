@@ -161,8 +161,15 @@
 <div id="screen-leaderboard" class="screen">
   <div class="lb-inner">
     <h2>Ape-Mod-<span class="accent">X</span> Leaderboard</h2>
+    <div class="lb-filters">
+      <button class="lb-filter-btn active" data-opp="">All-Time</button>
+      <button class="lb-filter-btn" data-opp="1">2 Players</button>
+      <button class="lb-filter-btn" data-opp="2">3 Players</button>
+      <button class="lb-filter-btn" data-opp="3">4 Players</button>
+      <button class="lb-filter-btn" data-opp="4">5 Players</button>
+    </div>
     <table class="lb-table">
-      <thead><tr><th>#</th><th>Player</th><th>Score</th><th>vs</th></tr></thead>
+      <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Players</th></tr></thead>
       <tbody id="lb-body"></tbody>
     </table>
     <div class="result-btns" style="margin-top:24px">

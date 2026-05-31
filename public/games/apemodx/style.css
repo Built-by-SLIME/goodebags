@@ -381,6 +381,12 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 .lb-table tr:first-child td { color:var(--gold); font-weight:800; }
 .lb-rank { font-weight:700; color:var(--muted); }
 
+/* ── Leaderboard filter buttons ───────────────────────── */
+.lb-filters { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; justify-content:center; }
+.lb-filter-btn { padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,.5); color:var(--muted); cursor:pointer; font-size:.78rem; font-weight:600; font-family:inherit; }
+.lb-filter-btn.active { background:rgba(255,215,0,.12); color:var(--gold); border-color:rgba(255,215,0,.3); }
+.lb-filter-btn:hover:not(.active) { border-color:rgba(255,255,255,.2); color:var(--text); }
+
 /* ── Responsive ──────────────────────────── */
 @media (max-width:640px) {
   :root { --card-w:130px; --card-h:182px; }
