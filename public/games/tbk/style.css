@@ -171,13 +171,11 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
 
 /* ── Opponent slot (seat class handles positioning; slot handles internal layout) ── */
 .opponent-slot {
-  display:flex; flex-direction:column; align-items:center; gap:4px;
+  display:flex; flex-direction:row; align-items:center; gap:8px;
 }
-/* Bottom opponent seats: face-up card above the stack so it doesn't overlap the human */
 .opponent-slot.seat-bl,
-.opponent-slot.seat-br {
-  flex-direction: column-reverse;
-}
+.opponent-slot.seat-br { flex-direction: row-reverse; }
+.opponent-slot.seat-tc { flex-direction: column; align-items: center; }
 
 .opp-avatar {
   width:80px; height:auto;
@@ -447,19 +445,7 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   .opp-face-card img { height:112px; }
   .card-back-img { width:48px; height:67px; }
   .hud-bar { padding:6px 10px; gap:8px; }
-  .opponent-slot {
-    flex-direction: row;
-    align-items: center;
-    gap: 6px;
-  }
-  .opponent-slot.seat-bl,
-  .opponent-slot.seat-br {
-    flex-direction: row-reverse;
-  }
-  .opponent-slot.seat-tc {
-    flex-direction: column;
-    align-items: center;
-  }
+
   .seat-card { width: 60px; }
   .seat-card img { height: 84px; }
 }
@@ -509,17 +495,5 @@ body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text)
   .continue-timer{ font-size:.65rem; }
   .seat-active   { outline:2px solid var(--gold); outline-offset:3px; }
   .seat-caller   { outline:2px solid var(--gold); outline-offset:3px; }
-  .opponent-slot {
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-  }
-  .opponent-slot.seat-bl,
-  .opponent-slot.seat-br {
-    flex-direction: row-reverse;
-  }
-  .opponent-slot.seat-tc {
-    flex-direction: column;
-    align-items: center;
-  }
+
 }
