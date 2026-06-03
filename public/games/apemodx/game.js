@@ -15,7 +15,7 @@ const S = {
   user: null, wallet: null, allCards: [],
   numOpponents: 1, playerHand: [], oppHands: [],
   frozenPile: [], callerIndex: -1, calledTraitIdx: -1,
-  sessionScore: 0, gameScore: 0, tiePlayers: null, tieTraits: [], roundNum: 0, roundsWon: 0, continueTimer: null,
+  sessionScore: 0, gameScore: 0, tiePlayers: null, roundNum: 0, roundsWon: 0, continueTimer: null,
   selectedBoard: null,
 };
 
@@ -117,7 +117,7 @@ $('btn-register').addEventListener('click', async()=>{
 // ── Lobby ────────────────────────────────────────────────
 function goToLobby() {
   clearResultTimer();
-  S.sessionScore=0; S.gameScore=0; S.tiePlayers=null; S.tieTraits=[];
+  S.sessionScore=0; S.gameScore=0; S.tiePlayers=null;
   show('lobby');
   $('lobby-welcome').textContent=`Welcome, ${S.user.username}!`;
 }
@@ -217,7 +217,7 @@ function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 // ── Start game ───────────────────────────────────────────
 function startGame(keepCaller=false) {
   clearResultTimer();
-  S.frozenPile=[]; S.roundNum=0; S.roundsWon=0; S.gameScore=0; S.tiePlayers=null; S.tieTraits=[];
+  S.frozenPile=[]; S.roundNum=0; S.roundsWon=0; S.gameScore=0; S.tiePlayers=null;
   const deck=shuffle([...S.allCards]);
   S.playerHand=deck.splice(0,10); S.oppHands=[];
   for(let i=0;i<S.numOpponents;i++) S.oppHands.push(deck.splice(0,10));
@@ -370,12 +370,10 @@ async function humanCallPhase() {
   const mb = $('message-box');
   mb.classList.add('player-turn');
   msg('Your turn! Pick a trait to play. (As caller, your XTRA does not apply this round.)');
-  if(S.tieTraits && S.tieTraits.length >= card.traits.length) S.tieTraits = [];
-  const usedTraits = S.tieTraits || [];
   const cardEl = document.createElement('div'); cardEl.className = 'player-card flip-in';
   cardEl.innerHTML = `<img src="${card.image}" alt="${card.id}" onerror="this.style.background='#222'" />
     <div class="trait-list">
-      ${card.traits.map((t,i) => usedTraits.includes(i) ? `<button class="trait-btn" disabled style="opacity:.4;cursor:not-allowed"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>` : `<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
+      ${card.traits.map((t,i) => `<button class="trait-btn" data-idx="${i}"><span class="t-name">${t.name}</span><span class="t-val">${t.value}</span></button>`).join('')}
       <div class="trait-btn xtra-row"><span class="t-name">XTRA: ${card.xtra.name}</span><span class="t-val">${card.xtra.value}</span></div>
     </div>`;
   cardEl.querySelectorAll('.trait-btn[data-idx]').forEach(btn => {
@@ -406,10 +404,8 @@ async function computerCallPhase() {
   $('message-box').classList.remove('player-turn');
   msg(`Player ${S.callerIndex + 1} is thinking…`);
   await sleep(1500);
-  let available = card.traits.map((t,i) => i);
-  if(S.tieTraits && S.tieTraits.length){ available = available.filter(i => !S.tieTraits.includes(i)); if(!available.length){S.tieTraits=[];available=card.traits.map((t,i)=>i);} }
-  let best = available[0];
-  available.forEach(i => { if(card.traits[i].value > card.traits[best].value) best = i; });
+  let best = 0;
+  card.traits.forEach((t,i) => { if(t.value > card.traits[best].value) best = i; });
   S.calledTraitIdx = best;
   msg(`Player ${S.callerIndex + 1} calls: "${card.traits[best].name}" — ${card.traits[best].value}. Revealing cards…`);
   renderOppFaceUp(oppIdx, card);
@@ -514,7 +510,7 @@ function resolveRound() {
       const roundPoints=1000*(scores.length-1);
       if(wi===0){S.roundsWon++; S.sessionScore+=roundPoints; S.gameScore+=roundPoints;}
       msg(`${wname} wins by default — other tied players out of cards!`);
-      S.tiePlayers=null;S.tieTraits=[];
+      S.tiePlayers=null;
       updateAllCounts();
       animateCenterCardsWinner(wi);
       highlightWinnerCard(wi,roundPoints);
@@ -532,11 +528,7 @@ function resolveRound() {
       },1200);
       return;
     }
-    if(!S.tiePlayers){
-      S.tiePlayers=winners.map(w=>w.playerIdx);S.tieTraits=[S.calledTraitIdx];
-    }else{
-      S.tiePlayers=winners.map(w=>w.playerIdx);S.tieTraits.push(S.calledTraitIdx);
-    }
+    S.tiePlayers=winners.map(w=>w.playerIdx);
     msg(`Tie! ${S.tiePlayers.length} players tied. Tie-breaker round…`);
     updateAllCounts();
     dismissCenterCards();
@@ -563,7 +555,7 @@ function resolveRound() {
       dismissCenterCards();
       setTimeout(()=>{
         const onDone=()=>{
-          S.tiePlayers=null; S.tieTraits=[];
+          S.tiePlayers=null;
           if(getActivePlayers().length===1){endGame();return;}
           if(S.playerHand.length>0)renderPlayerFaceUp();
           setTimeout(()=>startRound(),1500);
