@@ -267,6 +267,10 @@ img {
   color: var(--white);
 }
 
+.nav-wallet-item {
+  display: none;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -333,8 +337,18 @@ img {
     display: flex;
   }
 
-  .nav-right .btn-primary {
+  #walletBtn {
     display: none;
+  }
+
+  .nav-wallet-item {
+    display: block;
+    padding: 10px 24px;
+  }
+
+  .nav-wallet-item .btn-primary {
+    width: 100%;
+    justify-content: center;
   }
 }
 

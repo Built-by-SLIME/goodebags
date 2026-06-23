@@ -2,11 +2,14 @@
    WALLET CONNECT — AppKit / WalletConnect v2
 ═══════════════════════════════════════════ */
 const walletBtn = document.getElementById('walletBtn');
+const walletBtnMobile = document.getElementById('walletBtnMobile');
 
 let walletProjectId = null;
 
 function updateWalletBtn(connected) {
-  walletBtn.textContent = connected ? 'Disconnect' : 'Connect Wallet';
+  const text = connected ? 'Disconnect' : 'Connect Wallet';
+  walletBtn.textContent = text;
+  if (walletBtnMobile) walletBtnMobile.textContent = text;
 }
 
 async function loadWalletConfig() {
@@ -40,7 +43,7 @@ window.addEventListener('walletDisconnected', () => {
   updateWalletBtn(false);
 });
 
-walletBtn.addEventListener('click', () => {
+function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
   if (!walletProjectId) {
     alert('WalletConnect Project ID not configured. Please set WALLETCONNECT_PROJECT_ID environment variable.');
@@ -66,7 +69,10 @@ walletBtn.addEventListener('click', () => {
         console.error('[Main] Wallet connection failed:', err);
       });
   }
-});
+}
+
+walletBtn.addEventListener('click', handleWalletClick);
+if (walletBtnMobile) walletBtnMobile.addEventListener('click', handleWalletClick);
 
 /* ═══════════════════════════════════════════
    NAVBAR — scroll effect + mobile toggle
@@ -87,8 +93,8 @@ hamburger.addEventListener('click', () => {
   hamburger.setAttribute('aria-expanded', isOpen);
 });
 
-// Close mobile nav on link click
-navLinks.querySelectorAll('a').forEach(link => {
+// Close mobile nav on link or button click
+navLinks.querySelectorAll('a, button').forEach(link => {
   link.addEventListener('click', () => {
     hamburger.classList.remove('open');
     navLinks.classList.remove('open');
