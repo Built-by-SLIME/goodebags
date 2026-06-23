@@ -154,7 +154,6 @@ const AMX_BOARDS = [
   { file:'ape-08.png',       label:'Ape Table 8' },
   { file:'ape-09.jpg',       label:'Ape Table 9' },
   { file:'ape-10.jpg',       label:'Ape Table 10' },
-  { file:'ape-11.jpg',       label:'Ape Table 11' },
   { file:'universal-01.jpg', label:'Classic Table 1' },
   { file:'universal-02.png', label:'SLIME Table' },
 ];
