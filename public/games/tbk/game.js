@@ -57,11 +57,12 @@ async function initAuth() {
   $('auth-status').textContent = 'Checking wallet…';
   $('btn-connect-wallet').style.display = 'none';
 
-  // Load R2 config + wallet project ID
+  // Load R2 config + wallet credentials
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
     R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/tbk';
     _walletProjectId = cfg.walletConnectProjectId || '';
+    if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
   } catch(e) {}
 
   // Read wallet address directly from WC's IndexedDB — instant, no network
@@ -87,11 +88,14 @@ async function initAuth() {
 $('btn-connect-wallet').addEventListener('click', async () => {
   const btn = $('btn-connect-wallet');
   btn.disabled = true; btn.textContent = 'Connecting…';
+  $('auth-status').textContent = 'Opening wallet selector…';
+
   try {
-    if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
-    await WalletModule.openConnect(_walletProjectId);
+    const result = await showWalletSelector(_walletProjectId);
+    S.wallet = result.address;
     await initAuth();
-  } catch(e) {
+  } catch (e) {
+    console.error('[Auth] Wallet connection failed:', e);
     $('auth-status').textContent = 'Connection failed — please try again.';
     btn.disabled = false; btn.textContent = 'Connect Wallet';
   }

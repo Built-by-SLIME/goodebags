@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/api/config', (req, res) => {
   res.json({
     walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID || '',
+    xamanApiKey: process.env.XAMAN_API_KEY || '',
     r2BaseUrl: process.env.R2_BASE_URL || ''
   });
 });

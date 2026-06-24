@@ -39,7 +39,7 @@
       box-shadow: none;
     }
     .game-card.locked .game-card-body::after {
-      content: "🔒 Connect a Hedera wallet with TBK NFT";
+      content: "🔒 Connect a wallet to play";
       position: absolute;
       bottom: 16px;
       left: 50%;
@@ -103,7 +103,7 @@
       </a>
 
       <!-- Ape Mod X — XRPL -->
-      <a href="/games/apemodx/" class="game-card">
+      <a href="/games/apemodx/" class="game-card" id="amx-card">
         <img src="/assets/new-base-ape.png" alt="Ape Mod X" class="game-card-img" style="object-fit:cover; width:100%; height:220px;" />
         <div class="game-card-body">
           <span class="game-card-badge badge-xrpl">XRPL Network</span>
@@ -211,61 +211,116 @@
   })();
   </script>
 
+  <script src="https://xumm.app/assets/cdn/xumm.min.js"></script>
   <script src="/js/wallet-utils.js"></script>
+  <script src="/js/wallet-selector.js"></script>
   <script>
-  (async function(){
+  (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
+    const AMX_TAXON = 777;
     const tbkCard = document.getElementById('tbk-card');
-    if (!tbkCard) return;
+    const amxCard = document.getElementById('amx-card');
+    let _walletProjectId = '';
+    let _xamanApiKey = '';
 
-    const addr = await getWalletFromWC();
-    if (!addr) {
-      tbkCard.classList.add('locked');
-      tbkCard.removeAttribute('href');
-      tbkCard.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Connect a Hedera wallet to play The Bee\'s Knees.');
-      });
-      return;
-    }
-
-    const isHedera = addr.includes('.') || addr.startsWith('0x');
-    if (!isHedera) {
-      tbkCard.classList.add('locked');
-      tbkCard.removeAttribute('href');
-      tbkCard.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('The Bee\'s Knees requires a Hedera wallet. Please connect a Hedera-compatible wallet.');
-      });
-      return;
-    }
-
-    let hasToken = false;
-    const endpoints = [
-      'https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID,
-      'https://testnet.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID
-    ];
-
-    for (const url of endpoints) {
+    async function loadCfg() {
       try {
-        const res = await fetch(url);
-        if (!res.ok) continue;
-        const data = await res.json();
-        if (data.tokens && data.tokens.some(t => t.token_id === TBK_TOKEN_ID)) {
-          hasToken = true;
-          break;
-        }
+        const cfg = await fetch('/api/config').then(r => r.json());
+        _walletProjectId = cfg.walletConnectProjectId || '';
+        _xamanApiKey = cfg.xamanApiKey || '';
+        if (_xamanApiKey) initWalletSelector(_xamanApiKey);
       } catch (e) {}
     }
 
-    if (!hasToken) {
-      tbkCard.classList.add('locked');
-      tbkCard.removeAttribute('href');
-      tbkCard.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('You need a TBK NFT (Token ID: ' + TBK_TOKEN_ID + ') to play The Bee\'s Knees.');
-      });
+    async function checkTbkToken(addr) {
+      const endpoints = [
+        'https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID,
+        'https://testnet.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID
+      ];
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const data = await res.json();
+          if (data.tokens && data.tokens.some(t => t.token_id === TBK_TOKEN_ID)) return true;
+        } catch (e) {}
+      }
+      return false;
     }
+
+    async function checkAmxNft(addr) {
+      try {
+        const res = await fetch('https://xrplcluster.com/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ method: 'account_nfts', params: [{ account: addr }] })
+        });
+        const data = await res.json();
+        const nfts = data.result?.account_nfts || [];
+        return nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON);
+      } catch (e) { return false; }
+    }
+
+    function lockCard(card) {
+      if (!card) return;
+      card.classList.add('locked');
+      card.removeAttribute('href');
+      card.onclick = async (e) => {
+        e.preventDefault();
+        try {
+          const result = await showWalletSelector(_walletProjectId);
+          await runGates();
+        } catch (err) {
+          if (err.message !== 'User cancelled') console.error(err);
+        }
+      };
+    }
+
+    function unlockCard(card, href) {
+      if (!card) return;
+      card.classList.remove('locked');
+      card.setAttribute('href', href);
+      card.onclick = null;
+    }
+
+    async function runGates() {
+      if (!tbkCard || !amxCard) return;
+
+      // Start locked — unlock only if wallet + token checks pass
+      lockCard(tbkCard);
+      lockCard(amxCard);
+      let tbkOpen = false;
+      let amxOpen = false;
+
+      // Check WalletConnect session
+      const wcInfo = await getWalletInfoFromWC();
+      if (wcInfo && wcInfo.address) {
+        if (wcInfo.chain === 'hedera') {
+          const hasToken = await checkTbkToken(wcInfo.address);
+          if (hasToken) tbkOpen = true;
+        } else if (wcInfo.chain === 'xrpl') {
+          const hasNft = await checkAmxNft(wcInfo.address);
+          if (hasNft) amxOpen = true;
+        }
+      }
+
+      // Check Xaman session
+      if (typeof Xumm !== 'undefined' && _xamanApiKey) {
+        try {
+          const xumm = new Xumm(_xamanApiKey);
+          const account = await xumm.user.account;
+          if (account) {
+            const hasNft = await checkAmxNft(account);
+            if (hasNft) amxOpen = true;
+          }
+        } catch (e) {}
+      }
+
+      if (tbkOpen) unlockCard(tbkCard, '/games/tbk/');
+      if (amxOpen) unlockCard(amxCard, '/games/apemodx/');
+    }
+
+    loadCfg().then(runGates);
   })();
   </script>
 </body>

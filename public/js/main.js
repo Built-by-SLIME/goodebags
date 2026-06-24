@@ -20,6 +20,8 @@ async function loadWalletConfig() {
     walletProjectId = cfg.walletConnectProjectId || '';
     console.log('[Main] Project ID loaded:', walletProjectId ? 'yes' : 'no');
 
+    if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
+
     if (walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
       try {
         await WalletModule.init(walletProjectId);
@@ -45,30 +47,22 @@ window.addEventListener('walletDisconnected', () => {
 
 function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
-  if (!walletProjectId) {
-    alert('WalletConnect Project ID not configured. Please set WALLETCONNECT_PROJECT_ID environment variable.');
-    return;
-  }
-  if (typeof WalletModule === 'undefined') {
-    alert('Wallet module not loaded. Please refresh the page.');
-    return;
-  }
-  console.log('[Main] WalletModule present. isConnected?', WalletModule.isConnected ? WalletModule.isConnected() : 'no isConnected fn');
-  if (WalletModule.isConnected && WalletModule.isConnected()) {
+  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
     WalletModule.disconnectWallet().then(() => {
       updateWalletBtn(false);
     }).catch(() => {});
-  } else {
-    console.log('[Main] Calling WalletModule.openConnect()...');
-    WalletModule.openConnect(walletProjectId)
-      .then(() => {
-        console.log('[Main] openConnect resolved');
-        updateWalletBtn(true);
-      })
-      .catch((err) => {
-        console.error('[Main] Wallet connection failed:', err);
-      });
+    return;
   }
+  console.log('[Main] Opening wallet selector...');
+  showWalletSelector(walletProjectId)
+    .then((result) => {
+      console.log('[Main] Wallet connected via', result.type);
+      updateWalletBtn(true);
+    })
+    .catch((err) => {
+      if (err.message === 'User cancelled') return;
+      console.error('[Main] Wallet connection failed:', err);
+    });
 }
 
 walletBtn.addEventListener('click', handleWalletClick);

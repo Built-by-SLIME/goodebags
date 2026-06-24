@@ -55,35 +55,80 @@ function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);upda
 // ── Auth ─────────────────────────────────────────────────
 let _walletProjectId = '';
 
-async function initAuth() {
-  // Load R2 config + wallet project ID
+async function checkXrplNftGate(address) {
+  const AMX_TAXON = 777;
   try {
-    const cfg = await fetch('/api/config').then(r => r.json());
-    R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
-    _walletProjectId = cfg.walletConnectProjectId || '';
-  } catch(e) {}
-
-  // Try to read wallet address from WC's IndexedDB
-  S.wallet = await getWalletFromWC();
-
-  if (!S.wallet) {
-    // No wallet connected — play as guest (AMX is open until Xaman Connect is added)
-    S.user = { username: 'Guest' };
-    goToLobby();
-    return;
+    const res = await fetch('https://xrplcluster.com/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method: 'account_nfts', params: [{ account: address }] })
+    });
+    const data = await res.json();
+    const nfts = data.result?.account_nfts || [];
+    return nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON);
+  } catch (e) {
+    console.error('[Gate] XRPL NFT check failed:', e);
+    return false;
   }
+}
 
-  // Wallet found — show auth/register flow
+async function initAuth() {
   show('auth');
   $('auth-status').textContent = 'Checking wallet…';
   $('btn-connect-wallet').style.display = 'none';
 
-  // Look up or register user
+  // Load R2 config + wallet credentials
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
+    _walletProjectId = cfg.walletConnectProjectId || '';
+    if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
+  } catch(e) {}
+
+  // Try existing WalletConnect session
+  const wcInfo = await getWalletInfoFromWC();
+  if (wcInfo && wcInfo.address) {
+    S.wallet = wcInfo.address;
+    const hasNft = await checkXrplNftGate(S.wallet);
+    if (!hasNft) {
+      $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
+      $('btn-connect-wallet').style.display = '';
+      return;
+    }
+    await _loadUserAndGo();
+    return;
+  }
+
+  // Try existing Xaman session
+  if (typeof Xumm !== 'undefined' && _xamanApiKey) {
+    try {
+      const xumm = new Xumm(_xamanApiKey);
+      const account = await xumm.user.account;
+      if (account) {
+        S.wallet = account;
+        const hasNft = await checkXrplNftGate(S.wallet);
+        if (!hasNft) {
+          $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
+          $('btn-connect-wallet').style.display = '';
+          return;
+        }
+        await _loadUserAndGo();
+        return;
+      }
+    } catch (e) {}
+  }
+
+  // No wallet — show connect button
+  $('auth-status').textContent = 'Connect your wallet to play Ape-Mod-X.';
+  $('btn-connect-wallet').style.display = '';
+}
+
+async function _loadUserAndGo() {
   try {
     const res = await fetch(`/api/user/${S.wallet}`);
     if (res.ok) { S.user = await res.json(); goToLobby(); }
     else show('register');
-  } catch(e) {
+  } catch (e) {
     S.user = { username: 'Guest', wallet_address: S.wallet };
     goToLobby();
   }
@@ -92,11 +137,23 @@ async function initAuth() {
 $('btn-connect-wallet').addEventListener('click', async () => {
   const btn = $('btn-connect-wallet');
   btn.disabled = true; btn.textContent = 'Connecting…';
+  $('auth-status').textContent = 'Opening wallet selector…';
+
   try {
-    if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
-    await WalletModule.openConnect(_walletProjectId);
-    await initAuth();
-  } catch(e) {
+    const result = await showWalletSelector(_walletProjectId);
+    S.wallet = result.address;
+
+    // XRPL token gate
+    const hasNft = await checkXrplNftGate(S.wallet);
+    if (!hasNft) {
+      $('auth-status').textContent = 'You need an Ape-Mod-X NFT (Taxon 777) to play.';
+      btn.disabled = false; btn.textContent = 'Connect Wallet';
+      return;
+    }
+
+    await _loadUserAndGo();
+  } catch (e) {
+    console.error('[Auth] Wallet connection failed:', e);
     $('auth-status').textContent = 'Connection failed — please try again.';
     btn.disabled = false; btn.textContent = 'Connect Wallet';
   }
