@@ -1210,6 +1210,26 @@ img {
   color: var(--white);
 }
 
+.footer-legal {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+}
+
+.footer-legal a {
+  font-size: 0.82rem;
+  color: var(--gray-1);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-legal a:hover {
+  color: var(--white);
+}
+
 @media (max-width: 600px) {
   .footer-top {
     flex-direction: column;
@@ -1233,6 +1253,13 @@ img {
   .footer-bottom {
     flex-direction: column;
     text-align: center;
+  }
+
+  .footer-legal {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    margin-top: 8px;
   }
 }
 
