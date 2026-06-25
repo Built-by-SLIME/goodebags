@@ -304,11 +304,10 @@
         }
       }
 
-      // Check Xaman session
-      if (typeof Xumm !== 'undefined' && _xamanApiKey) {
+      // Check Xaman session (localStorage first, then SDK ready event)
+      if (_xamanApiKey) {
         try {
-          const xumm = new Xumm(_xamanApiKey);
-          const account = await xumm.user.account;
+          const account = await getXamanAccount(_xamanApiKey);
           if (account) {
             const hasNft = await checkAmxNft(account);
             if (hasNft) amxOpen = true;

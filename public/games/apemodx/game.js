@@ -99,11 +99,10 @@ async function initAuth() {
     return;
   }
 
-  // Try existing Xaman session
-  if (typeof Xumm !== 'undefined' && _xamanApiKey) {
+  // Try existing Xaman session (localStorage first, then SDK ready event)
+  if (_xamanApiKey) {
     try {
-      const xumm = new Xumm(_xamanApiKey);
-      const account = await xumm.user.account;
+      const account = await getXamanAccount(_xamanApiKey);
       if (account) {
         S.wallet = account;
         const hasNft = await checkXrplNftGate(S.wallet);

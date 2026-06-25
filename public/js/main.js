@@ -22,14 +22,25 @@ async function loadWalletConfig() {
 
     if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
 
+    let connected = false;
+
     if (walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
       try {
         await WalletModule.init(walletProjectId);
-        updateWalletBtn(!!WalletModule.isConnected && WalletModule.isConnected());
+        connected = !!WalletModule.isConnected && WalletModule.isConnected();
       } catch (e) {
         console.warn('[Main] Silent wallet init failed:', e);
       }
     }
+
+    if (!connected && cfg.xamanApiKey) {
+      try {
+        const xamanAccount = await getXamanAccount(cfg.xamanApiKey);
+        connected = !!xamanAccount;
+      } catch (e) {}
+    }
+
+    updateWalletBtn(connected);
   } catch (e) {
     console.warn('[Main] Could not load wallet config:', e);
     walletProjectId = '';
@@ -45,14 +56,23 @@ window.addEventListener('walletDisconnected', () => {
   updateWalletBtn(false);
 });
 
-function handleWalletClick() {
+async function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
+
+  // Disconnect WalletConnect if connected
   if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
-    WalletModule.disconnectWallet().then(() => {
-      updateWalletBtn(false);
-    }).catch(() => {});
+    await WalletModule.disconnectWallet().catch(() => {});
+    updateWalletBtn(false);
     return;
   }
+
+  // Disconnect Xaman if connected (clear localStorage)
+  if (localStorage.getItem('gb_xamanAccount')) {
+    clearXamanAccount();
+    updateWalletBtn(false);
+    return;
+  }
+
   console.log('[Main] Opening wallet selector...');
   showWalletSelector(walletProjectId)
     .then((result) => {

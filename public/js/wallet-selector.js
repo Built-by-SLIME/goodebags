@@ -123,6 +123,7 @@ function showWalletSelector(projectId) {
       const onSuccess = async () => {
         try {
           const account = await _xummInstance.user.account;
+          localStorage.setItem('gb_xamanAccount', account);
           _xummInstance.off('success', onSuccess);
           _xummInstance.off('error', onError);
           _selectorPromise = null;
@@ -142,6 +143,68 @@ function showWalletSelector(projectId) {
       _xummInstance.on('error', onError);
     };
   });
+}
+
+/* ── Xaman session helpers ───────────────────────────────────────────────────────────────────────────────── */
+async function getXamanAccount(apiKey) {
+  if (!apiKey || typeof Xumm === 'undefined') return null;
+
+  // Fast path: check localStorage
+  const stored = localStorage.getItem('gb_xamanAccount');
+  if (stored) return stored;
+
+  // Slow path: wait for SDK to initialize and restore stored session
+  return new Promise((resolve) => {
+    let resolved = false;
+    const xumm = new Xumm(apiKey);
+
+    const onReady = async () => {
+      if (resolved) return;
+      try {
+        const account = await xumm.user.account;
+        if (account && !resolved) {
+          resolved = true;
+          xumm.off('ready', onReady);
+          xumm.off('logout', onLogout);
+          localStorage.setItem('gb_xamanAccount', account);
+          resolve(account);
+          return;
+        }
+      } catch (e) {}
+      if (!resolved) {
+        resolved = true;
+        xumm.off('ready', onReady);
+        xumm.off('logout', onLogout);
+        resolve(null);
+      }
+    };
+
+    const onLogout = () => {
+      if (resolved) return;
+      resolved = true;
+      xumm.off('ready', onReady);
+      xumm.off('logout', onLogout);
+      clearXamanAccount();
+      resolve(null);
+    };
+
+    xumm.on('ready', onReady);
+    xumm.on('logout', onLogout);
+
+    // Hard timeout: if ready/logout never fire, resolve null
+    setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        xumm.off('ready', onReady);
+        xumm.off('logout', onLogout);
+        resolve(null);
+      }
+    }, 2000);
+  });
+}
+
+function clearXamanAccount() {
+  localStorage.removeItem('gb_xamanAccount');
 }
 
 /* ── Extended wallet-utils: read address + chain from WC IndexedDB ───────── */
