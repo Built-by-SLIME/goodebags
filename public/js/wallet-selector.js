@@ -3,7 +3,6 @@
    Returns a promise resolving to { type, address, chain }.
    ─────────────────────────────────────────────────────────────────────────── */
 
-let _xummInstance = null;
 let _xamanApiKey = null;
 let _selectorPromise = null;
 
@@ -109,38 +108,64 @@ function showWalletSelector(projectId) {
 
     // Xaman handler
     xamanBtn.onclick = () => {
+      console.log('[Xaman] Button clicked');
+
       if (!_xamanApiKey) {
+        console.error('[Xaman] API key missing');
+        alert('Xaman is not configured. Please check /api/config.');
         _selectorPromise = null;
         reject(new Error('Xaman API key not configured'));
         return;
       }
-      if (!_xummInstance) {
-        _xummInstance = new Xumm(_xamanApiKey);
+
+      if (typeof Xumm === 'undefined') {
+        console.error('[Xaman] Xumm SDK not loaded');
+        alert('Xaman SDK failed to load. Check your internet connection and try again.');
+        _selectorPromise = null;
+        reject(new Error('Xumm SDK not loaded'));
+        return;
       }
+
       modal.style.display = '';
-      _xummInstance.authorize();
+
+      let xumm;
+      try {
+        xumm = new Xumm(_xamanApiKey);
+        console.log('[Xaman] Instance created, calling authorize()');
+        xumm.authorize();
+      } catch (e) {
+        console.error('[Xaman] Error creating instance or calling authorize:', e);
+        alert('Xaman failed to start: ' + (e.message || 'Unknown error'));
+        _selectorPromise = null;
+        reject(e);
+        return;
+      }
 
       const onSuccess = async () => {
         try {
-          const account = await _xummInstance.user.account;
-          localStorage.setItem('gb_xamanAccount', account);
-          _xummInstance.off('success', onSuccess);
-          _xummInstance.off('error', onError);
+          const account = await xumm.user.account;
+          console.log('[Xaman] Success, account:', account);
+          if (account) {
+            localStorage.setItem('gb_xamanAccount', account);
+          }
+          xumm.off('success', onSuccess);
+          xumm.off('error', onError);
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
         } catch (e) {
           onError(e);
         }
       };
-      const onError = () => {
-        _xummInstance.off('success', onSuccess);
-        _xummInstance.off('error', onError);
+      const onError = (err) => {
+        console.error('[Xaman] Error event:', err);
+        xumm.off('success', onSuccess);
+        xumm.off('error', onError);
         _selectorPromise = null;
         reject(new Error('Xaman connection failed'));
       };
 
-      _xummInstance.on('success', onSuccess);
-      _xummInstance.on('error', onError);
+      xumm.on('success', onSuccess);
+      xumm.on('error', onError);
     };
   });
 }
