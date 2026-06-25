@@ -5,6 +5,7 @@
 
 let _xamanApiKey = null;
 let _selectorPromise = null;
+let _xamanAccount = null; // Global cache updated by _initXamanGlobalListener
 
 /* ── Build modal on first use ────────────────────────────────────────────── */
 function _buildModal() {
@@ -75,6 +76,46 @@ function _onClose() {
 /* ── Public API ──────────────────────────────────────────────────────────── */
 function initWalletSelector(apiKey) {
   _xamanApiKey = apiKey;
+  _initXamanGlobalListener(apiKey);
+}
+
+/* ── Global Xaman listener (runs on every page load to catch redirect results) ── */
+function _initXamanGlobalListener(apiKey) {
+  if (!apiKey || typeof Xumm === 'undefined') return;
+
+  const xumm = new Xumm(apiKey);
+
+  xumm.on('ready', async () => {
+    try {
+      const account = await xumm.user.account;
+      if (account) {
+        _xamanAccount = account;
+        localStorage.setItem('gb_xamanAccount', account);
+        console.log('[Xaman Global] Ready with account:', account);
+      }
+    } catch (e) {}
+  });
+
+  xumm.on('success', async () => {
+    try {
+      const account = await xumm.user.account;
+      if (account) {
+        _xamanAccount = account;
+        localStorage.setItem('gb_xamanAccount', account);
+        console.log('[Xaman Global] Success with account:', account);
+      }
+    } catch (e) {}
+  });
+
+  xumm.on('logout', () => {
+    _xamanAccount = null;
+    localStorage.removeItem('gb_xamanAccount');
+    console.log('[Xaman Global] Logout');
+  });
+
+  xumm.on('error', (err) => {
+    console.error('[Xaman Global] Error:', err);
+  });
 }
 
 function showWalletSelector(projectId) {
@@ -126,6 +167,21 @@ function showWalletSelector(projectId) {
         return;
       }
 
+      // Fast path: use already-cached account from this session or localStorage
+      if (_xamanAccount) {
+        console.log('[Xaman] Using cached account:', _xamanAccount);
+        _selectorPromise = null;
+        resolve({ type: 'xaman', address: _xamanAccount, chain: 'xrpl' });
+        return;
+      }
+      const stored = localStorage.getItem('gb_xamanAccount');
+      if (stored) {
+        console.log('[Xaman] Using stored account from localStorage:', stored);
+        _selectorPromise = null;
+        resolve({ type: 'xaman', address: stored, chain: 'xrpl' });
+        return;
+      }
+
       modal.style.display = '';
 
       let xumm;
@@ -141,27 +197,63 @@ function showWalletSelector(projectId) {
         return;
       }
 
+      let resolved = false;
+      const cleanup = () => {
+        clearTimeout(timeout);
+        clearInterval(pollInterval);
+      };
+
+      // 30-second timeout: if nothing happens, kill the flow and alert the user
+      const timeout = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          cleanup();
+          console.error('[Xaman] Connection timeout');
+          alert('Xaman connection timed out. Please close the Xaman app and try again.');
+          _selectorPromise = null;
+          reject(new Error('Xaman connection timeout'));
+        }
+      }, 30000);
+
+      // Poll localStorage every 500ms — on mobile the redirect opens a new tab,
+      // the new tab's global listener writes the account, and this tab picks it up.
+      const pollInterval = setInterval(() => {
+        if (resolved) return;
+        const account = localStorage.getItem('gb_xamanAccount');
+        if (account) {
+          resolved = true;
+          cleanup();
+          console.log('[Xaman] Account found via localStorage polling:', account);
+          _selectorPromise = null;
+          resolve({ type: 'xaman', address: account, chain: 'xrpl' });
+        }
+      }, 500);
+
+      const onError = (err) => {
+        if (resolved) return;
+        resolved = true;
+        cleanup();
+        console.error('[Xaman] Error event:', err);
+        _selectorPromise = null;
+        reject(new Error('Xaman connection failed'));
+      };
+
       const onSuccess = async () => {
+        if (resolved) return;
+        resolved = true;
+        cleanup();
         try {
           const account = await xumm.user.account;
           console.log('[Xaman] Success, account:', account);
           if (account) {
+            _xamanAccount = account;
             localStorage.setItem('gb_xamanAccount', account);
           }
-          xumm.off('success', onSuccess);
-          xumm.off('error', onError);
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
         } catch (e) {
           onError(e);
         }
-      };
-      const onError = (err) => {
-        console.error('[Xaman] Error event:', err);
-        xumm.off('success', onSuccess);
-        xumm.off('error', onError);
-        _selectorPromise = null;
-        reject(new Error('Xaman connection failed'));
       };
 
       xumm.on('success', onSuccess);
@@ -170,11 +262,12 @@ function showWalletSelector(projectId) {
   });
 }
 
-/* ── Xaman session helpers ───────────────────────────────────────────────────────────────────────────────── */
+/* ── Xaman session helpers ─────────────────────────────────────────────────── */
 async function getXamanAccount(apiKey) {
   if (!apiKey || typeof Xumm === 'undefined') return null;
 
-  // Fast path: check localStorage
+  // Fast path: use global cache or localStorage
+  if (_xamanAccount) return _xamanAccount;
   const stored = localStorage.getItem('gb_xamanAccount');
   if (stored) return stored;
 
@@ -183,14 +276,20 @@ async function getXamanAccount(apiKey) {
     let resolved = false;
     const xumm = new Xumm(apiKey);
 
+    const cleanup = () => {
+      try { xumm.off('ready', onReady); } catch (e) {}
+      try { xumm.off('success', onSuccess); } catch (e) {}
+      try { xumm.off('logout', onLogout); } catch (e) {}
+    };
+
     const onReady = async () => {
       if (resolved) return;
       try {
         const account = await xumm.user.account;
         if (account && !resolved) {
           resolved = true;
-          xumm.off('ready', onReady);
-          xumm.off('logout', onLogout);
+          cleanup();
+          _xamanAccount = account;
           localStorage.setItem('gb_xamanAccount', account);
           resolve(account);
           return;
@@ -198,38 +297,65 @@ async function getXamanAccount(apiKey) {
       } catch (e) {}
       if (!resolved) {
         resolved = true;
-        xumm.off('ready', onReady);
-        xumm.off('logout', onLogout);
+        cleanup();
         resolve(null);
       }
+    };
+
+    const onSuccess = async () => {
+      if (resolved) return;
+      try {
+        const account = await xumm.user.account;
+        if (account && !resolved) {
+          resolved = true;
+          cleanup();
+          _xamanAccount = account;
+          localStorage.setItem('gb_xamanAccount', account);
+          resolve(account);
+          return;
+        }
+      } catch (e) {}
     };
 
     const onLogout = () => {
       if (resolved) return;
       resolved = true;
-      xumm.off('ready', onReady);
-      xumm.off('logout', onLogout);
+      cleanup();
       clearXamanAccount();
       resolve(null);
     };
 
     xumm.on('ready', onReady);
+    xumm.on('success', onSuccess);
     xumm.on('logout', onLogout);
 
-    // Hard timeout: if ready/logout never fire, resolve null
+    // Hard timeout: if ready/success/logout never fire, resolve null
     setTimeout(() => {
       if (!resolved) {
         resolved = true;
-        xumm.off('ready', onReady);
-        xumm.off('logout', onLogout);
+        cleanup();
         resolve(null);
       }
-    }, 2000);
+    }, 5000);
   });
 }
 
 function clearXamanAccount() {
+  _xamanAccount = null;
   localStorage.removeItem('gb_xamanAccount');
+}
+
+function xummLogout() {
+  clearXamanAccount();
+  if (typeof Xumm === 'undefined' || !_xamanApiKey) return;
+  try {
+    const xumm = new Xumm(_xamanApiKey);
+    if (typeof xumm.logout === 'function') {
+      xumm.logout();
+    }
+  } catch (e) {
+    console.error('[Xaman] Logout failed:', e);
+  }
 }
 
 /* ── Extended wallet-utils: read address + chain from WC IndexedDB ───────── */

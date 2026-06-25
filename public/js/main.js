@@ -56,6 +56,14 @@ window.addEventListener('walletDisconnected', () => {
   updateWalletBtn(false);
 });
 
+// Detect Xaman auth completion from other tabs (mobile redirect opens new tab)
+window.addEventListener('storage', (e) => {
+  if (e.key === 'gb_xamanAccount' && e.newValue) {
+    console.log('[Main] Xaman auth detected from another tab:', e.newValue);
+    updateWalletBtn(true);
+  }
+});
+
 async function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
 
@@ -66,9 +74,9 @@ async function handleWalletClick() {
     return;
   }
 
-  // Disconnect Xaman if connected (clear localStorage)
+  // Disconnect Xaman if connected
   if (localStorage.getItem('gb_xamanAccount')) {
-    clearXamanAccount();
+    xummLogout();
     updateWalletBtn(false);
     return;
   }
