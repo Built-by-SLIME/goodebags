@@ -133,11 +133,36 @@ function showWalletSelector(projectId) {
       modal.style.display = '';
       try {
         if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
-        await WalletModule.openConnect(projectId);
-        const info = await getWalletInfoFromWC();
-        if (info && info.address) {
+        const session = await WalletModule.openConnect(projectId);
+        // Use the returned session directly (IndexedDB read is too slow/unreliable)
+        let address = null;
+        let chain = 'unknown';
+        if (session && session.namespaces) {
+          for (const [nsKey, ns] of Object.entries(session.namespaces)) {
+            if (ns.accounts && ns.accounts.length > 0) {
+              const parts = ns.accounts[0].split(':');
+              address = parts[parts.length - 1] || null;
+              chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';
+              break;
+            }
+          }
+        }
+        // Fallback: read from WalletModule in-memory provider
+        if (!address && typeof WalletModule.getAddress === 'function') {
+          address = WalletModule.getAddress();
+          if (address) {
+            const s = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
+            if (s && s.namespaces) {
+              for (const nsKey of Object.keys(s.namespaces)) {
+                if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
+                if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+              }
+            }
+          }
+        }
+        if (address) {
           _selectorPromise = null;
-          resolve({ type: 'wc', address: info.address, chain: info.chain });
+          resolve({ type: 'wc', address, chain });
         } else {
           throw new Error('WalletConnect failed');
         }
@@ -358,9 +383,26 @@ function xummLogout() {
   }
 }
 
-/* ── Extended wallet-utils: read address + chain from WC IndexedDB ───────── */
+/* ── Extended wallet-utils: read address + chain from WalletConnect ─────────── */
 function getWalletInfoFromWC() {
   return new Promise(resolve => {
+    // Fast path: use WalletModule in-memory provider (reliable, no DB race)
+    if (typeof WalletModule !== 'undefined' && typeof WalletModule.getAddress === 'function') {
+      const address = WalletModule.getAddress();
+      if (address) {
+        let chain = 'unknown';
+        const session = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
+        if (session && session.namespaces) {
+          for (const nsKey of Object.keys(session.namespaces)) {
+            if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
+            if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+          }
+        }
+        resolve({ address, chain });
+        return;
+      }
+    }
+    // Slow path: read from IndexedDB (fragile, may race with DB write)
     try {
       const req = indexedDB.open('WALLET_CONNECT_V2_INDEXED_DB');
       req.onerror = () => resolve(null);

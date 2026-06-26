@@ -8,6 +8,12 @@
 ─────────────────────────────────────────────────────────────────────────── */
 function getWalletFromWC() {
   return new Promise(resolve => {
+    // Fast path: use WalletModule in-memory provider (reliable, no DB race)
+    if (typeof WalletModule !== 'undefined' && typeof WalletModule.getAddress === 'function') {
+      const addr = WalletModule.getAddress();
+      if (addr) { resolve(addr); return; }
+    }
+    // Slow path: read from IndexedDB (fragile, may race with DB write)
     try {
       const req = indexedDB.open('WALLET_CONNECT_V2_INDEXED_DB');
       req.onerror = () => resolve(null);
