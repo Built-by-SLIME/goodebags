@@ -83,10 +83,9 @@ async function initAuth() {
     R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
     _walletProjectId = cfg.walletConnectProjectId || '';
     if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
+    // Init WalletModule in background without blocking auth check (localStorage is the fast path)
     if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
-      try {
-        await WalletModule.init(_walletProjectId);
-      } catch (e) {}
+      WalletModule.init(_walletProjectId).catch(() => {});
     }
   } catch(e) {}
 

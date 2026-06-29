@@ -211,9 +211,9 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=5"></script>
-  <script src="/js/wallet-utils.js?v=5"></script>
-  <script src="/js/wallet-selector.js?v=5"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=6"></script>
+  <script src="/js/wallet-utils.js?v=6"></script>
+  <script src="/js/wallet-selector.js?v=6"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -229,12 +229,11 @@
         _walletProjectId = cfg.walletConnectProjectId || '';
         _xamanApiKey = cfg.xamanApiKey || '';
         if (_xamanApiKey) initWalletSelector(_xamanApiKey);
+        // Init WalletModule in the background WITHOUT blocking runGates().
+        // localStorage is the fast path; WalletModule.init() is only needed
+        // if localStorage is empty and we need to read from the provider directly.
         if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
-          try {
-            await WalletModule.init(_walletProjectId);
-          } catch (e) {
-            console.warn('[Games] WalletModule init failed:', e);
-          }
+          WalletModule.init(_walletProjectId).catch(() => {});
         }
       } catch (e) {}
     }
@@ -339,8 +338,9 @@
         console.log('[Gate] No wallet detected');
       }
 
-      // Check Xaman session (localStorage first, then SDK ready event)
-      if (_xamanApiKey) {
+      // Check Xaman session only if wallet is NOT already found via WalletConnect
+      // (saves the 10-second Xaman timeout when user is connected via WC)
+      if (_xamanApiKey && !(wcInfo && wcInfo.address)) {
         try {
           const account = await getXamanAccount(_xamanApiKey);
           console.log('[Gate] Xaman account:', account);
@@ -358,6 +358,14 @@
       if (amxOpen) unlockCard(amxCard, '/games/apemodx/');
       console.log('[Gate] runGates complete — tbkOpen:', tbkOpen, 'amxOpen:', amxOpen);
     }
+
+    // If wallet is connected on another tab, detect it and refresh the gate check
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'gb_wcAddress' || e.key === 'gb_xamanAccount') {
+        console.log('[Gate] Cross-tab wallet change detected:', e.key, e.newValue ? 'connected' : 'disconnected');
+        runGates();
+      }
+    });
 
     loadCfg().then(runGates);
   })();
