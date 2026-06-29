@@ -200,6 +200,9 @@ function showWalletSelector(projectId) {
           }
         }
         if (address) {
+          localStorage.setItem('gb_wcAddress', address);
+          localStorage.setItem('gb_wcChain', chain);
+          localStorage.removeItem('gb_xamanAccount');
           _selectorPromise = null;
           resolve({ type: 'wc', address, chain });
         } else {
@@ -288,6 +291,8 @@ function showWalletSelector(projectId) {
           resolved = true;
           cleanup();
           console.log('[Xaman] Account found via localStorage polling:', account);
+          localStorage.removeItem('gb_wcAddress');
+          localStorage.removeItem('gb_wcChain');
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
         }
@@ -312,6 +317,8 @@ function showWalletSelector(projectId) {
           if (account) {
             _xamanAccount = account;
             localStorage.setItem('gb_xamanAccount', account);
+            localStorage.removeItem('gb_wcAddress');
+            localStorage.removeItem('gb_wcChain');
           }
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
@@ -441,6 +448,14 @@ function xummLogout() {
 /* ── Extended wallet-utils: read address + chain from WalletConnect ─────────── */
 function getWalletInfoFromWC() {
   return new Promise(resolve => {
+    // Fast path: localStorage (shared across pages, no race conditions)
+    const lsAddress = localStorage.getItem('gb_wcAddress');
+    const lsChain = localStorage.getItem('gb_wcChain');
+    if (lsAddress) {
+      resolve({ address: lsAddress, chain: lsChain || 'unknown' });
+      return;
+    }
+
     // Fast path: use WalletModule in-memory provider (reliable, no DB race)
     if (typeof WalletModule !== 'undefined' && typeof WalletModule.getAddress === 'function') {
       const address = WalletModule.getAddress();
@@ -476,10 +491,23 @@ function getWalletInfoFromWC() {
             try {
               const raw = valReq.result;
               const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+              // Handle single session object directly (data.namespaces)
+              if (data && data.namespaces) {
+                for (const [nsKey, ns] of Object.entries(data.namespaces)) {
+                  if (ns.accounts && ns.accounts.length > 0) {
+                    const parts = ns.accounts[0].split(':');
+                    const address = parts[parts.length - 1] || null;
+                    const chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';
+                    resolve({ address, chain });
+                    return;
+                  }
+                }
+              }
+              // Handle map of sessions
               for (const session of Object.values(data || {})) {
                 if (!session?.namespaces) continue;
                 for (const [nsKey, ns] of Object.entries(session.namespaces)) {
-                  if (ns.accounts?.length) {
+                  if (ns.accounts && ns.accounts.length > 0) {
                     const parts = ns.accounts[0].split(':');
                     const address = parts[parts.length - 1] || null;
                     const chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';

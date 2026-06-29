@@ -8,6 +8,10 @@
 ─────────────────────────────────────────────────────────────────────────── */
 function getWalletFromWC() {
   return new Promise(resolve => {
+    // Fast path: localStorage (shared across pages, no race conditions)
+    const lsAddress = localStorage.getItem('gb_wcAddress');
+    if (lsAddress) { resolve(lsAddress); return; }
+
     // Fast path: use WalletModule in-memory provider (reliable, no DB race)
     if (typeof WalletModule !== 'undefined' && typeof WalletModule.getAddress === 'function') {
       const addr = WalletModule.getAddress();
@@ -32,11 +36,21 @@ function getWalletFromWC() {
             try {
               const raw = valReq.result;
               const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+              // Handle single session object directly (data.namespaces)
+              if (data && data.namespaces) {
+                for (const ns of Object.values(data.namespaces)) {
+                  if (ns.accounts && ns.accounts.length > 0) {
+                    const parts = ns.accounts[0].split(':');
+                    resolve(parts[parts.length - 1] || null);
+                    return;
+                  }
+                }
+              }
+              // Handle map of sessions
               for (const session of Object.values(data || {})) {
                 if (!session?.namespaces) continue;
                 for (const ns of Object.values(session.namespaces)) {
-                  if (ns.accounts?.length) {
-                    // Account format: "chain:networkId:address"
+                  if (ns.accounts && ns.accounts.length > 0) {
                     const parts = ns.accounts[0].split(':');
                     resolve(parts[parts.length - 1] || null);
                     return;

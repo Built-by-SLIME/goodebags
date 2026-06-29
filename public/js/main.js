@@ -49,10 +49,29 @@ async function loadWalletConfig() {
 loadWalletConfig();
 
 window.addEventListener('walletConnected', () => {
+  // Try to capture and store wallet info from WalletModule for cross-page sharing
+  if (typeof WalletModule !== 'undefined' && typeof WalletModule.getAddress === 'function') {
+    const address = WalletModule.getAddress();
+    if (address) {
+      let chain = 'unknown';
+      const s = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
+      if (s && s.namespaces) {
+        for (const nsKey of Object.keys(s.namespaces)) {
+          if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
+          if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+        }
+      }
+      localStorage.setItem('gb_wcAddress', address);
+      localStorage.setItem('gb_wcChain', chain);
+      localStorage.removeItem('gb_xamanAccount');
+    }
+  }
   updateWalletBtn(true);
 });
 
 window.addEventListener('walletDisconnected', () => {
+  localStorage.removeItem('gb_wcAddress');
+  localStorage.removeItem('gb_wcChain');
   updateWalletBtn(false);
 });
 
@@ -61,6 +80,8 @@ window.addEventListener('storage', (e) => {
   if (e.key === 'gb_xamanAccount') {
     if (e.newValue) {
       console.log('[Main] Xaman auth detected from another tab:', e.newValue);
+      localStorage.removeItem('gb_wcAddress');
+      localStorage.removeItem('gb_wcChain');
       updateWalletBtn(true);
     } else {
       console.log('[Main] Xaman logout detected from another tab');
@@ -84,6 +105,11 @@ document.addEventListener('visibilitychange', () => {
     updateWalletBtn(true);
     return;
   }
+  // Check WalletConnect session from localStorage (cross-page fallback)
+  if (localStorage.getItem('gb_wcAddress')) {
+    console.log('[Main] WalletConnect session detected from localStorage on visibility change');
+    updateWalletBtn(true);
+  }
 });
 
 // Periodic polling to catch sessions that arrived while browser was backgrounded
@@ -94,6 +120,10 @@ setInterval(() => {
   }
   if (localStorage.getItem('gb_xamanAccount')) {
     updateWalletBtn(true);
+    return;
+  }
+  if (localStorage.getItem('gb_wcAddress')) {
+    updateWalletBtn(true);
   }
 }, 3000);
 
@@ -103,6 +133,8 @@ async function handleWalletClick() {
   // Disconnect WalletConnect if connected
   if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
     await WalletModule.disconnectWallet().catch(() => {});
+    localStorage.removeItem('gb_wcAddress');
+    localStorage.removeItem('gb_wcChain');
     updateWalletBtn(false);
     return;
   }
@@ -118,6 +150,14 @@ async function handleWalletClick() {
   showWalletSelector(walletProjectId)
     .then((result) => {
       console.log('[Main] Wallet connected via', result.type);
+      if (result.type === 'wc') {
+        localStorage.setItem('gb_wcAddress', result.address);
+        localStorage.setItem('gb_wcChain', result.chain);
+        localStorage.removeItem('gb_xamanAccount');
+      } else if (result.type === 'xaman') {
+        localStorage.removeItem('gb_wcAddress');
+        localStorage.removeItem('gb_wcChain');
+      }
       updateWalletBtn(true);
     })
     .catch((err) => {

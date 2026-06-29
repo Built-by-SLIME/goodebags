@@ -211,9 +211,9 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=3"></script>
-  <script src="/js/wallet-utils.js?v=3"></script>
-  <script src="/js/wallet-selector.js?v=3"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=4"></script>
+  <script src="/js/wallet-utils.js?v=4"></script>
+  <script src="/js/wallet-selector.js?v=4"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -229,6 +229,13 @@
         _walletProjectId = cfg.walletConnectProjectId || '';
         _xamanApiKey = cfg.xamanApiKey || '';
         if (_xamanApiKey) initWalletSelector(_xamanApiKey);
+        if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
+          try {
+            await WalletModule.init(_walletProjectId);
+          } catch (e) {
+            console.warn('[Games] WalletModule init failed:', e);
+          }
+        }
       } catch (e) {}
     }
 

@@ -83,6 +83,11 @@ async function initAuth() {
     R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
     _walletProjectId = cfg.walletConnectProjectId || '';
     if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
+    if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
+      try {
+        await WalletModule.init(_walletProjectId);
+      } catch (e) {}
+    }
   } catch(e) {}
 
   // Try existing WalletConnect session
@@ -141,6 +146,14 @@ $('btn-connect-wallet').addEventListener('click', async () => {
   try {
     const result = await showWalletSelector(_walletProjectId);
     S.wallet = result.address;
+    if (result.type === 'wc') {
+      localStorage.setItem('gb_wcAddress', result.address);
+      localStorage.setItem('gb_wcChain', result.chain);
+      localStorage.removeItem('gb_xamanAccount');
+    } else if (result.type === 'xaman') {
+      localStorage.removeItem('gb_wcAddress');
+      localStorage.removeItem('gb_wcChain');
+    }
 
     // XRPL token gate
     const hasNft = await checkXrplNftGate(S.wallet);
