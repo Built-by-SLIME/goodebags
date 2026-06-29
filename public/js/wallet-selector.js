@@ -85,6 +85,19 @@ function _initXamanGlobalListener(apiKey) {
 
   const xumm = new Xumm(apiKey);
 
+  // Proactive check: try to read account directly without waiting for events.
+  // On redirect tabs the SDK may have the session but may not fire ready/success.
+  setTimeout(async () => {
+    try {
+      const account = await xumm.user.account;
+      if (account) {
+        _xamanAccount = account;
+        localStorage.setItem('gb_xamanAccount', account);
+        console.log('[Xaman Global] Proactive account found:', account);
+      }
+    } catch (e) {}
+  }, 2000);
+
   xumm.on('ready', async () => {
     try {
       const account = await xumm.user.account;
@@ -133,11 +146,37 @@ function showWalletSelector(projectId) {
       modal.style.display = '';
       try {
         if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
-        const session = await WalletModule.openConnect(projectId);
-        // Use the returned session directly (IndexedDB read is too slow/unreliable)
+        // openConnect can hang on mobile when the browser is backgrounded.
+        // Race it with a 45-second timeout and then check getAddress() directly.
+        let session;
+        try {
+          session = await Promise.race([
+            WalletModule.openConnect(projectId),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('WalletConnect timeout')), 45000))
+          ]);
+        } catch (err) {
+          if (err.message !== 'WalletConnect timeout') throw err;
+          // Timeout: the wallet may still have connected while the browser was backgrounded.
+          // Poll getAddress() for up to 5 seconds to see if the session arrived.
+          let polledAddress = null;
+          for (let i = 0; i < 50; i++) {
+            if (typeof WalletModule.getAddress === 'function') {
+              polledAddress = WalletModule.getAddress();
+              if (polledAddress) break;
+            }
+            await new Promise(r => setTimeout(r, 100));
+          }
+          if (polledAddress) {
+            session = { __polled: true, address: polledAddress };
+          } else {
+            throw new Error('WalletConnect timed out. Please close the wallet app and try again.');
+          }
+        }
         let address = null;
         let chain = 'unknown';
-        if (session && session.namespaces) {
+        if (session && session.__polled) {
+          address = session.address;
+        } else if (session && session.namespaces) {
           for (const [nsKey, ns] of Object.entries(session.namespaces)) {
             if (ns.accounts && ns.accounts.length > 0) {
               const parts = ns.accounts[0].split(':');
@@ -354,6 +393,22 @@ async function getXamanAccount(apiKey) {
     xumm.on('success', onSuccess);
     xumm.on('logout', onLogout);
 
+    // Proactive check: try to read account directly without waiting for events.
+    // On redirect tabs the SDK may have the session but may not fire ready/success.
+    setTimeout(async () => {
+      if (resolved) return;
+      try {
+        const account = await xumm.user.account;
+        if (account && !resolved) {
+          resolved = true;
+          cleanup();
+          _xamanAccount = account;
+          localStorage.setItem('gb_xamanAccount', account);
+          resolve(account);
+        }
+      } catch (e) {}
+    }, 1500);
+
     // Hard timeout: if ready/success/logout never fire, resolve null
     setTimeout(() => {
       if (!resolved) {
@@ -361,7 +416,7 @@ async function getXamanAccount(apiKey) {
         cleanup();
         resolve(null);
       }
-    }, 5000);
+    }, 10000);
   });
 }
 

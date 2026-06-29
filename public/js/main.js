@@ -58,11 +58,44 @@ window.addEventListener('walletDisconnected', () => {
 
 // Detect Xaman auth completion from other tabs (mobile redirect opens new tab)
 window.addEventListener('storage', (e) => {
-  if (e.key === 'gb_xamanAccount' && e.newValue) {
-    console.log('[Main] Xaman auth detected from another tab:', e.newValue);
-    updateWalletBtn(true);
+  if (e.key === 'gb_xamanAccount') {
+    if (e.newValue) {
+      console.log('[Main] Xaman auth detected from another tab:', e.newValue);
+      updateWalletBtn(true);
+    } else {
+      console.log('[Main] Xaman logout detected from another tab');
+      updateWalletBtn(false);
+    }
   }
 });
+
+// Detect sessions when browser becomes visible (mobile backgrounding fix)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  // Check WalletConnect session
+  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
+    console.log('[Main] WalletConnect session detected on visibility change');
+    updateWalletBtn(true);
+    return;
+  }
+  // Check Xaman session from localStorage
+  if (localStorage.getItem('gb_xamanAccount')) {
+    console.log('[Main] Xaman session detected on visibility change');
+    updateWalletBtn(true);
+    return;
+  }
+});
+
+// Periodic polling to catch sessions that arrived while browser was backgrounded
+setInterval(() => {
+  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
+    updateWalletBtn(true);
+    return;
+  }
+  if (localStorage.getItem('gb_xamanAccount')) {
+    updateWalletBtn(true);
+  }
+}, 3000);
 
 async function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
