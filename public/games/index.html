@@ -39,7 +39,7 @@
       box-shadow: none;
     }
     .game-card.locked .game-card-body::after {
-      content: "🔒 Connect a wallet to play";
+      content: attr(data-lock-msg);
       position: absolute;
       bottom: 16px;
       left: 50%;
@@ -211,9 +211,9 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=4"></script>
-  <script src="/js/wallet-utils.js?v=4"></script>
-  <script src="/js/wallet-selector.js?v=4"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=5"></script>
+  <script src="/js/wallet-utils.js?v=5"></script>
+  <script src="/js/wallet-selector.js?v=5"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -247,10 +247,14 @@
       for (const url of endpoints) {
         try {
           const res = await fetch(url);
+          console.log('[Gate] TBK token check', url, 'status:', res.status, 'ok:', res.ok);
           if (!res.ok) continue;
           const data = await res.json();
+          console.log('[Gate] TBK token check response tokens:', data.tokens ? data.tokens.length : 0, data.tokens);
           if (data.tokens && data.tokens.some(t => t.token_id === TBK_TOKEN_ID)) return true;
-        } catch (e) {}
+        } catch (e) {
+          console.error('[Gate] TBK token check error:', url, e.message);
+        }
       }
       return false;
     }
@@ -268,10 +272,12 @@
       } catch (e) { return false; }
     }
 
-    function lockCard(card) {
+    function lockCard(card, msg) {
       if (!card) return;
       card.classList.add('locked');
       card.removeAttribute('href');
+      if (msg) card.dataset.lockMsg = msg;
+      else delete card.dataset.lockMsg;
       card.onclick = async (e) => {
         e.preventDefault();
         try {
@@ -287,43 +293,70 @@
       if (!card) return;
       card.classList.remove('locked');
       card.setAttribute('href', href);
+      delete card.dataset.lockMsg;
       card.onclick = null;
     }
 
     async function runGates() {
       if (!tbkCard || !amxCard) return;
+      console.log('[Gate] runGates starting...');
 
       // Start locked — unlock only if wallet + token checks pass
-      lockCard(tbkCard);
-      lockCard(amxCard);
+      lockCard(tbkCard, '🔒 Connect a wallet to play');
+      lockCard(amxCard, '🔒 Connect a wallet to play');
       let tbkOpen = false;
       let amxOpen = false;
 
       // Check WalletConnect session
       const wcInfo = await getWalletInfoFromWC();
+      console.log('[Gate] WalletConnect info:', wcInfo);
       if (wcInfo && wcInfo.address) {
+        console.log('[Gate] Wallet detected:', wcInfo.address, 'chain:', wcInfo.chain);
         if (wcInfo.chain === 'hedera') {
+          console.log('[Gate] Checking TBK token for', wcInfo.address);
           const hasToken = await checkTbkToken(wcInfo.address);
-          if (hasToken) tbkOpen = true;
+          console.log('[Gate] TBK token check result:', hasToken);
+          if (hasToken) {
+            tbkOpen = true;
+          } else {
+            lockCard(tbkCard, '🔒 Wallet connected — TBK token not found');
+          }
         } else if (wcInfo.chain === 'xrpl') {
+          console.log('[Gate] Checking AMX NFT for', wcInfo.address);
           const hasNft = await checkAmxNft(wcInfo.address);
-          if (hasNft) amxOpen = true;
+          console.log('[Gate] AMX NFT check result:', hasNft);
+          if (hasNft) {
+            amxOpen = true;
+          } else {
+            lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found');
+          }
+        } else {
+          console.log('[Gate] Unknown chain:', wcInfo.chain, '- cannot determine which game to unlock');
+          lockCard(tbkCard, '🔒 Wallet connected — unknown chain');
+          lockCard(amxCard, '🔒 Wallet connected — unknown chain');
         }
+      } else {
+        console.log('[Gate] No wallet detected');
       }
 
       // Check Xaman session (localStorage first, then SDK ready event)
       if (_xamanApiKey) {
         try {
           const account = await getXamanAccount(_xamanApiKey);
+          console.log('[Gate] Xaman account:', account);
           if (account) {
             const hasNft = await checkAmxNft(account);
+            console.log('[Gate] AMX NFT check result for Xaman:', hasNft);
             if (hasNft) amxOpen = true;
           }
-        } catch (e) {}
+        } catch (e) {
+          console.log('[Gate] Xaman check error:', e);
+        }
       }
 
       if (tbkOpen) unlockCard(tbkCard, '/games/tbk/');
       if (amxOpen) unlockCard(amxCard, '/games/apemodx/');
+      console.log('[Gate] runGates complete — tbkOpen:', tbkOpen, 'amxOpen:', amxOpen);
     }
 
     loadCfg().then(runGates);
