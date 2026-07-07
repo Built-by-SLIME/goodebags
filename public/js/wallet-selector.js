@@ -107,6 +107,14 @@ function clearAllWalletState() {
   clearXamanCache();
 }
 
+function dispatchXamanChange(account) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('xamanAccountChanged', {
+      detail: { account }
+    }));
+  }
+}
+
 function wasXamanExplicitlyLoggedOut() {
   return localStorage.getItem(LS_XAMAN_LOGOUT) === '1';
 }
@@ -147,6 +155,7 @@ function _initXamanGlobalListener(apiKey) {
       if (account) {
         _xamanAccount = account;
         localStorage.setItem(LS_XAMAN, account);
+        dispatchXamanChange(account);
         console.log('[Xaman Global] Proactive account found:', account);
       }
     } catch (e) {}
@@ -158,6 +167,7 @@ function _initXamanGlobalListener(apiKey) {
       if (account && !wasXamanExplicitlyLoggedOut()) {
         _xamanAccount = account;
         localStorage.setItem(LS_XAMAN, account);
+        dispatchXamanChange(account);
         console.log('[Xaman Global] Ready with account:', account);
       }
     } catch (e) {}
@@ -169,6 +179,7 @@ function _initXamanGlobalListener(apiKey) {
       if (account && !wasXamanExplicitlyLoggedOut()) {
         _xamanAccount = account;
         localStorage.setItem(LS_XAMAN, account);
+        dispatchXamanChange(account);
         console.log('[Xaman Global] Success with account:', account);
       }
     } catch (e) {}
@@ -177,6 +188,7 @@ function _initXamanGlobalListener(apiKey) {
   xumm.on('logout', () => {
     _xamanAccount = null;
     localStorage.removeItem(LS_XAMAN);
+    dispatchXamanChange(null);
     console.log('[Xaman Global] Logout');
   });
 
@@ -345,6 +357,7 @@ function showWalletSelector(projectId) {
           if (account) {
             _xamanAccount = account;
             localStorage.setItem(LS_XAMAN, account);
+            dispatchXamanChange(account);
           }
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
@@ -379,6 +392,7 @@ function showWalletSelector(projectId) {
           console.log('[Xaman] Account found via localStorage polling:', account);
           clearWalletConnectCache();
           _xamanAccount = account;
+          dispatchXamanChange(account);
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
         }
@@ -422,6 +436,7 @@ async function getXamanAccount(apiKey) {
           cleanup();
           _xamanAccount = account;
           localStorage.setItem(LS_XAMAN, account);
+          dispatchXamanChange(account);
           resolve(account);
           return;
         }
@@ -442,6 +457,7 @@ async function getXamanAccount(apiKey) {
           cleanup();
           _xamanAccount = account;
           localStorage.setItem(LS_XAMAN, account);
+          dispatchXamanChange(account);
           resolve(account);
           return;
         }
@@ -453,6 +469,7 @@ async function getXamanAccount(apiKey) {
       resolved = true;
       cleanup();
       clearXamanCache();
+      dispatchXamanChange(null);
       resolve(null);
     };
 
@@ -470,6 +487,7 @@ async function getXamanAccount(apiKey) {
           cleanup();
           _xamanAccount = account;
           localStorage.setItem(LS_XAMAN, account);
+          dispatchXamanChange(account);
           resolve(account);
         }
       } catch (e) {}
@@ -493,6 +511,7 @@ function clearXamanAccount() {
 function xummLogout() {
   clearAllWalletState();
   setXamanExplicitLogout(true);
+  dispatchXamanChange(null);
   if (typeof Xumm === 'undefined' || !_xamanApiKey) return;
   try {
     const xumm = _getXumm(_xamanApiKey) || new Xumm(_xamanApiKey);

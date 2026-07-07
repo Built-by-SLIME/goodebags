@@ -211,10 +211,10 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=12"></script>
-  <script src="/js/wallet.bundle.js?v=12"></script>
-  <script src="/js/wallet-utils.js?v=12"></script>
-  <script src="/js/wallet-selector.js?v=12"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=13"></script>
+  <script src="/js/wallet.bundle.js?v=13"></script>
+  <script src="/js/wallet-utils.js?v=13"></script>
+  <script src="/js/wallet-selector.js?v=13"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -366,6 +366,13 @@
         console.log('[Gate] Cross-tab wallet change detected:', e.key, e.newValue ? 'connected' : 'disconnected');
         runGates();
       }
+    });
+
+    // Xaman auth completion in the same tab (mobile redirect) doesn't fire storage
+    // events in the same document, so listen for the custom event as well.
+    window.addEventListener('xamanAccountChanged', (e) => {
+      console.log('[Gate] Xaman account changed event:', e.detail.account);
+      runGates();
     });
 
     loadCfg().then(runGates);

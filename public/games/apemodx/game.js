@@ -740,4 +740,12 @@ async function loadLeaderboard(opponents){
 }
 
 // ── Boot ──────────────────────────────────────────────────
+
+// Re-run auth when Xaman account becomes available after a mobile redirect.
+// The initial initAuth() may run before the Xumm SDK has restored the session.
+window.addEventListener('xamanAccountChanged', () => {
+  console.log('[Auth] Xaman account changed; re-checking auth');
+  initAuth();
+});
+
 initAuth();
