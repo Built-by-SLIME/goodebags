@@ -538,9 +538,9 @@ function getWalletInfoFromWC() {
         let chain = 'unknown';
         const session = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
         if (session && session.namespaces) {
-          for (const nsKey of Object.keys(session.namespaces)) {
-            if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
-            if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+          for (const [nsKey, ns] of Object.entries(session.namespaces)) {
+            chain = _detectChain(nsKey, ns.accounts);
+            if (chain !== 'unknown') break;
           }
         }
         resolve({ address, chain });
