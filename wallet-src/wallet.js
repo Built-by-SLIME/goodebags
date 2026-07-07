@@ -211,16 +211,29 @@ export async function openConnect(projectId) {
     console.log('[Wallet] Starting provider.connect() — this will wait for user approval...');
 
     const connectPromise = provider.connect({
-      namespaces: {
+      // Use optional namespaces so wallets can approve only the chains they support.
+      // HashPack and other Hedera wallets require at least the standard Hedera
+      // methods to be listed; empty methods:[] caused the Pair button to do nothing.
+      optionalNamespaces: {
         hedera: {
           chains: ['hedera:mainnet', 'hedera:testnet'],
-          methods: [],
-          events: []
+          methods: [
+            'hedera_signAndExecuteTransaction',
+            'hedera_signTransaction',
+            'hedera_executeTransaction',
+            'hedera_signMessage',
+            'hedera_getNodeAddresses'
+          ],
+          events: ['chainChanged', 'accountsChanged']
         },
         xrpl: {
           chains: ['xrpl:0', 'xrpl:1'],
-          methods: [],
-          events: []
+          methods: [
+            'xrpl_signTransaction',
+            'xrpl_signMessage',
+            'xrpl_submitTransaction'
+          ],
+          events: ['chainChanged', 'accountsChanged']
         }
       }
     });
