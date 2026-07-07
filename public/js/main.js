@@ -56,9 +56,19 @@ window.addEventListener('walletConnected', () => {
       let chain = 'unknown';
       const s = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
       if (s && s.namespaces) {
-        for (const nsKey of Object.keys(s.namespaces)) {
-          if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
+        for (const [nsKey, ns] of Object.entries(s.namespaces)) {
           if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+          if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
+          // HashPack and other Hedera wallets sometimes report eip155:295/296
+          if (nsKey.includes('eip155') && ns.accounts && ns.accounts.length > 0) {
+            const parts = ns.accounts[0].split(':');
+            if (parts.length >= 2 && ['295', '296', '297'].includes(parts[1])) { chain = 'hedera'; break; }
+          }
+          // Fallback: Hedera account IDs are 0.0.xxx
+          if (ns.accounts && ns.accounts.length > 0) {
+            const addr = ns.accounts[0].split(':').pop();
+            if (addr && /^\d+\.\d+\.\d+$/.test(addr)) { chain = 'hedera'; break; }
+          }
         }
       }
       localStorage.setItem('gb_wcAddress', address);

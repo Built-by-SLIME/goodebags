@@ -241,7 +241,7 @@ function showWalletSelector(projectId) {
             if (ns.accounts && ns.accounts.length > 0) {
               const parts = ns.accounts[0].split(':');
               address = parts[parts.length - 1] || null;
-              chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';
+              chain = _detectChain(nsKey, ns.accounts);
               break;
             }
           }
@@ -253,9 +253,9 @@ function showWalletSelector(projectId) {
           if (address) {
             const s = typeof WalletModule.getSession === 'function' ? WalletModule.getSession() : null;
             if (s && s.namespaces) {
-              for (const nsKey of Object.keys(s.namespaces)) {
-                if (nsKey.includes('hedera')) { chain = 'hedera'; break; }
-                if (nsKey.includes('xrpl')) { chain = 'xrpl'; break; }
+              for (const [nsKey, ns] of Object.entries(s.namespaces)) {
+                chain = _detectChain(nsKey, ns.accounts);
+                if (chain !== 'unknown') break;
               }
             }
           }
@@ -505,6 +505,22 @@ function xummLogout() {
 }
 
 /* ── Extended wallet-utils: read address + chain from WalletConnect ─────────── */
+function _detectChain(nsKey, accounts) {
+  if (nsKey.includes('xrpl')) return 'xrpl';
+  if (nsKey.includes('hedera')) return 'hedera';
+  // Some Hedera wallets (e.g. HashPack via EVM mode) report eip155 with chainId 295/296/297
+  if (nsKey.includes('eip155') && accounts && accounts.length > 0) {
+    const parts = accounts[0].split(':');
+    if (parts.length >= 2 && ['295', '296', '297'].includes(parts[1])) return 'hedera';
+  }
+  // Fallback: Hedera account IDs are 0.0.xxx
+  if (accounts && accounts.length > 0) {
+    const addr = accounts[0].split(':').pop();
+    if (addr && /^\d+\.\d+\.\d+$/.test(addr)) return 'hedera';
+  }
+  return 'unknown';
+}
+
 function getWalletInfoFromWC() {
   return new Promise(resolve => {
     // Fast path: localStorage (shared across pages, no race conditions)
@@ -557,7 +573,7 @@ function getWalletInfoFromWC() {
                   if (ns.accounts && ns.accounts.length > 0) {
                     const parts = ns.accounts[0].split(':');
                     const address = parts[parts.length - 1] || null;
-                    const chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';
+                    const chain = _detectChain(nsKey, ns.accounts);
                     resolve({ address, chain });
                     return;
                   }
@@ -570,7 +586,7 @@ function getWalletInfoFromWC() {
                   if (ns.accounts && ns.accounts.length > 0) {
                     const parts = ns.accounts[0].split(':');
                     const address = parts[parts.length - 1] || null;
-                    const chain = nsKey.includes('hedera') ? 'hedera' : nsKey.includes('xrpl') ? 'xrpl' : 'unknown';
+                    const chain = _detectChain(nsKey, ns.accounts);
                     resolve({ address, chain });
                     return;
                   }
