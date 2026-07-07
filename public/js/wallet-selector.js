@@ -5,7 +5,14 @@
 
 let _xamanApiKey = null;
 let _selectorPromise = null;
-let _xamanAccount = null; // Global cache updated by _initXamanGlobalListener
+let _xamanAccount = null;      // Global cache updated by _initXamanGlobalListener
+let _xumm = null;              // Shared Xumm instance
+let _xamanConnectAttempt = 0;  // Incremented on each explicit connect attempt
+
+const LS_WC_ADDRESS = 'gb_wcAddress';
+const LS_WC_CHAIN   = 'gb_wcChain';
+const LS_XAMAN      = 'gb_xamanAccount';
+const LS_XAMAN_LOGOUT = 'gb_xamanExplicitLogout';
 
 /* ── Build modal on first use ────────────────────────────────────────────── */
 function _buildModal() {
@@ -79,20 +86,67 @@ function initWalletSelector(apiKey) {
   _initXamanGlobalListener(apiKey);
 }
 
+/* ── State helpers ───────────────────────────────────────────────────────── */
+function clearWalletConnectCache() {
+  localStorage.removeItem(LS_WC_ADDRESS);
+  localStorage.removeItem(LS_WC_CHAIN);
+}
+
+function setWalletConnectCache(address, chain) {
+  localStorage.setItem(LS_WC_ADDRESS, address);
+  localStorage.setItem(LS_WC_CHAIN, chain || 'unknown');
+}
+
+function clearXamanCache() {
+  _xamanAccount = null;
+  localStorage.removeItem(LS_XAMAN);
+}
+
+function clearAllWalletState() {
+  clearWalletConnectCache();
+  clearXamanCache();
+}
+
+function wasXamanExplicitlyLoggedOut() {
+  return localStorage.getItem(LS_XAMAN_LOGOUT) === '1';
+}
+
+function setXamanExplicitLogout(loggedOut) {
+  if (loggedOut) localStorage.setItem(LS_XAMAN_LOGOUT, '1');
+  else localStorage.removeItem(LS_XAMAN_LOGOUT);
+}
+
+function _getXumm(apiKey) {
+  if (!_xumm && typeof Xumm !== 'undefined' && apiKey) {
+    try {
+      _xumm = new Xumm(apiKey);
+    } catch (e) {
+      console.error('[Xaman] Failed to create shared Xumm instance:', e);
+    }
+  }
+  return _xumm;
+}
+
 /* ── Global Xaman listener (runs on every page load to catch redirect results) ── */
 function _initXamanGlobalListener(apiKey) {
   if (!apiKey || typeof Xumm === 'undefined') return;
 
-  const xumm = new Xumm(apiKey);
+  const xumm = _getXumm(apiKey);
+  if (!xumm) return;
+
+  // If the user explicitly logged out, don't auto-restore the account on page load.
+  if (wasXamanExplicitlyLoggedOut()) {
+    console.log('[Xaman Global] Explicit logout detected; skipping auto-restore');
+    return;
+  }
 
   // Proactive check: try to read account directly without waiting for events.
-  // On redirect tabs the SDK may have the session but may not fire ready/success.
   setTimeout(async () => {
     try {
       const account = await xumm.user.account;
       if (account) {
         _xamanAccount = account;
-        localStorage.setItem('gb_xamanAccount', account);
+        localStorage.setItem(LS_XAMAN, account);
         console.log('[Xaman Global] Proactive account found:', account);
       }
     } catch (e) {}
@@ -101,9 +155,9 @@ function _initXamanGlobalListener(apiKey) {
   xumm.on('ready', async () => {
     try {
       const account = await xumm.user.account;
-      if (account) {
+      if (account && !wasXamanExplicitlyLoggedOut()) {
         _xamanAccount = account;
-        localStorage.setItem('gb_xamanAccount', account);
+        localStorage.setItem(LS_XAMAN, account);
         console.log('[Xaman Global] Ready with account:', account);
       }
     } catch (e) {}
@@ -112,9 +166,9 @@ function _initXamanGlobalListener(apiKey) {
   xumm.on('success', async () => {
     try {
       const account = await xumm.user.account;
-      if (account) {
+      if (account && !wasXamanExplicitlyLoggedOut()) {
         _xamanAccount = account;
-        localStorage.setItem('gb_xamanAccount', account);
+        localStorage.setItem(LS_XAMAN, account);
         console.log('[Xaman Global] Success with account:', account);
       }
     } catch (e) {}
@@ -122,7 +176,7 @@ function _initXamanGlobalListener(apiKey) {
 
   xumm.on('logout', () => {
     _xamanAccount = null;
-    localStorage.removeItem('gb_xamanAccount');
+    localStorage.removeItem(LS_XAMAN);
     console.log('[Xaman Global] Logout');
   });
 
@@ -146,8 +200,12 @@ function showWalletSelector(projectId) {
       modal.style.display = '';
       try {
         if (typeof WalletModule === 'undefined') throw new Error('Wallet module not loaded');
-        // openConnect can hang on mobile when the browser is backgrounded.
-        // Race it with a 45-second timeout and then check getAddress() directly.
+
+        // An explicit connect attempt should clear any stale explicit-logout flag for Xaman
+        // and any cached Xaman account, because the user is choosing WC this time.
+        setXamanExplicitLogout(false);
+        clearXamanCache();
+
         let session;
         try {
           session = await Promise.race([
@@ -172,10 +230,12 @@ function showWalletSelector(projectId) {
             throw new Error('WalletConnect timed out. Please close the wallet app and try again.');
           }
         }
+
         let address = null;
         let chain = 'unknown';
         if (session && session.__polled) {
           address = session.address;
+          chain = 'xrpl'; // Default fallback for polled sessions; update below if possible.
         } else if (session && session.namespaces) {
           for (const [nsKey, ns] of Object.entries(session.namespaces)) {
             if (ns.accounts && ns.accounts.length > 0) {
@@ -186,6 +246,7 @@ function showWalletSelector(projectId) {
             }
           }
         }
+
         // Fallback: read from WalletModule in-memory provider
         if (!address && typeof WalletModule.getAddress === 'function') {
           address = WalletModule.getAddress();
@@ -199,10 +260,10 @@ function showWalletSelector(projectId) {
             }
           }
         }
+
         if (address) {
-          localStorage.setItem('gb_wcAddress', address);
-          localStorage.setItem('gb_wcChain', chain);
-          localStorage.removeItem('gb_xamanAccount');
+          setWalletConnectCache(address, chain);
+          clearXamanCache();
           _selectorPromise = null;
           resolve({ type: 'wc', address, chain });
         } else {
@@ -234,26 +295,18 @@ function showWalletSelector(projectId) {
         return;
       }
 
-      // Fast path: use already-cached account from this session or localStorage
-      if (_xamanAccount) {
-        console.log('[Xaman] Using cached account:', _xamanAccount);
-        _selectorPromise = null;
-        resolve({ type: 'xaman', address: _xamanAccount, chain: 'xrpl' });
-        return;
-      }
-      const stored = localStorage.getItem('gb_xamanAccount');
-      if (stored) {
-        console.log('[Xaman] Using stored account from localStorage:', stored);
-        _selectorPromise = null;
-        resolve({ type: 'xaman', address: stored, chain: 'xrpl' });
-        return;
-      }
-
+      // IMPORTANT: an explicit "Connect Wallet" click must always trigger a fresh
+      // authorization. Using a cached account here is what caused "another user
+      // cannot connect" after the first user had connected.
       modal.style.display = '';
+      setXamanExplicitLogout(false);
+      clearWalletConnectCache();
 
+      const attempt = ++_xamanConnectAttempt;
       let xumm;
       try {
-        xumm = new Xumm(_xamanApiKey);
+        xumm = _getXumm(_xamanApiKey);
+        if (!xumm) throw new Error('Could not create Xumm instance');
         console.log('[Xaman] Instance created, calling authorize()');
         xumm.authorize();
       } catch (e) {
@@ -265,14 +318,47 @@ function showWalletSelector(projectId) {
       }
 
       let resolved = false;
+      let timeout = null;
+      let pollInterval = null;
+
       const cleanup = () => {
-        clearTimeout(timeout);
-        clearInterval(pollInterval);
+        if (timeout) { clearTimeout(timeout); timeout = null; }
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
       };
 
+      const onError = (err) => {
+        if (resolved || attempt !== _xamanConnectAttempt) return;
+        resolved = true;
+        cleanup();
+        console.error('[Xaman] Error event:', err);
+        _selectorPromise = null;
+        reject(new Error('Xaman connection failed'));
+      };
+
+      const onSuccess = async () => {
+        if (resolved || attempt !== _xamanConnectAttempt) return;
+        try {
+          const account = await xumm.user.account;
+          console.log('[Xaman] Success, account:', account);
+          resolved = true;
+          cleanup();
+          if (account) {
+            _xamanAccount = account;
+            localStorage.setItem(LS_XAMAN, account);
+          }
+          _selectorPromise = null;
+          resolve({ type: 'xaman', address: account, chain: 'xrpl' });
+        } catch (e) {
+          onError(e);
+        }
+      };
+
+      xumm.on('success', onSuccess);
+      xumm.on('error', onError);
+
       // 30-second timeout: if nothing happens, kill the flow and alert the user
-      const timeout = setTimeout(() => {
-        if (!resolved) {
+      timeout = setTimeout(() => {
+        if (!resolved && attempt === _xamanConnectAttempt) {
           resolved = true;
           cleanup();
           console.error('[Xaman] Connection timeout');
@@ -284,51 +370,19 @@ function showWalletSelector(projectId) {
 
       // Poll localStorage every 500ms — on mobile the redirect opens a new tab,
       // the new tab's global listener writes the account, and this tab picks it up.
-      const pollInterval = setInterval(() => {
-        if (resolved) return;
-        const account = localStorage.getItem('gb_xamanAccount');
+      pollInterval = setInterval(() => {
+        if (resolved || attempt !== _xamanConnectAttempt) return;
+        const account = localStorage.getItem(LS_XAMAN);
         if (account) {
           resolved = true;
           cleanup();
           console.log('[Xaman] Account found via localStorage polling:', account);
-          localStorage.removeItem('gb_wcAddress');
-          localStorage.removeItem('gb_wcChain');
+          clearWalletConnectCache();
+          _xamanAccount = account;
           _selectorPromise = null;
           resolve({ type: 'xaman', address: account, chain: 'xrpl' });
         }
       }, 500);
-
-      const onError = (err) => {
-        if (resolved) return;
-        resolved = true;
-        cleanup();
-        console.error('[Xaman] Error event:', err);
-        _selectorPromise = null;
-        reject(new Error('Xaman connection failed'));
-      };
-
-      const onSuccess = async () => {
-        if (resolved) return;
-        resolved = true;
-        cleanup();
-        try {
-          const account = await xumm.user.account;
-          console.log('[Xaman] Success, account:', account);
-          if (account) {
-            _xamanAccount = account;
-            localStorage.setItem('gb_xamanAccount', account);
-            localStorage.removeItem('gb_wcAddress');
-            localStorage.removeItem('gb_wcChain');
-          }
-          _selectorPromise = null;
-          resolve({ type: 'xaman', address: account, chain: 'xrpl' });
-        } catch (e) {
-          onError(e);
-        }
-      };
-
-      xumm.on('success', onSuccess);
-      xumm.on('error', onError);
     };
   });
 }
@@ -337,9 +391,15 @@ function showWalletSelector(projectId) {
 async function getXamanAccount(apiKey) {
   if (!apiKey || typeof Xumm === 'undefined') return null;
 
+  // If the user explicitly logged out, don't auto-restore.
+  if (wasXamanExplicitlyLoggedOut()) {
+    console.log('[Xaman] Explicit logout detected; skipping auto-restore');
+    return null;
+  }
+
   // Fast path: use global cache or localStorage
   if (_xamanAccount) return _xamanAccount;
-  const stored = localStorage.getItem('gb_xamanAccount');
+  const stored = localStorage.getItem(LS_XAMAN);
   if (stored) return stored;
 
   // Slow path: wait for SDK to initialize and restore stored session
@@ -361,7 +421,7 @@ async function getXamanAccount(apiKey) {
           resolved = true;
           cleanup();
           _xamanAccount = account;
-          localStorage.setItem('gb_xamanAccount', account);
+          localStorage.setItem(LS_XAMAN, account);
           resolve(account);
           return;
         }
@@ -381,7 +441,7 @@ async function getXamanAccount(apiKey) {
           resolved = true;
           cleanup();
           _xamanAccount = account;
-          localStorage.setItem('gb_xamanAccount', account);
+          localStorage.setItem(LS_XAMAN, account);
           resolve(account);
           return;
         }
@@ -392,7 +452,7 @@ async function getXamanAccount(apiKey) {
       if (resolved) return;
       resolved = true;
       cleanup();
-      clearXamanAccount();
+      clearXamanCache();
       resolve(null);
     };
 
@@ -401,7 +461,6 @@ async function getXamanAccount(apiKey) {
     xumm.on('logout', onLogout);
 
     // Proactive check: try to read account directly without waiting for events.
-    // On redirect tabs the SDK may have the session but may not fire ready/success.
     setTimeout(async () => {
       if (resolved) return;
       try {
@@ -410,7 +469,7 @@ async function getXamanAccount(apiKey) {
           resolved = true;
           cleanup();
           _xamanAccount = account;
-          localStorage.setItem('gb_xamanAccount', account);
+          localStorage.setItem(LS_XAMAN, account);
           resolve(account);
         }
       } catch (e) {}
@@ -428,15 +487,15 @@ async function getXamanAccount(apiKey) {
 }
 
 function clearXamanAccount() {
-  _xamanAccount = null;
-  localStorage.removeItem('gb_xamanAccount');
+  clearXamanCache();
 }
 
 function xummLogout() {
-  clearXamanAccount();
+  clearAllWalletState();
+  setXamanExplicitLogout(true);
   if (typeof Xumm === 'undefined' || !_xamanApiKey) return;
   try {
-    const xumm = new Xumm(_xamanApiKey);
+    const xumm = _getXumm(_xamanApiKey) || new Xumm(_xamanApiKey);
     if (typeof xumm.logout === 'function') {
       xumm.logout();
     }
@@ -449,8 +508,8 @@ function xummLogout() {
 function getWalletInfoFromWC() {
   return new Promise(resolve => {
     // Fast path: localStorage (shared across pages, no race conditions)
-    const lsAddress = localStorage.getItem('gb_wcAddress');
-    const lsChain = localStorage.getItem('gb_wcChain');
+    const lsAddress = localStorage.getItem(LS_WC_ADDRESS);
+    const lsChain = localStorage.getItem(LS_WC_CHAIN);
     if (lsAddress) {
       resolve({ address: lsAddress, chain: lsChain || 'unknown' });
       return;
@@ -472,6 +531,7 @@ function getWalletInfoFromWC() {
         return;
       }
     }
+
     // Slow path: read from IndexedDB (fragile, may race with DB write)
     try {
       const req = indexedDB.open('WALLET_CONNECT_V2_INDEXED_DB');

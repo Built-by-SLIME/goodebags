@@ -64,6 +64,7 @@ window.addEventListener('walletConnected', () => {
       localStorage.setItem('gb_wcAddress', address);
       localStorage.setItem('gb_wcChain', chain);
       localStorage.removeItem('gb_xamanAccount');
+      localStorage.removeItem('gb_xamanExplicitLogout');
     }
   }
   updateWalletBtn(true);
@@ -72,6 +73,9 @@ window.addEventListener('walletConnected', () => {
 window.addEventListener('walletDisconnected', () => {
   localStorage.removeItem('gb_wcAddress');
   localStorage.removeItem('gb_wcChain');
+  // If WalletConnect disconnected, also clear any stale Xaman cache so the UI
+  // doesn't flip back to "connected" after a refresh.
+  localStorage.removeItem('gb_xamanAccount');
   updateWalletBtn(false);
 });
 
@@ -82,11 +86,19 @@ window.addEventListener('storage', (e) => {
       console.log('[Main] Xaman auth detected from another tab:', e.newValue);
       localStorage.removeItem('gb_wcAddress');
       localStorage.removeItem('gb_wcChain');
+      localStorage.removeItem('gb_xamanExplicitLogout');
       updateWalletBtn(true);
     } else {
       console.log('[Main] Xaman logout detected from another tab');
       updateWalletBtn(false);
     }
+  }
+  if (e.key === 'gb_xamanExplicitLogout' && e.newValue) {
+    // Another tab logged out; make sure this tab reflects that.
+    localStorage.removeItem('gb_xamanAccount');
+    localStorage.removeItem('gb_wcAddress');
+    localStorage.removeItem('gb_wcChain');
+    updateWalletBtn(false);
   }
 });
 
@@ -130,18 +142,22 @@ setInterval(() => {
 async function handleWalletClick() {
   console.log('[Main] Wallet button clicked');
 
-  // Disconnect WalletConnect if connected
-  if (typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected()) {
-    await WalletModule.disconnectWallet().catch(() => {});
+  // If any wallet appears connected, disconnect EVERYTHING. This prevents the
+  // stale-session bug where one wallet type's cache hides behind the other.
+  const wcConnected = typeof WalletModule !== 'undefined' && WalletModule.isConnected && WalletModule.isConnected();
+  const xamanConnected = !!localStorage.getItem('gb_xamanAccount');
+
+  if (wcConnected || xamanConnected) {
+    if (wcConnected) {
+      await WalletModule.disconnectWallet().catch(() => {});
+    }
+    if (xamanConnected) {
+      xummLogout();
+    }
+    // Belt-and-suspenders: clear any leftover cache keys.
     localStorage.removeItem('gb_wcAddress');
     localStorage.removeItem('gb_wcChain');
-    updateWalletBtn(false);
-    return;
-  }
-
-  // Disconnect Xaman if connected
-  if (localStorage.getItem('gb_xamanAccount')) {
-    xummLogout();
+    localStorage.removeItem('gb_xamanAccount');
     updateWalletBtn(false);
     return;
   }
@@ -155,8 +171,10 @@ async function handleWalletClick() {
         localStorage.setItem('gb_wcChain', result.chain);
         localStorage.removeItem('gb_xamanAccount');
       } else if (result.type === 'xaman') {
+        localStorage.setItem('gb_xamanAccount', result.address);
         localStorage.removeItem('gb_wcAddress');
         localStorage.removeItem('gb_wcChain');
+        localStorage.removeItem('gb_xamanExplicitLogout');
       }
       updateWalletBtn(true);
     })
