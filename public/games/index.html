@@ -211,10 +211,10 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=14"></script>
-  <script src="/js/wallet.bundle.js?v=14"></script>
-  <script src="/js/wallet-utils.js?v=14"></script>
-  <script src="/js/wallet-selector.js?v=14"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=15"></script>
+  <script src="/js/wallet.bundle.js?v=15"></script>
+  <script src="/js/wallet-utils.js?v=15"></script>
+  <script src="/js/wallet-selector.js?v=15"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -240,46 +240,31 @@
     }
 
     async function checkTbkToken(addr) {
-      const endpoints = [
-        'https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID,
-        'https://testnet.mirrornode.hedera.com/api/v1/accounts/' + encodeURIComponent(addr) + '/tokens?token.id=' + TBK_TOKEN_ID
-      ];
-      for (const url of endpoints) {
-        try {
-          const res = await fetch(url);
-          console.log('[Gate] TBK token check', url, 'status:', res.status, 'ok:', res.ok);
-          if (!res.ok) continue;
-          const data = await res.json();
-          console.log('[Gate] TBK token check response tokens:', data.tokens ? data.tokens.length : 0, data.tokens);
-          if (data.tokens && data.tokens.some(t => t.token_id === TBK_TOKEN_ID)) return true;
-        } catch (e) {
-          console.error('[Gate] TBK token check error:', url, e.message);
-        }
+      try {
+        const res = await fetch('/api/check-tbk-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account: addr })
+        });
+        const data = await res.json();
+        console.log('[Gate] TBK token check result:', data.hasToken);
+        return !!data.hasToken;
+      } catch (e) {
+        console.error('[Gate] TBK token check error:', e.message);
+        return false;
       }
-      return false;
     }
 
     async function checkAmxNft(addr) {
       try {
-        let marker = undefined;
-        let page = 0;
-        const MAX_PAGES = 20;
-        while (page < MAX_PAGES) {
-          const params = { account: addr };
-          if (marker) params.marker = marker;
-          const res = await fetch('https://xrplcluster.com/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ method: 'account_nfts', params: [params] })
-          });
-          const data = await res.json();
-          const nfts = data.result?.account_nfts || [];
-          if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) return true;
-          marker = data.result?.marker;
-          if (!marker) break;
-          page++;
-        }
-        return false;
+        const res = await fetch('/api/check-amx-nft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account: addr })
+        });
+        const data = await res.json();
+        console.log('[Gate] AMX NFT check result:', data.hasNft);
+        return !!data.hasNft;
       } catch (e) {
         console.error('[Gate] AMX NFT check error:', e);
         return false;

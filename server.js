@@ -71,6 +71,70 @@ async function submitScore(table, req, res) {
 app.post('/api/scores/amx', (req, res) => submitScore('amx_scores', req, res));
 app.post('/api/scores/tbk', (req, res) => submitScore('tbk_scores', req, res));
 
+// ── Token / NFT gating ────────────────────────────────────
+// These checks are done server-side to avoid CORS issues with public nodes.
+
+const AMX_TAXON = 777;
+const TBK_TOKEN_ID = '0.0.7295055';
+
+async function fetchJson(url, options) {
+  const res = await fetch(url, options);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// POST /api/check-amx-nft  { account }
+app.post('/api/check-amx-nft', async (req, res) => {
+  const { account } = req.body;
+  if (!account) return res.status(400).json({ error: 'missing account' });
+  try {
+    let marker = undefined;
+    let page = 0;
+    const MAX_PAGES = 20;
+    while (page < MAX_PAGES) {
+      const params = { account };
+      if (marker) params.marker = marker;
+      const data = await fetchJson('https://xrplcluster.com/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'account_nfts', params: [params] })
+      });
+      const nfts = data.result?.account_nfts || [];
+      if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) {
+        return res.json({ hasNft: true });
+      }
+      marker = data.result?.marker;
+      if (!marker) break;
+      page++;
+    }
+    res.json({ hasNft: false });
+  } catch (e) {
+    console.error('[API] AMX NFT check failed:', e.message);
+    res.status(502).json({ error: 'nft_check_failed', hasNft: false });
+  }
+});
+
+// POST /api/check-tbk-token  { account }
+app.post('/api/check-tbk-token', async (req, res) => {
+  const { account } = req.body;
+  if (!account) return res.status(400).json({ error: 'missing account' });
+  const endpoints = [
+    `https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/${encodeURIComponent(account)}/tokens?token.id=${TBK_TOKEN_ID}`,
+    `https://testnet.mirrornode.hedera.com/api/v1/accounts/${encodeURIComponent(account)}/tokens?token.id=${TBK_TOKEN_ID}`
+  ];
+  for (const url of endpoints) {
+    try {
+      const data = await fetchJson(url);
+      if (data.tokens && data.tokens.some(t => t.token_id === TBK_TOKEN_ID)) {
+        return res.json({ hasToken: true });
+      }
+    } catch (e) {
+      console.error('[API] TBK token check failed for', url, e.message);
+    }
+  }
+  res.json({ hasToken: false });
+});
+
 // ── Leaderboards ──────────────────────────────────────────
 async function getLeaderboard(table, req, res) {
   const opponents = req.query.opponents;
