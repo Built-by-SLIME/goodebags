@@ -84,34 +84,62 @@ async function fetchJson(url, options) {
 }
 
 // POST /api/check-amx-nft  { account }
+// Query public Ripple nodes. xrplcluster.com returns HTTP 402 from cloud IPs,
+// so we use s1/s2.ripple.com which serve validated ledger data.
 app.post('/api/check-amx-nft', async (req, res) => {
   const { account } = req.body;
   if (!account) return res.status(400).json({ error: 'missing account' });
-  try {
-    let marker = undefined;
-    let page = 0;
-    const MAX_PAGES = 20;
-    while (page < MAX_PAGES) {
-      const params = { account };
-      if (marker) params.marker = marker;
-      const data = await fetchJson('https://xrplcluster.com/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ method: 'account_nfts', params: [params] })
-      });
-      const nfts = data.result?.account_nfts || [];
-      if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) {
-        return res.json({ hasNft: true });
+
+  const endpoints = [
+    'https://s1.ripple.com:51234/',
+    'https://s2.ripple.com:51234/'
+  ];
+
+  let lastError = null;
+  for (const url of endpoints) {
+    try {
+      let marker = undefined;
+      let page = 0;
+      const MAX_PAGES = 20;
+      while (page < MAX_PAGES) {
+        const params = { account };
+        if (marker) params.marker = marker;
+        const data = await fetchJson(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ method: 'account_nfts', params: [params] })
+        });
+
+        // XRPL JSON-RPC returns HTTP 200 even for ledger errors.
+        if (data.result?.status === 'error') {
+          // actNotFound means the account has no NFTs (and never has).
+          if (data.result?.error === 'actNotFound') {
+            return res.json({ hasNft: false });
+          }
+          throw new Error(`XRPL error: ${data.result?.error || 'unknown'}`);
+        }
+
+        const nfts = data.result?.account_nfts || [];
+        if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) {
+          return res.json({ hasNft: true });
+        }
+        marker = data.result?.marker;
+        if (!marker) {
+          // Definitive empty result from a working node.
+          return res.json({ hasNft: false });
+        }
+        page++;
       }
-      marker = data.result?.marker;
-      if (!marker) break;
-      page++;
+    } catch (e) {
+      lastError = e.message;
+      console.error('[API] AMX NFT check failed for', url, e.message);
     }
-    res.json({ hasNft: false });
-  } catch (e) {
-    console.error('[API] AMX NFT check failed:', e.message);
-    res.status(502).json({ error: 'nft_check_failed', hasNft: false });
   }
+
+  // Every endpoint failed — we couldn't get a definitive answer.
+  // Don't falsely claim the user has no NFT.
+  console.error('[API] AMX NFT check: all endpoints failed. Last error:', lastError);
+  res.status(503).json({ error: 'verification_unavailable', hasNft: false });
 });
 
 // POST /api/check-tbk-token  { account }
