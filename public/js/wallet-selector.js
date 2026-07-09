@@ -8,6 +8,8 @@ let _selectorPromise = null;
 let _xamanAccount = null;      // Global cache updated by _initXamanGlobalListener
 let _xumm = null;              // Shared Xumm instance
 let _xamanConnectAttempt = 0;  // Incremented on each explicit connect attempt
+let _xamanListenersAttached = false; // Ensure global listeners are only added once
+let _lastDispatchedAccount = null;   // Suppress duplicate xamanAccountChanged events
 
 const LS_WC_ADDRESS = 'gb_wcAddress';
 const LS_WC_CHAIN   = 'gb_wcChain';
@@ -108,6 +110,8 @@ function clearAllWalletState() {
 }
 
 function dispatchXamanChange(account) {
+  if (account === _lastDispatchedAccount) return;
+  _lastDispatchedAccount = account;
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('xamanAccountChanged', {
       detail: { account }
@@ -138,9 +142,11 @@ function _getXumm(apiKey) {
 /* ── Global Xaman listener (runs on every page load to catch redirect results) ── */
 function _initXamanGlobalListener(apiKey) {
   if (!apiKey || typeof Xumm === 'undefined') return;
+  if (_xamanListenersAttached) return;
 
   const xumm = _getXumm(apiKey);
   if (!xumm) return;
+  _xamanListenersAttached = true;
 
   // If the user explicitly logged out, don't auto-restore the account on page load.
   if (wasXamanExplicitlyLoggedOut()) {

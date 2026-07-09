@@ -54,6 +54,8 @@ function giveCardsToWinner(wi,cards){if(wi===0){S.playerHand.push(...cards);upda
 
 // ── Auth ─────────────────────────────────────────────────
 let _walletProjectId = '';
+let _authRunning = false;
+let _authDone = false;
 
 async function checkXrplNftGate(address) {
   try {
@@ -72,57 +74,68 @@ async function checkXrplNftGate(address) {
 }
 
 async function initAuth() {
-  show('auth');
-  $('auth-status').textContent = 'Checking wallet…';
-  $('btn-connect-wallet').style.display = 'none';
+  if (_authRunning || _authDone) return;
+  _authRunning = true;
 
-  // Load R2 config + wallet credentials
   try {
-    const cfg = await fetch('/api/config').then(r => r.json());
-    R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
-    _walletProjectId = cfg.walletConnectProjectId || '';
-    if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
-    // Init WalletModule in background without blocking auth check (localStorage is the fast path)
-    if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
-      WalletModule.init(_walletProjectId).catch(() => {});
-    }
-  } catch(e) {}
+    show('auth');
+    $('auth-status').textContent = 'Checking wallet…';
+    $('btn-connect-wallet').style.display = 'none';
 
-  // Try existing WalletConnect session
-  const wcInfo = await getWalletInfoFromWC();
-  if (wcInfo && wcInfo.address) {
-    S.wallet = wcInfo.address;
-    const hasNft = await checkXrplNftGate(S.wallet);
-    if (!hasNft) {
-      $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
-      $('btn-connect-wallet').style.display = '';
-      return;
-    }
-    await _loadUserAndGo();
-    return;
-  }
-
-  // Try existing Xaman session (localStorage first, then SDK ready event)
-  if (_xamanApiKey) {
+    // Load R2 config + wallet credentials
     try {
-      const account = await getXamanAccount(_xamanApiKey);
-      if (account) {
-        S.wallet = account;
-        const hasNft = await checkXrplNftGate(S.wallet);
-        if (!hasNft) {
-          $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
-          $('btn-connect-wallet').style.display = '';
-          return;
-        }
-        await _loadUserAndGo();
+      const cfg = await fetch('/api/config').then(r => r.json());
+      R2 = (cfg.r2BaseUrl || '').replace(/\/$/, '') + '/apemodx';
+      _walletProjectId = cfg.walletConnectProjectId || '';
+      if (cfg.xamanApiKey) initWalletSelector(cfg.xamanApiKey);
+      // Init WalletModule in background without blocking auth check (localStorage is the fast path)
+      if (_walletProjectId && typeof WalletModule !== 'undefined' && WalletModule.init) {
+        WalletModule.init(_walletProjectId).catch(() => {});
+      }
+    } catch(e) {}
+
+    // Try existing WalletConnect session
+    const wcInfo = await getWalletInfoFromWC();
+    if (wcInfo && wcInfo.address) {
+      S.wallet = wcInfo.address;
+      const hasNft = await checkXrplNftGate(S.wallet);
+      if (!hasNft) {
+        $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
+        $('btn-connect-wallet').style.display = '';
+        _authDone = true;
         return;
       }
-    } catch (e) {}
-  }
+      await _loadUserAndGo();
+      _authDone = true;
+      return;
+    }
 
-  // No wallet — show connect button
-  $('auth-status').textContent = 'Connect your wallet to play Ape-Mod-X.';
-  $('btn-connect-wallet').style.display = '';
+    // Try existing Xaman session (localStorage first, then SDK ready event)
+    if (_xamanApiKey) {
+      try {
+        const account = await getXamanAccount(_xamanApiKey);
+        if (account) {
+          S.wallet = account;
+          const hasNft = await checkXrplNftGate(S.wallet);
+          if (!hasNft) {
+            $('auth-status').textContent = 'You need an Ape-Mod-X NFT to play.';
+            $('btn-connect-wallet').style.display = '';
+            _authDone = true;
+            return;
+          }
+          await _loadUserAndGo();
+          _authDone = true;
+          return;
+        }
+      } catch (e) {}
+    }
+
+    // No wallet — show connect button
+    $('auth-status').textContent = 'Connect your wallet to play Ape-Mod-X.';
+    $('btn-connect-wallet').style.display = '';
+  } finally {
+    _authRunning = false;
+  }
 }
 
 async function _loadUserAndGo() {
@@ -158,10 +171,12 @@ $('btn-connect-wallet').addEventListener('click', async () => {
     if (!hasNft) {
       $('auth-status').textContent = 'You need an Ape-Mod-X NFT (Taxon 777) to play.';
       btn.disabled = false; btn.textContent = 'Connect Wallet';
+      _authDone = true;
       return;
     }
 
     await _loadUserAndGo();
+    _authDone = true;
   } catch (e) {
     console.error('[Auth] Wallet connection failed:', e);
     $('auth-status').textContent = 'Connection failed — please try again.';
@@ -742,7 +757,24 @@ async function loadLeaderboard(opponents){
 
 // Re-run auth when Xaman account becomes available after a mobile redirect.
 // The initial initAuth() may run before the Xumm SDK has restored the session.
-window.addEventListener('xamanAccountChanged', () => {
+window.addEventListener('xamanAccountChanged', (e) => {
+  const account = e.detail?.account || null;
+  if (account && account === S.wallet) {
+    console.log('[Auth] Xaman account change ignored — same account');
+    return;
+  }
+  if (_authDone) {
+    if (!account) {
+      // Logout: reset auth state so the user can reconnect.
+      console.log('[Auth] Xaman logout detected; resetting auth');
+      _authDone = false;
+      S.wallet = null;
+      S.user = null;
+    } else {
+      console.log('[Auth] Xaman account change ignored — already authenticated');
+      return;
+    }
+  }
   console.log('[Auth] Xaman account changed; re-checking auth');
   initAuth();
 });
