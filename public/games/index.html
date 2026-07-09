@@ -211,10 +211,10 @@
   })();
   </script>
 
-  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=13"></script>
-  <script src="/js/wallet.bundle.js?v=13"></script>
-  <script src="/js/wallet-utils.js?v=13"></script>
-  <script src="/js/wallet-selector.js?v=13"></script>
+  <script src="https://xumm.app/assets/cdn/xumm.min.js?v=14"></script>
+  <script src="/js/wallet.bundle.js?v=14"></script>
+  <script src="/js/wallet-utils.js?v=14"></script>
+  <script src="/js/wallet-selector.js?v=14"></script>
   <script>
   (function(){
     const TBK_TOKEN_ID = '0.0.7295055';
@@ -261,15 +261,29 @@
 
     async function checkAmxNft(addr) {
       try {
-        const res = await fetch('https://xrplcluster.com/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ method: 'account_nfts', params: [{ account: addr }] })
-        });
-        const data = await res.json();
-        const nfts = data.result?.account_nfts || [];
-        return nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON);
-      } catch (e) { return false; }
+        let marker = undefined;
+        let page = 0;
+        const MAX_PAGES = 20;
+        while (page < MAX_PAGES) {
+          const params = { account: addr };
+          if (marker) params.marker = marker;
+          const res = await fetch('https://xrplcluster.com/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ method: 'account_nfts', params: [params] })
+          });
+          const data = await res.json();
+          const nfts = data.result?.account_nfts || [];
+          if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) return true;
+          marker = data.result?.marker;
+          if (!marker) break;
+          page++;
+        }
+        return false;
+      } catch (e) {
+        console.error('[Gate] AMX NFT check error:', e);
+        return false;
+      }
     }
 
     function lockCard(card, msg) {

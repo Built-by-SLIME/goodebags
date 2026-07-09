@@ -58,14 +58,25 @@ let _walletProjectId = '';
 async function checkXrplNftGate(address) {
   const AMX_TAXON = 777;
   try {
-    const res = await fetch('https://xrplcluster.com/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'account_nfts', params: [{ account: address }] })
-    });
-    const data = await res.json();
-    const nfts = data.result?.account_nfts || [];
-    return nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON);
+    let marker = undefined;
+    let page = 0;
+    const MAX_PAGES = 20;
+    while (page < MAX_PAGES) {
+      const params = { account: address };
+      if (marker) params.marker = marker;
+      const res = await fetch('https://xrplcluster.com/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'account_nfts', params: [params] })
+      });
+      const data = await res.json();
+      const nfts = data.result?.account_nfts || [];
+      if (nfts.some(nft => nft.NFTokenTaxon === AMX_TAXON)) return true;
+      marker = data.result?.marker;
+      if (!marker) break;
+      page++;
+    }
+    return false;
   } catch (e) {
     console.error('[Gate] XRPL NFT check failed:', e);
     return false;
