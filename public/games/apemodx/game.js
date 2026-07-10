@@ -226,18 +226,17 @@ $('btn-quit-game').addEventListener('click', () => {
 
 // ── Board selector ────────────────────────────────────────
 const AMX_BOARDS = [
-  { file:'ape-01.png',       label:'Ape Table 1' },
-  { file:'ape-02.jpg',       label:'Ape Table 2' },
-  { file:'ape-03.jpg',       label:'Ape Table 3' },
-  { file:'ape-04.jpg',       label:'Ape Table 4' },
-  { file:'ape-05.jpg',       label:'Ape Table 5' },
-  { file:'ape-06.png',       label:'Ape Table 6' },
-  { file:'ape-07.png',       label:'Ape Table 7' },
-  { file:'ape-08.png',       label:'Ape Table 8' },
-  { file:'ape-09.jpg',       label:'Ape Table 9' },
-  { file:'ape-10.jpg',       label:'Ape Table 10' },
-  { file:'universal-01.jpg', label:'Classic Table 1' },
-  { file:'universal-02.png', label:'SLIME Table' },
+  { file:'dood-community.png',       label:'Dood CommUnity' },
+  { file:'grey-brushed-leather.jpg', label:'Grey Brushed Leather' },
+  { file:'grey-scored-leather.jpg',  label:'Grey Scored Leather' },
+  { file:'red-leather.png',          label:'Red Leather' },
+  { file:'rustic-gold-wood.png',     label:'Rustic Gold on Wood' },
+  { file:'white-marble-stone.png',   label:'White Marble On Stone' },
+  { file:'blue-magic-stone.jpg',     label:'Blue Magic Stone Cabin' },
+  { file:'reptilex.png',             label:'Reptilex' },
+  { file:'snappy-dressers.png',      label:'Snappy Dressers' },
+  { file:'universal-01.jpg',         label:'Classic Table 1' },
+  { file:'universal-02.png',         label:'SLIME Table' },
 ];
 
 function goToBoardSelect() {
