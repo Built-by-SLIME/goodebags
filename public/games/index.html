@@ -286,8 +286,8 @@
     }
 
     function getActionEl(card) {
-      if (card === tbkCard) return $('tbk-action');
-      if (card === amxCard) return $('amx-action');
+      if (card === tbkCard) return document.getElementById('tbk-action');
+      if (card === amxCard) return document.getElementById('amx-action');
       return null;
     }
 
