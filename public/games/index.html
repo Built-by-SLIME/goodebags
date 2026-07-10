@@ -38,23 +38,35 @@
       transform: none;
       box-shadow: none;
     }
-    .game-card.locked .game-card-body::after {
-      content: attr(data-lock-msg);
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.88);
-      color: #FFD700;
+    .card-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
       padding: 10px 18px;
-      border-radius: 10px;
+      border-radius: 100px;
       font-size: 0.78rem;
       font-weight: 700;
       text-align: center;
       white-space: nowrap;
+      background: rgba(0,0,0,0.88);
+      color: #FFD700;
       border: 1px solid rgba(255,215,0,0.3);
-      pointer-events: none;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
       z-index: 2;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .card-action:hover {
+      background: rgba(255,215,0,0.12);
+      border-color: #FFD700;
+    }
+    .game-card.locked .card-action {
+      display: inline-flex;
+    }
+    .game-card:not(.locked) .card-action {
+      display: none;
     }
     .back-link { margin-top: 40px; color: #a0a0a0; text-decoration: none; font-size: 0.85rem; }
     .back-link:hover { color: #FFD700; }
@@ -99,6 +111,7 @@
           <span class="game-card-badge badge-hedera">Hedera Network</span>
           <h3>The Bee's Knees</h3>
           <p>Battle with your TBK NFT cards on the Hedera network. Build your hive, swarm your opponents, and claim the honey pot.</p>
+          <span class="card-action" id="tbk-action"></span>
         </div>
       </a>
 
@@ -109,6 +122,7 @@
           <span class="game-card-badge badge-xrpl">XRPL Network</span>
           <h3>Ape Mod X</h3>
           <p>Enter the arena with your Ape Mod X NFTs on the XRPL. Modify your apes, outsmart rivals, and dominate the jungle.</p>
+          <span class="card-action" id="amx-action"></span>
         </div>
       </a>
 
@@ -271,21 +285,63 @@
       }
     }
 
-    function lockCard(card, msg) {
+    function getActionEl(card) {
+      if (card === tbkCard) return $('tbk-action');
+      if (card === amxCard) return $('amx-action');
+      return null;
+    }
+
+    function setAction(card, action) {
+      const el = getActionEl(card);
+      if (!el) return;
+      if (!action) {
+        el.textContent = '';
+        el.onclick = null;
+        return;
+      }
+      el.textContent = action.text || '🔒 Locked';
+      if (action.href) {
+        el.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          window.open(action.href, '_blank', 'noopener,noreferrer');
+        };
+        card.onclick = (e) => {
+          e.preventDefault();
+          window.open(action.href, '_blank', 'noopener,noreferrer');
+        };
+      } else if (action.handler) {
+        el.onclick = async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          await action.handler(e);
+        };
+        card.onclick = async (e) => {
+          e.preventDefault();
+          await action.handler(e);
+        };
+      } else {
+        el.onclick = null;
+        card.onclick = null;
+      }
+    }
+
+    async function openWalletSelector() {
+      try {
+        await showWalletSelector(_walletProjectId);
+        await runGates();
+      } catch (err) {
+        if (err.message !== 'User cancelled') console.error(err);
+      }
+    }
+
+    function lockCard(card, msg, action) {
       if (!card) return;
       card.classList.add('locked');
       card.removeAttribute('href');
       if (msg) card.dataset.lockMsg = msg;
       else delete card.dataset.lockMsg;
-      card.onclick = async (e) => {
-        e.preventDefault();
-        try {
-          const result = await showWalletSelector(_walletProjectId);
-          await runGates();
-        } catch (err) {
-          if (err.message !== 'User cancelled') console.error(err);
-        }
-      };
+      setAction(card, action);
     }
 
     function unlockCard(card, href) {
@@ -294,15 +350,21 @@
       card.setAttribute('href', href);
       delete card.dataset.lockMsg;
       card.onclick = null;
+      setAction(card, null);
     }
+
+    const TBK_MINT_URL = 'https://sentx.io/launchpad/the-bees-knees-public';
+    const AMX_MINT_URL = 'https://xrp.cafe/collection/ape-mod-x-couture';
 
     async function runGates() {
       if (!tbkCard || !amxCard) return;
       console.log('[Gate] runGates starting...');
 
+      const connectAction = { text: 'Connect Wallet', handler: openWalletSelector };
+
       // Start locked — unlock only if wallet + token checks pass
-      lockCard(tbkCard, '🔒 Connect a wallet to play');
-      lockCard(amxCard, '🔒 Connect a wallet to play');
+      lockCard(tbkCard, '🔒 Connect a wallet to play', connectAction);
+      lockCard(amxCard, '🔒 Connect a wallet to play', connectAction);
       let tbkOpen = false;
       let amxOpen = false;
 
@@ -318,7 +380,7 @@
           if (hasToken) {
             tbkOpen = true;
           } else {
-            lockCard(tbkCard, '🔒 Wallet connected — TBK token not found');
+            lockCard(tbkCard, '🔒 Wallet connected — TBK token not found', { text: 'Buy Cards', href: TBK_MINT_URL });
           }
         } else if (wcInfo.chain === 'xrpl') {
           console.log('[Gate] Checking AMX NFT for', wcInfo.address);
@@ -327,12 +389,12 @@
           if (hasNft) {
             amxOpen = true;
           } else {
-            lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found');
+            lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Buy Cards', href: AMX_MINT_URL });
           }
         } else {
           console.log('[Gate] Unknown chain:', wcInfo.chain, '- cannot determine which game to unlock');
-          lockCard(tbkCard, '🔒 Wallet connected — unknown chain');
-          lockCard(amxCard, '🔒 Wallet connected — unknown chain');
+          lockCard(tbkCard, '🔒 Wallet connected — unknown chain', connectAction);
+          lockCard(amxCard, '🔒 Wallet connected — unknown chain', connectAction);
         }
       } else {
         console.log('[Gate] No wallet detected');
@@ -347,7 +409,11 @@
           if (account) {
             const hasNft = await checkAmxNft(account);
             console.log('[Gate] AMX NFT check result for Xaman:', hasNft);
-            if (hasNft) amxOpen = true;
+            if (hasNft) {
+              amxOpen = true;
+            } else {
+              lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Buy Cards', href: AMX_MINT_URL });
+            }
           }
         } catch (e) {
           console.log('[Gate] Xaman check error:', e);
