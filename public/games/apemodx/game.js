@@ -355,13 +355,6 @@ const SEAT_CLASSES = {
   4: ['seat-bl', 'seat-tl', 'seat-tr', 'seat-br'],
 };
 
-const AMX_OPP_AVATARS = [
-  'assets/avatars/amx-opp-1.png',
-  'assets/avatars/amx-opp-2.png',
-  'assets/avatars/amx-opp-3.png',
-  'assets/avatars/amx-opp-4.png',
-];
-
 function buildTableUI() {
   const felt = document.querySelector('.table-felt');
   // Apply selected board image
@@ -373,12 +366,10 @@ function buildTableUI() {
   // Build opponent seats with position class based on count
   const seats = SEAT_CLASSES[S.numOpponents];
   for (let i = 0; i < S.numOpponents; i++) {
-    const avatar = AMX_OPP_AVATARS[i];
     const slot = document.createElement('div');
     slot.className = `opponent-slot ${seats[i]}`;
     slot.id = `opp-slot-${i}`;
     slot.innerHTML = `
-      <img class="opp-avatar" src="${avatar}" alt="Player ${i+2}" />
       <div class="opp-identity">
         <div class="opp-stack">
           <img class="card-back-img" id="opp-back-${i}" src="${backFor(S.oppHands[i][0])}" />
@@ -394,9 +385,9 @@ function buildTableUI() {
 }
 
 // ── Turn-banner helpers ──────────────────────────────────
-async function showTurnBanner(name, avatarSrc, label) {
+async function showTurnBanner(name, label) {
   const banner = $('turn-banner');
-  banner.innerHTML = `<img class="tb-avatar" src="${avatarSrc}" alt="${name}" /><div class="tb-name">${name}</div><div class="tb-label">${label}</div>`;
+  banner.innerHTML = `<div class="tb-name">${name}</div><div class="tb-label">${label}</div>`;
   banner.classList.remove('tb-out');
   banner.classList.add('tb-in');
   banner.style.display = 'flex';
@@ -445,7 +436,7 @@ function startRound() {
 // ── Human turn ───────────────────────────────────────────
 async function humanCallPhase() {
   const playerName = S.user ? S.user.username : 'You';
-  await showTurnBanner(playerName, 'assets/avatars/amx-player.png', 'YOUR TURN — Pick a trait!');
+  await showTurnBanner(playerName, 'YOUR TURN — Pick a trait!');
   setCallerSeat(0);
   const card = S.playerHand[0];
   const mb = $('message-box');
@@ -479,8 +470,7 @@ async function humanCallPhase() {
 async function computerCallPhase() {
   const oppIdx = S.callerIndex - 1;
   const card = S.oppHands[oppIdx][0];
-  const avatarSrc = AMX_OPP_AVATARS[oppIdx];
-  await showTurnBanner(`Player ${S.callerIndex + 1}`, avatarSrc, 'is choosing a trait…');
+  await showTurnBanner(`Player ${S.callerIndex + 1}`, 'is choosing a trait…');
   setCallerSeat(S.callerIndex);
   $('message-box').classList.remove('player-turn');
   msg(`Player ${S.callerIndex + 1} is thinking…`);
