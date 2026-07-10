@@ -98,6 +98,19 @@
     .lb-filter-btn.active { background: rgba(255,215,0,0.12); color: #FFD700; border-color: rgba(255,215,0,0.3); }
     .lb-filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.2); color: #ccc; }
 
+    .game-disclaimer {
+      margin-top: -32px;
+      margin-bottom: 40px;
+      padding: 12px 20px;
+      border-radius: 100px;
+      background: rgba(255,215,0,0.12);
+      border: 1px solid rgba(255,215,0,0.3);
+      color: #FFD700;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      max-width: 90%;
+    }
     @media (max-width: 700px) { .game-cards { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -105,6 +118,7 @@
   <div class="game-select-container">
     <h1 class="game-select-title">Choose Your <span style="color:#FFD700">Battle</span></h1>
     <p class="game-select-sub">Select your network. Each game uses cards from its own NFT collection.</p>
+    <div class="game-disclaimer">🎴 An NFT from the corresponding collection is required to play.</div>
 
     <div class="game-cards">
       <!-- TBK — Hedera -->
