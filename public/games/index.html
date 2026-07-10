@@ -29,14 +29,17 @@
     .game-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
     .game-card p { font-size: 0.88rem; color: #a0a0a0; line-height: 1.5; }
     .game-card.locked {
-      opacity: 0.45;
-      filter: grayscale(0.6);
       cursor: not-allowed;
     }
     .game-card.locked:hover {
       border-color: rgba(255,255,255,0.08);
       transform: none;
       box-shadow: none;
+    }
+    .game-card.locked .game-card-img,
+    .game-card.locked .game-card-body > *:not(.card-action) {
+      opacity: 0.45;
+      filter: grayscale(0.6);
     }
     .card-action {
       display: inline-flex;
@@ -49,9 +52,9 @@
       font-weight: 700;
       text-align: center;
       white-space: nowrap;
-      background: rgba(0,0,0,0.88);
+      background: rgba(255,215,0,0.15);
       color: #FFD700;
-      border: 1px solid rgba(255,215,0,0.3);
+      border: 1px solid rgba(255,215,0,0.6);
       cursor: pointer;
       text-decoration: none;
       position: relative;
@@ -59,7 +62,7 @@
       transition: background 0.2s ease, border-color 0.2s ease;
     }
     .card-action:hover {
-      background: rgba(255,215,0,0.12);
+      background: rgba(255,215,0,0.28);
       border-color: #FFD700;
     }
     .game-card.locked .card-action {
@@ -380,7 +383,7 @@
           if (hasToken) {
             tbkOpen = true;
           } else {
-            lockCard(tbkCard, '🔒 Wallet connected — TBK token not found', { text: 'Buy Cards', href: TBK_MINT_URL });
+            lockCard(tbkCard, '🔒 Wallet connected — TBK token not found', { text: 'Get NFT', href: TBK_MINT_URL });
           }
         } else if (wcInfo.chain === 'xrpl') {
           console.log('[Gate] Checking AMX NFT for', wcInfo.address);
@@ -389,7 +392,7 @@
           if (hasNft) {
             amxOpen = true;
           } else {
-            lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Buy Cards', href: AMX_MINT_URL });
+            lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Get NFT', href: AMX_MINT_URL });
           }
         } else {
           console.log('[Gate] Unknown chain:', wcInfo.chain, '- cannot determine which game to unlock');
@@ -412,7 +415,7 @@
             if (hasNft) {
               amxOpen = true;
             } else {
-              lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Buy Cards', href: AMX_MINT_URL });
+              lockCard(amxCard, '🔒 Wallet connected — AMX NFT not found', { text: 'Get NFT', href: AMX_MINT_URL });
             }
           }
         } catch (e) {
