@@ -237,6 +237,7 @@ const AMX_BOARDS = [
   { file:'snappy-dressers.png',      label:'Snappy Dressers' },
   { file:'universal-01.jpg',         label:'Classic Table 1' },
   { file:'universal-02.png',         label:'SLIME Table' },
+  { file:'pink-cracked-marble.jpg',  label:'Pink Cracked Marble' },
 ];
 
 function goToBoardSelect() {
