@@ -177,7 +177,8 @@
   <div class="lb-inner">
     <h2>Ape-Mod-<span class="accent">X</span> Leaderboard</h2>
     <div class="lb-filters">
-      <button class="lb-filter-btn active" data-opp="">All-Time</button>
+      <button class="lb-filter-btn active" data-period="monthly">Monthly Tournament</button>
+      <button class="lb-filter-btn" data-opp="">All-Time</button>
       <button class="lb-filter-btn" data-opp="1">2 Players</button>
       <button class="lb-filter-btn" data-opp="2">3 Players</button>
       <button class="lb-filter-btn" data-opp="3">4 Players</button>
@@ -187,6 +188,13 @@
       <thead><tr><th>#</th><th>Player</th><th>Score</th><th>Players</th></tr></thead>
       <tbody id="lb-body"></tbody>
     </table>
+    <div id="lb-winners" class="lb-winners">
+      <h3 class="lb-winners-title">Previous Months' Winners</h3>
+      <table class="lb-table">
+        <thead><tr><th>Month</th><th>Winner</th></tr></thead>
+        <tbody id="lb-winners-body"></tbody>
+      </table>
+    </div>
     <div class="result-btns" style="margin-top:24px">
       <button id="btn-lb-play" class="btn-primary">Play Again</button>
       <button id="btn-lb-quit" class="btn-outline">Game Select</button>
@@ -205,6 +213,6 @@
 
 <script src="/js/device-guard.js?v=16"></script>
 <script src="/js/wallet.bundle.js?v=16"></script>
-<script src="game.js?v=18"></script>
+<script src="game.js?v=19"></script>
 </body>
 </html>

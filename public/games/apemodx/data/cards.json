@@ -1748,7 +1748,7 @@
       },
       {
         "name": "Wearing & Holding",
-        "value": 8
+        "value": 3
       },
       {
         "name": "Head & Hat",
@@ -3868,7 +3868,7 @@
       },
       {
         "name": "Eyes",
-        "value": 8
+        "value": 3
       }
     ],
     "xtra": {

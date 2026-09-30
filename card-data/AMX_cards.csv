@@ -50,10 +50,10 @@ AM#48,Couture,,Banana Wallpaper One,2,Phone And A Nice Cuppa,1,WhiteTrucker & Or
 AM#49,Couture,,Banana Wallpaper Two,2,Silver Handgun,1,Red Loose Knit Beanie,3,Snarl,4,Sunken Orange,6,Large Gold Earring,2
 AM#50,Couture,,Abstract Eye Colours,1,Silver Revolver,1,Grey Beanie with Black Pompom,3,Black Moustache,4,Round Fire Aviators,6,Gold Nose Tooth,1
 AMM#1,Mutants,,Blue Arrow Tunnel,4,Cracked Paint Chest,3,Bert: Cool Black Hair,2,Bert: White Moustache & Beard,8,Blue Crazy,5,Green & Red Slime,1
-AMM#2,Mutants,,Bright White Arrow Tunnel,4,Chest Target,8,Brad: Bald,1,Brad: Bearded Scream,8,Pink Focused,5,None,0
+AMM#2,Mutants,,Bright White Arrow Tunnel,4,Chest Target,3,Brad: Bald,1,Brad: Bearded Scream,8,Pink Focused,5,None,0
 AMM#3,Mutants,,Pink Arrow Tunnel,4,Lean with Scars,2,Charles: Blue Slick Hair,1,Charles: Dribble Yell,7,Spaced Out,5,None,0
 AMM#4,Mutants,,"Twisted Beach, Pink Jungle",3,Skinny with Bloody Shoulder,2,Chris: Torn Yellow Cap,1,Chris: Scary Pink Shriek,7,Wired,5,Gold Nose Tooth,1
-AMM#5,Mutants,,"Abstract Beach, Yellow Etching",3,Lean with Scars,0,David: Blue Cap,1,David: Belch,7,"White, Looking Right",5,Green & Red Slime,1
+AMM#5,Mutants,,"Abstract Beach, Yellow Etching",3,Lean with Scars,2,David: Blue Cap,1,David: Belch,7,"White, Looking Right",5,Green & Red Slime,1
 AMM#6,Mutants,,"Abstract Beach, Green Dream",3,Skinny with Bloody Shoulder,2,Jon: Torn Orange Cap,1,"Jon: Purple Goatee, Sad",6,Wired,5,Toxic Rainbow Slime,2
 AMM#7,Mutants,,"Twisted Beach, Dark Day",3,Lean with Scars,2,Kyle: Greasy Black Hair,1,Kyle: Missing Teeth,6,Tired  ,4,None,0
 AMM#8,Mutants,,Bananascape Purple Early,3,Skinny with Bloody Shoulder,2,Timothy: Short Green Hair,1,Timothy: Unsure,6,Sunken Orange,4,Green & Red Slime,1
@@ -112,7 +112,7 @@ amme#10,Mecha,,Burnt Smoke Clouds,1,Scout Class Light Yellow,6,Red Steel Cap & F
 amme#11,Mecha,,Black Dot Vortex,9,Scout Class Yellow Beacon,5,Steel Cap Yellow Dot,1,Wry Smile,3,Red Lava,4,Banana Oil,2
 amme#12,Mecha,,Yellow Landscape Vortex,8,Scout Class Blue H.U.D.,5,Steel Cap Yellow Dot,1,Wide Pout,2,Blank Red,4,Gold Bar,2
 amme#13,Mecha,,Red Sky Blast,8,Scout Class Blue Beacon,5,Titanium Cap Yellow Dot,1,Pout,2,Shiny Black,4,Banana Oil,2
-amme#14,Mecha,,Desert Cloud Squares,7,Combat Plate & Red Stripe,5,Steel Cap Yellow Dot,1,Wide Pout,2,Golden Mechanical,8,Banana ,1
+amme#14,Mecha,,Desert Cloud Squares,7,Combat Plate & Red Stripe,5,Steel Cap Yellow Dot,1,Wide Pout,2,Golden Mechanical,3,Banana ,1
 amme#15,Mecha,,Vibing Paint Squares,7,Combat Class Yellow Armour,5,Steel Cap  ,1,Pout,2,Grey Mechanical,3,Gold Bar,2
 amme#16,Mecha,,Dark Purple Cloud Squares,7,Combat Class Smooth Plate,5,Titanium Cap Yellow Dot,1,Wide Pout,2,Pink Dot Mechanical,3,Banana,1
 amme#17,Mecha,,Swirling Skies,6,Scout Class Yellow Indicator,4,Steel Cap Yellow Dot,1,Pout,2,Red Mechanical,3,Banana Plant,2

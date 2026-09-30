@@ -3,6 +3,20 @@
 All notable changes to this project are documented here.
 Format: `[Date] — Description`
 
+## [2026-09-30] — Monthly Tournaments + AMX Trait Updates
+
+### Added
+- **Monthly Tournament leaderboards** — each game (AMX, TBK) now has a "Monthly Tournament" view ranking players by their best single score within the current UK calendar month (Europe/London, GMT/BST-aware; tied scores rank earliest-first). Tournaments run from midnight UK time on the 1st to midnight on the last day; history starts October 2026 (no retroactive winners).
+- **Previous Months' Winners** — shown below the monthly board in the games-hub modal and both in-game leaderboard screens; one winner per completed UK month, computed on the fly from existing score rows (no schema change).
+- New endpoints: `GET /api/leaderboard/amx?period=monthly`, `GET /api/leaderboard/tbk?period=monthly`, `GET /api/leaderboard/amx/winners`, `GET /api/leaderboard/tbk/winners` (`server.js`).
+
+### Changed
+- **AMX trait values** (`card-data/AMX_cards.csv` → regenerated `public/games/apemodx/data/cards.json`): `AMM#2` Wearing & Holding 8→3, `amme#14` Eyes 8→3, `AMM#5` Wearing & Holding 0→2 (aligns the CSV with the value already live in-game).
+- `scripts/build_card_json.py` — AMX card IDs/animation paths are now uppercased in the JSON output (`amme#` → `AMME#`) while image paths keep the CSV casing, preserving the exact paths the live game uses.
+- Leaderboard filter rows (hub modal + both in-game screens) now default to "Monthly Tournament"; "All-Time" and player-count filters unchanged.
+
+---
+
 ## 2025-05-30 — Open AMX to Guest Play
 - **AMX no longer requires wallet connection** to play. `initAuth()` in `public/games/apemodx/game.js` bypasses the auth screen entirely when no wallet is found — sets `S.user = { username: 'Guest' }` and calls `goToLobby()` directly. If a wallet IS connected, the existing auth/register flow still works normally.
 - **TBK remains token-gated** on the game selector via Hedera Token ID `0.0.7295055`.

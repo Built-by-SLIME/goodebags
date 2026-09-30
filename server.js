@@ -164,10 +164,30 @@ app.post('/api/check-tbk-token', async (req, res) => {
 });
 
 // ── Leaderboards ──────────────────────────────────────────
+// played_at is a naive TIMESTAMP written by NOW() in the DB session timezone,
+// so it is converted back with the server's own TimeZone setting before
+// shifting to UK time. Europe/London handles the GMT/BST switch. Monthly
+// Tournaments run per UK calendar month; history starts October 2026.
+const UK_TZ = 'Europe/London';
+const TOURNAMENT_START = `timestamp '2026-10-01 00:00'`;
+const LONDON_TIME = `s.played_at AT TIME ZONE current_setting('TimeZone') AT TIME ZONE '${UK_TZ}'`;
+const LONDON_MONTH = `date_trunc('month', ${LONDON_TIME})`;
+
 async function getLeaderboard(table, req, res) {
   const opponents = req.query.opponents;
   let sql, params = [];
-  if (opponents) {
+  if (req.query.period === 'monthly') {
+    // Monthly Tournament: best single score per user within the current UK
+    // calendar month; tied scores rank earliest-first.
+    sql = `SELECT * FROM (
+             SELECT DISTINCT ON (u.id) u.username, s.score, s.opponents, s.played_at
+             FROM ${table} s JOIN users u ON u.id = s.user_id
+             WHERE ${LONDON_TIME} >= ${TOURNAMENT_START}
+               AND ${LONDON_MONTH} = date_trunc('month', now() AT TIME ZONE '${UK_TZ}')
+             ORDER BY u.id, s.score DESC, s.played_at ASC
+           ) best
+           ORDER BY score DESC, played_at ASC LIMIT 50`;
+  } else if (opponents) {
     // Best score per user for a specific opponent count
     sql = `SELECT u.username, MAX(s.score) as score, s.opponents
            FROM ${table} s JOIN users u ON u.id = s.user_id
@@ -190,6 +210,36 @@ async function getLeaderboard(table, req, res) {
 
 app.get('/api/leaderboard/amx', (req, res) => getLeaderboard('amx_scores', req, res));
 app.get('/api/leaderboard/tbk', (req, res) => getLeaderboard('tbk_scores', req, res));
+
+// Previous Monthly Tournament winners: one per completed UK month since the
+// tournament start (highest best-single-score, earliest tie-break).
+async function getMonthlyWinners(table, req, res) {
+  const sql = `WITH london AS (
+    SELECT s.*, ${LONDON_MONTH} AS lmonth
+    FROM ${table} s
+    WHERE ${LONDON_TIME} >= ${TOURNAMENT_START}
+      AND ${LONDON_MONTH} < date_trunc('month', now() AT TIME ZONE '${UK_TZ}')
+  ),
+  best_per_user AS (
+    SELECT DISTINCT ON (lmonth, user_id) lmonth, user_id, score, opponents, played_at
+    FROM london
+    ORDER BY lmonth, user_id, score DESC, played_at ASC
+  ),
+  winner AS (
+    SELECT DISTINCT ON (lmonth) lmonth, user_id, score, opponents, played_at
+    FROM best_per_user
+    ORDER BY lmonth, score DESC, played_at ASC
+  )
+  SELECT to_char(w.lmonth, 'FMMonth') AS month, to_char(w.lmonth, 'YYYY') AS year,
+         u.username, w.score, w.opponents
+  FROM winner w JOIN users u ON u.id = w.user_id
+  ORDER BY w.lmonth DESC`;
+  const r = await query(sql);
+  res.json(r ? r.rows : []);
+}
+
+app.get('/api/leaderboard/amx/winners', (req, res) => getMonthlyWinners('amx_scores', req, res));
+app.get('/api/leaderboard/tbk/winners', (req, res) => getMonthlyWinners('tbk_scores', req, res));
 
 // ── Root fallback ─────────────────────────────────────────
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

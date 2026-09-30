@@ -7,11 +7,14 @@ with open('/Users/davidconklin/Goodebags/card-data/AMX_cards.csv', newline='', e
     for row in reader:
         card_id = row['card_id'].strip()
         deck = row['deck'].strip()
-        animations = [f"assets/animations/{card_id}.mp4"]
-        if card_id == 'AM#43':
+        # Mecha CSV ids are lowercase (amme#), but the game/R2 use uppercase
+        # AMME# for ids + animations and lowercase for image files.
+        display_id = card_id.upper()
+        animations = [f"assets/animations/{display_id}.mp4"]
+        if display_id == 'AM#43':
             animations.append("assets/animations/AM#43b.mp4")
         card = {
-            "id": card_id,
+            "id": display_id,
             "deck": deck,
             "image": f"assets/cards/{card_id}.png",
             "animations": animations,

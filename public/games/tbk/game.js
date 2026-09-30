@@ -633,28 +633,51 @@ async function endGame(){
 }
 
 // ── Leaderboard ───────────────────────────────────────────
-async function loadLeaderboard(opponents){
+async function loadLeaderboard(opponents,period){
   show('leaderboard');
+  opponents=opponents||'';
+  period=period||(opponents?'all':'monthly');
+  // Sync filter button states with the view being loaded
+  document.querySelectorAll('#screen-leaderboard .lb-filter-btn').forEach(b=>{
+    const bp=b.dataset.period||'all',bo=b.dataset.opp||'';
+    b.classList.toggle('active',bp===period&&bo===opponents);
+  });
+  $('lb-winners').style.display=period==='monthly'?'':'none';
+  if(period==='monthly')loadMonthlyWinners();
   try{
-    const url='/api/leaderboard/tbk'+(opponents?'?opponents='+opponents:'');
+    let url='/api/leaderboard/tbk';
+    if(period==='monthly')url+='?period=monthly';
+    else if(opponents)url+='?opponents='+opponents;
     const rows=await fetch(url).then(r=>r.json());
     const tbody=$('lb-body'); tbody.innerHTML='';
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">No scores yet.</td></tr>';return;}
-    rows.forEach((r,i)=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td class="lb-rank">${i+1}</td><td>${r.username}</td><td>${Number(r.score).toLocaleString()}</td><td>${r.opponents+1}</td>`;
-      tbody.appendChild(tr);
-    });
+    if(!rows.length){
+      tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--muted)">${period==='monthly'?'No scores yet this month.':'No scores yet.'}</td></tr>`;
+    }else{
+      rows.forEach((r,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td class="lb-rank">${i+1}</td><td>${r.username}</td><td>${Number(r.score).toLocaleString()}</td><td>${r.opponents+1}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
   }catch(e){$('lb-body').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted)">Could not load scores.</td></tr>';}
   document.querySelectorAll('#screen-leaderboard .lb-filter-btn').forEach(btn=>{
-    btn.onclick=()=>{
-      document.querySelectorAll('#screen-leaderboard .lb-filter-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      loadLeaderboard(btn.dataset.opp||'');
-    };
+    btn.onclick=()=>loadLeaderboard(btn.dataset.opp||'',btn.dataset.period||'all');
   });
   $('btn-lb-play').onclick=()=>goToLobby();
   $('btn-lb-quit').onclick=()=>window.location.href='/games/';
+}
+async function loadMonthlyWinners(){
+  const tbody=$('lb-winners-body');
+  try{
+    const rows=await fetch('/api/leaderboard/tbk/winners').then(r=>r.json());
+    tbody.innerHTML='';
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:var(--muted)">No previous winners yet.</td></tr>';return;}
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${r.month}</td><td>${r.username}</td>`;
+      tbody.appendChild(tr);
+    });
+  }catch(e){tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:var(--muted)">Could not load winners.</td></tr>';}
 }
 
 // ── Boot ──────────────────────────────────────────────────
