@@ -167,9 +167,9 @@ app.post('/api/check-tbk-token', async (req, res) => {
 // played_at is a naive TIMESTAMP written by NOW() in the DB session timezone,
 // so it is converted back with the server's own TimeZone setting before
 // shifting to UK time. Europe/London handles the GMT/BST switch. Monthly
-// Tournaments run per UK calendar month; history starts October 2026.
+// Tournaments run per UK calendar month; winners history starts July 2026.
 const UK_TZ = 'Europe/London';
-const TOURNAMENT_START = `timestamp '2026-10-01 00:00'`;
+const TOURNAMENT_START = `timestamp '2026-07-01 00:00'`;
 const LONDON_TIME = `s.played_at AT TIME ZONE current_setting('TimeZone') AT TIME ZONE '${UK_TZ}'`;
 const LONDON_MONTH = `date_trunc('month', ${LONDON_TIME})`;
 

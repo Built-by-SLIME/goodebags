@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format: `[Date] — Description`
 
+## [2026-10-02] — Winners History Extended to July 2026
+
+### Changed
+- **Previous Months' Winners** now includes July, August and September 2026 — `TOURNAMENT_START` in `server.js` moved from `2026-10-01` to `2026-07-01`. Winners for those months are computed retroactively from existing score rows (same rules: best single score per UK calendar month, earliest tie-break). Months with no scores simply don't appear. Current-month Monthly Tournament boards are unaffected.
+
+---
+
 ## [2026-09-30] — Monthly Tournaments + AMX Trait Updates
 
 ### Added
