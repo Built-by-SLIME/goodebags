@@ -213,6 +213,21 @@ app.get('/api/leaderboard/tbk', (req, res) => getLeaderboard('tbk_scores', req, 
 
 // Previous Monthly Tournament winners: one per completed UK month since the
 // tournament start (highest best-single-score, earliest tie-break).
+// Manually curated winners history (agreed 2026-10); any month listed here is
+// excluded from the computed results so the manual entry always wins.
+const MANUAL_WINNERS = {
+  amx_scores: [
+    { month: 'July', year: '2026', username: 'Goodebags' },
+    { month: 'August', year: '2026', username: 'Big Chief' },
+    { month: 'September', year: '2026', username: 'Big Chief' },
+  ],
+  tbk_scores: [
+    { month: 'July', year: '2026', username: 'Big Chief' },
+    { month: 'August', year: '2026', username: 'Big Chief' },
+    { month: 'September', year: '2026', username: 'Big Chief' },
+  ],
+};
+
 async function getMonthlyWinners(table, req, res) {
   const sql = `WITH london AS (
     SELECT s.*, ${LONDON_MONTH} AS lmonth
@@ -235,7 +250,11 @@ async function getMonthlyWinners(table, req, res) {
   FROM winner w JOIN users u ON u.id = w.user_id
   ORDER BY w.lmonth DESC`;
   const r = await query(sql);
-  res.json(r ? r.rows : []);
+  const rows = r ? r.rows : [];
+  const manual = MANUAL_WINNERS[table] || [];
+  const computed = rows.filter(row =>
+    !manual.some(m => m.month === row.month && m.year === row.year));
+  res.json([...manual, ...computed]);
 }
 
 app.get('/api/leaderboard/amx/winners', (req, res) => getMonthlyWinners('amx_scores', req, res));
